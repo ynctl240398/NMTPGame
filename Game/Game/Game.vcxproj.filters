@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Direct3D">
+      <UniqueIdentifier>{908482b1-f4ec-47b5-9eab-8d0ad8c9a302}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectXAudio">
+      <UniqueIdentifier>{c262b03c-f498-44d1-957e-1514d28a0bf9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectXAudio\DirectMusic">
+      <UniqueIdentifier>{2f66651e-f3cb-41e9-b8ab-05094805527d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectXAudio\DirectSound">
+      <UniqueIdentifier>{84af433e-bf2b-4808-ac32-800fd1843d15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectXAudio\DirectSound3D">
+      <UniqueIdentifier>{1a920a85-a13e-42b0-a87a-64265ef73fc1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectInput">
+      <UniqueIdentifier>{f99b97f9-c13c-4c9d-bf8d-751c5f5523a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectPlay">
+      <UniqueIdentifier>{676e4e4a-7cd5-44d4-8280-7745067b9e24}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="C:\Users\HOME\Downloads\brick.ico">
+      <Filter>Source Files</Filter>
+    </Image>
+    <Image Include="C:\Users\HOME\Downloads\brick.png">
+      <Filter>Source Files</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
