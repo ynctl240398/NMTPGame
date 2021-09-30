@@ -4,22 +4,29 @@
 #define SCENE_SECTION_UNKNOWN -1
 #define SCENE_SECTION_ID 0
 #define SCENE_SECTION_POS 1
-#define BG_ID_WORLD_1_1 100
-#define TOTAL_SPRITES 95
-#define TITLE_WITDH 16
-#define TITLE_HEIGHT 16
-#define TITLE_SPACE 1
-#define TITLE_ROW 0
 
-void CBackGround::initTitles()
+void CBackGround::initTitles(string line)
 {
-	for (size_t i = 0; i < TOTAL_SPRITES; i++)
+	vector<string> tokens = split(line, "\t");
+	if (tokens.size() < 6) return; // skip invalid lines
+
+	startId = atoi(tokens[0].c_str());
+	w = stoi(tokens[1].c_str());
+	h = stoi(tokens[2].c_str());
+	space = atoi(tokens[3].c_str());
+	row = stoi(tokens[4].c_str());
+	totalSprite = stoi(tokens[5].c_str());
+
+	wstring path = ToWSTR(this->filePathImg);
+	textures->Add(startId, path.c_str());
+
+	for (size_t i = 0; i < totalSprite; i++)
 	{
-		int id = BG_ID_WORLD_1_1 + i;
-		int l = i * (TITLE_WITDH + TITLE_SPACE);
-		int r = l + TITLE_WITDH;
-		int t = TITLE_ROW;
-		int b = t + TITLE_HEIGHT;
+		int id = startId + i;
+		int l = i * (w + space);
+		int r = l + w;
+		int t = row;
+		int b = t + h;
 		this->titles[id] = new CTitle(l, t, r, b);
 	}
 }
@@ -35,7 +42,7 @@ void CBackGround::_ParseSection_Sprites(string line, LPTEXTURE tex)
 
 	LPSPRITE sprite = new CSprite(this->countSprite, this->titles[id]->getL(), this->titles[id]->getT(), this->titles[id]->getR(), this->titles[id]->getB(), tex);
 	this->sprites[this->countSprite] = sprite;
-	LPPOS pos = new CPos(id, x + TITLE_WITDH / 2, y + TITLE_HEIGHT / 2);
+	LPPOS pos = new CPos(id, x + w / 2, y + h / 2);
 	this->poss[this->countSprite] = pos;
 
 	this->countSprite++;
@@ -75,7 +82,6 @@ CBackGround::CBackGround(string filePathTxt, string filePathImg) {
 	this->filePathImg = filePathImg;
 	this->countSprite = 0;
 	this->textures = new CTextures();
-	this->initTitles();
 }
 
 void CBackGround::Load()
@@ -91,7 +97,7 @@ void CBackGround::Load()
 
 		if (line[0] == '#') continue; //comment line
 
-		if (line == "[ID]") {
+		if (line == "[INIT]") {
 			section = SCENE_SECTION_ID; continue;
 		}
 
@@ -99,16 +105,14 @@ void CBackGround::Load()
 			section = SCENE_SECTION_POS; continue;
 		}
 
-		if (section == SCENE_SECTION_ID) {
-			id = atoi(line.c_str());
-			wstring path = ToWSTR(this->filePathImg);
-			textures->Add(id, path.c_str());
+		if (section == SCENE_SECTION_ID) {			
+			initTitles(line);
 			continue;
 		}
 
 		if (section == SCENE_SECTION_POS)
 		{
-			_ParseSection_Sprites(line, textures->Get(id));
+			_ParseSection_Sprites(line, textures->Get(startId));
 		}
 	}
 }

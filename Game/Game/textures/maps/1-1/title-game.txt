@@ -1,4 +1,6 @@
-[ID]
+[INIT]
+#startid	w	h	space	row	total
+100	16	16	1	0	95
 100
 [POS]
 #id	x	y

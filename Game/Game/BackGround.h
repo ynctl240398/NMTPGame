@@ -81,8 +81,16 @@ protected:
 	unordered_map<int, LPPOS> poss;
 	unordered_map<int, LPSPRITE> sprites;
 	CTextures* textures;
+
+	int startId;
+	int w;
+	int h;
+	int row;
+	int space;
 	int countSprite;
-	void initTitles();
+	int totalSprite;
+
+	void initTitles(string line);
 	void _ParseSection_Sprites(string line, LPTEXTURE tex);
 	vector<string> split(string line, string delimeter);
 	wstring ToWSTR(string st);
