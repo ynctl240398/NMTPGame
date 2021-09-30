@@ -13,42 +13,87 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Direct3D">
-      <UniqueIdentifier>{908482b1-f4ec-47b5-9eab-8d0ad8c9a302}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="DirectXAudio">
-      <UniqueIdentifier>{c262b03c-f498-44d1-957e-1514d28a0bf9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="DirectXAudio\DirectMusic">
-      <UniqueIdentifier>{2f66651e-f3cb-41e9-b8ab-05094805527d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="DirectXAudio\DirectSound">
-      <UniqueIdentifier>{84af433e-bf2b-4808-ac32-800fd1843d15}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="DirectXAudio\DirectSound3D">
-      <UniqueIdentifier>{1a920a85-a13e-42b0-a87a-64265ef73fc1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="DirectInput">
-      <UniqueIdentifier>{f99b97f9-c13c-4c9d-bf8d-751c5f5523a4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="DirectPlay">
-      <UniqueIdentifier>{676e4e4a-7cd5-44d4-8280-7745067b9e24}</UniqueIdentifier>
-    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\02-Sprite\Animation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\02-Sprite\Animations.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\02-Sprite\debug.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\02-Sprite\Game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\02-Sprite\GameObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\02-Sprite\Mario.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\02-Sprite\Sprite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\02-Sprite\Sprites.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\02-Sprite\Textures.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BackGround.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlaySence.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="C:\Users\HOME\Downloads\brick.ico">
-      <Filter>Source Files</Filter>
-    </Image>
-    <Image Include="C:\Users\HOME\Downloads\brick.png">
-      <Filter>Source Files</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <ClInclude Include="..\02-Sprite\Animation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\02-Sprite\AnimationFrame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\02-Sprite\Animations.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\02-Sprite\debug.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\02-Sprite\Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\02-Sprite\GameObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\02-Sprite\Mario.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\02-Sprite\Sprite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\02-Sprite\Sprites.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\02-Sprite\Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\02-Sprite\Textures.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BackGround.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlaySence.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

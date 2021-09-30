@@ -1,3 +1,0 @@
-﻿  main.cpp
-main.obj : error LNK2019: unresolved external symbol D3D10CreateDeviceAndSwapChain referenced in function "void __cdecl InitDirectX(struct HWND__ *)" (?InitDirectX@@YAXPEAUHWND__@@@Z)
-D:\work\GitHub\NMTPGame\Game\x64\Debug\Game.exe : fatal error LNK1120: 1 unresolved externals

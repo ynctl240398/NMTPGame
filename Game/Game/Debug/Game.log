@@ -1,2 +1,16 @@
-﻿  LINK : D:\work\GitHub\NMTPGame\Game\Debug\Game.exe not found or not built by the last incremental link; performing full link
+﻿  BackGround.cpp
+D:\work\GitHub\NMTPGame\Game\Game\BackGround.h(26,31): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\work\GitHub\NMTPGame\Game\Game\BackGround.h(27,31): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\work\GitHub\NMTPGame\Game\Game\BackGround.h(29,26): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+D:\work\GitHub\NMTPGame\Game\Game\BackGround.h(30,26): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+D:\work\GitHub\NMTPGame\Game\Game\BackGround.cpp(38,50): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\work\GitHub\NMTPGame\Game\Game\BackGround.cpp(38,29): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\work\GitHub\NMTPGame\Game\Game\BackGround.cpp(118,23): warning C4018: '<': signed/unsigned mismatch
+D:\work\GitHub\NMTPGame\Game\Game\BackGround.cpp(120,45): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  main.cpp
+D:\work\GitHub\NMTPGame\Game\Game\BackGround.h(26,31): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\work\GitHub\NMTPGame\Game\Game\BackGround.h(27,31): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\work\GitHub\NMTPGame\Game\Game\BackGround.h(29,26): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+D:\work\GitHub\NMTPGame\Game\Game\BackGround.h(30,26): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+  Generating Code...
   Game.vcxproj -> D:\work\GitHub\NMTPGame\Game\Debug\Game.exe
