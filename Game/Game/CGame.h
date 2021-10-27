@@ -54,6 +54,9 @@ public:
 
 	CGame();
 
+	int GetWindowWidth() { return _windowWidth; }
+	int GetWindowHeight() { return _windowHeight; }
+
 	// Init DirectX, Sprite Handler
 	bool Init(HWND hWnd);
 

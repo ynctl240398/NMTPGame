@@ -31,9 +31,7 @@
 //PATH file
 #define FILE_PATH_BG_WORLD_1 "textures//world1-1//bg.txt"
 #define FILE_PATH_MARIO "textures//animation//mario.txt"
-
-//dif
-#define DIF_X 8.0f;
+#define FILE_PATH_CAMERA "textures//world1-1//camera.txt"
 
 using namespace std;
 

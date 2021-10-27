@@ -6,20 +6,18 @@
 
 #small-walk
 1001	18	0	34	16
-1002	54	0	34	16
+1002	54	0	70	16
 
-[ANI]
+[FRAME]
 #id_sprite	time(ms)
 1000	100
-[NEW_ANI]
+[ANIMATION]
+1000
+
+[FRAME]
 1001	100
 1002	100
-[NEW_ANI]
+[ANIMATION]
+1001
 
-[ANIS]
-#id_ani
-#small-idle
-1000
-#small-walk
-1002
 [END]

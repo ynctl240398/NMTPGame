@@ -18,7 +18,7 @@ void CBackGround::_ParseSectionSprites(string line) {
 	vector<string> tokens = split(line);
 	if (tokens.size() < LENGTH_SPRITES) return; // skip invalid lines
 
-	float x = stof(tokens[0].c_str()) + DIF_X;
+	float x = stof(tokens[0].c_str());
 	float y = stof(tokens[1].c_str());
 	int l = atoi(tokens[2].c_str());
 	int t = atoi(tokens[3].c_str());

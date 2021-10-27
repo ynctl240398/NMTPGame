@@ -30,33 +30,37 @@ CSprite::CSprite(int id, int left, int top, int right, int bottom, LPTEXTURE tex
 	_cameraInstance = CCam::GetInstance();
 }
 
-void CSprite::_ScaleSprite(const RECT& spriteBound, int idTex) {
+void CSprite::_ScaleSprite(const RECT& spriteBound, int idTex, D3DXVECTOR2 scale, unsigned int alpha) {
 
-	if (CTextures::GetInstance()->Get(idTex) == nullptr) {
+	LPTEXTURE texture = CTextures::GetInstance()->Get(idTex);
+	if (texture == nullptr) {
 		return;
 	}
 
-	_sprite.TexCoord.x = spriteBound.left / static_cast<float>(CTextures::GetInstance()->Get(idTex)->getWidth());
-	_sprite.TexCoord.y = spriteBound.top / static_cast<float>(CTextures::GetInstance()->Get(idTex)->getHeight());
+	_sprite.TexCoord.x = spriteBound.left / static_cast<float>(texture->getWidth());
+	_sprite.TexCoord.y = spriteBound.top / static_cast<float>(texture->getHeight());
 
 	int spriteWidth = spriteBound.right - spriteBound.left;
 	int spriteHeight = spriteBound.bottom - spriteBound.top;
-	_sprite.TexSize.x = spriteWidth / static_cast<float>(CTextures::GetInstance()->Get(idTex)->getWidth());
-	_sprite.TexSize.y = spriteHeight / static_cast<float>(CTextures::GetInstance()->Get(idTex)->getHeight());
-	_sprite.ColorModulate = { 1.0f, 1.0f, 1.0f, 1.0f };
+	_sprite.TexSize.x = spriteWidth / static_cast<float>(texture->getWidth());
+	_sprite.TexSize.y = spriteHeight / static_cast<float>(texture->getHeight());
+	_sprite.ColorModulate = { 1.0f, 1.0f, 1.0f, alpha / 255.0f };
 	_sprite.TextureIndex = 0;
 
-	D3DXMatrixScaling(&_scaleMatrix, static_cast<float>(spriteWidth), static_cast<float>(spriteHeight), 1.0f);
+	D3DXMatrixScaling(&_scaleMatrix, static_cast<float>(spriteWidth) * scale.x, static_cast<float>(spriteHeight) * scale.y, 1.0f);
 }
 
-void CSprite::Draw(RECT rect,float x, float y, int idTex)
+void CSprite::Draw(RECT rect,float x, float y, int idTex, D3DXVECTOR2 scale, unsigned int alpha)
 {
 	CGame* g = CGame::GetInstance();
 
-	_ScaleSprite(rect, idTex);
+	_ScaleSprite(rect, idTex, scale, alpha);
 
 	D3DXMATRIX matTranslation;
-	D3DXMatrixTranslation(&matTranslation, x, (g->GetBackBufferHeight() - y), 0.1f);
+
+	float nx = x - _cameraInstance->GetPosition().x;
+	float ny = (g->GetBackBufferHeight() - y) + _cameraInstance->GetPosition().y;
+	D3DXMatrixTranslation(&matTranslation, nx, ny, 0.1f);
 	this->_sprite.matWorld = (this->_scaleMatrix * matTranslation);
 
 	CUtil::SpriteHandler->DrawSpritesImmediate(&_sprite, 1, 0, 0);

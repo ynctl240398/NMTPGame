@@ -19,14 +19,14 @@ class CSprite
 	D3DX10_SPRITE _sprite;
 	D3DXMATRIX _scaleMatrix;
 
-	void _ScaleSprite(const RECT& spriteBound, int idTex);
+	void _ScaleSprite(const RECT& rect, int idTex, D3DXVECTOR2 scale, unsigned int alpha);
 
 public:
 	CSprite(int id, int left, int top, int right, int bottom, LPTEXTURE tex);
 
-	RECT GetBoundingBoxSprite() { return{ left, top, left + right, top + bottom }; }
+	RECT GetBoundingBoxSprite() { return{ left, top, right, bottom }; }
 
-	void Draw(RECT rect, float x, float y, int idTex);
+	void Draw(RECT rect, float x, float y, int idTex, D3DXVECTOR2, unsigned int);
 	void Release();
 };
 

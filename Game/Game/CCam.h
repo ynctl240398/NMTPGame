@@ -16,6 +16,8 @@ private:
 public:
 	static CCam* GetInstance();
 
+	void Load(string);
+
 	void SetCameraWidth(unsigned int);
 	unsigned int GetCameraWidth() const;
 	void SetCameraHeight(unsigned int);

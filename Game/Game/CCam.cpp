@@ -2,6 +2,8 @@
 #include "CUtil.h"
 #include "CKeyBoard.h"
 
+#define LENGTH_NUMBER 7
+
 CCam* CCam::_cameraInstance = NULL;
 
 CCam::CCam() {}
@@ -35,6 +37,36 @@ float CCam::GetUpVector(int index) const {
 	return _upVectors.at(index);
 }
 
+void CCam::Load(string filePath) {
+	ifstream f;
+	f.open(filePath);
+	char str[MAX_SCENE_LINE];
+	while (f.getline(str, MAX_SCENE_LINE))
+	{
+		string line(str);
+
+		if (line[0] == '#' || line.empty()) continue; //comment line
+
+		vector<string> tokens = split(line);
+		if (tokens.size() < LENGTH_NUMBER) return; // skip invalid lines
+
+		int l = atoi(tokens[0].c_str());
+		int t = atoi(tokens[1].c_str());
+		int r = atoi(tokens[2].c_str());
+		int b = atoi(tokens[3].c_str());
+		float x = stof(tokens[4].c_str());
+		float y = stof(tokens[5].c_str());
+		float upVector = stof(tokens[6].c_str());
+
+		CRect* cameraBound = new CRect(l, t, r, b);
+
+		SetPosition({ x, y });
+		AddUpVector(upVector);
+
+		AddCameraBound(cameraBound);
+	}
+}
+
 void CCam::AddUpVector(float upVector) {
 	_upVectors.emplace_back(upVector);
 }
@@ -56,13 +88,19 @@ void CCam::AddCameraBound(LPRECTCUSTOM cameraBound) {
 }
 
 void CCam::Update(DWORD dt, vector<CGameObject*>* collidableObjects) {
-	CKeyBoardCustom* _keyboard = CKeyBoardCustom::GetInstance();
+	/*CKeyBoardCustom* _keyboard = CKeyBoardCustom::GetInstance();
 	if (_keyboard->IsKeyDown(DIK_RIGHTARROW)) {
 		_position.x += dt * 0.1f;
 	}
 	else if (_keyboard->IsKeyDown(DIK_LEFTARROW)) {
 		_position.x -= dt * 0.1f;
 	}
+	else if (_keyboard->IsKeyDown(DIK_UPARROW)) {
+		_position.y -= dt * 0.1f;
+	}
+	else if (_keyboard->IsKeyDown(DIK_DOWNARROW)) {
+		_position.y += dt * 0.1f;
+	}*/
 }
 
 void CCam::Release() {

@@ -10,7 +10,7 @@ void CAnimation::Add(int spriteId, DWORD time)
 	frames.push_back(frame);
 }
 
-void CAnimation::Render(int idTex, float x, float y)
+void CAnimation::Render(int idTex, float x, float y, D3DXVECTOR2 scale, unsigned int alpha)
 {
 	ULONGLONG now = GetTickCount64();
 	if (currentFrame == -1)
@@ -31,7 +31,7 @@ void CAnimation::Render(int idTex, float x, float y)
 
 	}
 	RECT rect = frames[currentFrame]->GetSprite()->GetBoundingBoxSprite();
-	frames[currentFrame]->GetSprite()->Draw(rect, x, y, idTex);
+	frames[currentFrame]->GetSprite()->Draw(rect, x, y, idTex, scale, alpha);
 }
 
 CAnimations* CAnimations::__instance = NULL;

@@ -21,18 +21,11 @@ void LoadResources() {
 	bg->Load(FILE_PATH_BG_WORLD_1);
 
 	_camera = CCam::GetInstance();
-	//test
-	CRect* cameraBound = new CRect(1968, 464, 2479, 689);
+	_camera->Load(FILE_PATH_CAMERA);
 
-	float upVector = 1.0f;
-	_camera->SetPosition({ 0, 279 });
-	_camera->AddUpVector(upVector);
-
-	_camera->AddCameraBound(cameraBound);
-
-	_mario = new CMario();
-	_mario->SetPosition({ 8 ,100 });
-	//_mario->Load(FILE_PATH_MARIO);
+	_mario = CMario::GetInstance();
+	_mario->SetPosition({ 25 , 384 });
+	_mario->Load(FILE_PATH_MARIO);
 }
 
 void Update(DWORD dt)
@@ -109,9 +102,11 @@ int Run()
 
 			Update((DWORD)dt);
 			Render();
+			Sleep(0);
 		}
-		else
-			Sleep((DWORD)(tickPerFrame - dt));
+		else {
+			//Sleep((DWORD)(tickPerFrame - dt));
+		}
 	}
 
 	return 1;
