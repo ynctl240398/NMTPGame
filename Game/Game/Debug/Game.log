@@ -1,6 +1,2 @@
-﻿  CCam.cpp
-D:\git\NMTPGame\Game\Game\CCam.cpp(61,43): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-D:\git\NMTPGame\Game\Game\CCam.cpp(61,40): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-D:\git\NMTPGame\Game\Game\CCam.cpp(61,37): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-D:\git\NMTPGame\Game\Game\CCam.cpp(61,34): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+﻿  CMario.cpp
   Game.vcxproj -> D:\git\NMTPGame\Game\Debug\Game.exe

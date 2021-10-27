@@ -127,7 +127,7 @@ void CMario::Update(DWORD dt, vector<CGameObject*>* collidableObjects) {
 	if (_position.x < MIN_X) {
 		_position.x = MIN_X;
 	}
-	else _position.x += _velocity.x * dt;
+	else _position.x += _velocity.x * dt * 1.1f;
 
 	_HandleKeyboard();
 	_HandleState();
