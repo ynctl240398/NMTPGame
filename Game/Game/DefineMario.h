@@ -1,0 +1,36 @@
+#pragma once
+//mario prop
+#define MARIO_GRAVITY 0.0005f
+
+//state syntax 1 + 9xx
+#define STATE_MARIO_IDLE 1901
+#define STATE_MARIO_WALK 1902
+#define STATE_MARIO_JUMP 1903
+#define STATE_MARIO_SIT 1904
+
+//small syntax 1 + 0xx
+#define ID_SMALL_MARIO_ANI_IDLE_LEFT 1000
+#define ID_SMALL_MARIO_ANI_IDLE_RIGHT 1001
+#define ID_SMALL_MARIO_ANI_WALK_LEFT 1002
+#define ID_SMALL_MARIO_ANI_WALK_RIGHT 1003
+
+//big syntax 1 + 1xx
+#define ID_BIG_MARIO_ANI_IDLE_LEFT 1100
+#define ID_BIG_MARIO_ANI_IDLE_RIGHT 1101
+#define ID_BIG_MARIO_ANI_WALK_LEFT 1102
+#define ID_BIG_MARIO_ANI_WALK_RIGHT 1103
+
+//super syntax 1 + 2xx
+#define ID_SUPER_MARIO_ANI_IDLE_LEFT 1200
+#define ID_SUPER_MARIO_ANI_IDLE_RIGHT 1201
+#define ID_SUPER_MARIO_ANI_WALK_LEFT 1202
+#define ID_SUPER_MARIO_ANI_WALK_RIGHT 1203
+
+//level
+#define LEVEL_SMALL "small"
+#define LEVEL_BIG "big"
+#define LEVEL_SUPER "supper"
+
+//direction
+#define DIRECTION_LEFT "left"
+#define DIRECTION_RIGHT "right"

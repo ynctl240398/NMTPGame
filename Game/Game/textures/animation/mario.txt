@@ -1,0 +1,25 @@
+[SPRITE]
+#id	l	t	r	b
+
+#small-idle
+1000	0	0	16	16
+
+#small-walk
+1001	18	0	34	16
+1002	54	0	34	16
+
+[ANI]
+#id_sprite	time(ms)
+1000	100
+[NEW_ANI]
+1001	100
+1002	100
+[NEW_ANI]
+
+[ANIS]
+#id_ani
+#small-idle
+1000
+#small-walk
+1002
+[END]

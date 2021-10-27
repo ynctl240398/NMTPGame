@@ -15,84 +15,99 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\02-Sprite\Animation.cpp">
+    <ClCompile Include="CGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\02-Sprite\Animations.cpp">
+    <ClCompile Include="CDebug.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\02-Sprite\debug.cpp">
+    <ClCompile Include="CTexture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\02-Sprite\Game.cpp">
+    <ClCompile Include="CAnimation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\02-Sprite\GameObject.cpp">
+    <ClCompile Include="CSprite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\02-Sprite\Mario.cpp">
+    <ClCompile Include="CGameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\02-Sprite\Sprite.cpp">
+    <ClCompile Include="CBackGround.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\02-Sprite\Sprites.cpp">
+    <ClCompile Include="CUtil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\02-Sprite\Textures.cpp">
+    <ClCompile Include="CCam.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BackGround.cpp">
+    <ClCompile Include="CEntity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PlaySence.cpp">
+    <ClCompile Include="CGrid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CPipeLine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CMario.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CKeyBoard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\02-Sprite\Animation.h">
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CGame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\02-Sprite\AnimationFrame.h">
+    <ClInclude Include="CDebug.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\02-Sprite\Animations.h">
+    <ClInclude Include="CTexture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\02-Sprite\debug.h">
+    <ClInclude Include="CAnimation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\02-Sprite\Game.h">
+    <ClInclude Include="CSprite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\02-Sprite\GameObject.h">
+    <ClInclude Include="CGameObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\02-Sprite\Mario.h">
+    <ClInclude Include="CBackGround.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\02-Sprite\Sprite.h">
+    <ClInclude Include="CUtil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\02-Sprite\Sprites.h">
+    <ClInclude Include="CCam.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\02-Sprite\Texture.h">
+    <ClInclude Include="CEntity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\02-Sprite\Textures.h">
+    <ClInclude Include="CGrid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BackGround.h">
+    <ClInclude Include="CPipeLine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PlaySence.h">
+    <ClInclude Include="CMario.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DefineMario.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CKeyBoard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

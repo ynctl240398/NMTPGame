@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{962a4148-064c-4a6e-89b2-6c07cd8cf012}</ProjectGuid>
+    <ProjectGuid>{2cb13ad5-560b-438f-80f4-61d2b9c91892}</ProjectGuid>
     <RootNamespace>Game</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -92,7 +92,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d10.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d10.lib;d3dcompiler.lib;dxguid.lib;dinput8.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -140,36 +140,41 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CAnimation.cpp" />
+    <ClCompile Include="CBackGround.cpp" />
+    <ClCompile Include="CCam.cpp" />
+    <ClCompile Include="CDebug.cpp" />
+    <ClCompile Include="CEntity.cpp" />
+    <ClCompile Include="CGame.cpp" />
+    <ClCompile Include="CGameObject.cpp" />
+    <ClCompile Include="CGrid.cpp" />
+    <ClCompile Include="CKeyBoard.cpp" />
+    <ClCompile Include="CMario.cpp" />
+    <ClCompile Include="CPipeLine.cpp" />
+    <ClCompile Include="CSprite.cpp" />
+    <ClCompile Include="CTexture.cpp" />
+    <ClCompile Include="CUtil.cpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\02-Sprite\Animation.cpp" />
-    <ClCompile Include="..\02-Sprite\Animations.cpp" />
-    <ClCompile Include="..\02-Sprite\debug.cpp" />
-    <ClCompile Include="..\02-Sprite\Game.cpp" />
-    <ClCompile Include="..\02-Sprite\GameObject.cpp" />
-    <ClCompile Include="..\02-Sprite\Mario.cpp" />
-    <ClCompile Include="..\02-Sprite\Sprite.cpp" />
-    <ClCompile Include="..\02-Sprite\Sprites.cpp" />
-    <ClCompile Include="..\02-Sprite\Textures.cpp" />
-    <ClCompile Include="BackGround.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="PlaySence.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\02-Sprite\Animation.h" />
-    <ClInclude Include="..\02-Sprite\AnimationFrame.h" />
-    <ClInclude Include="..\02-Sprite\Animations.h" />
-    <ClInclude Include="..\02-Sprite\debug.h" />
-    <ClInclude Include="..\02-Sprite\Game.h" />
-    <ClInclude Include="..\02-Sprite\GameObject.h" />
-    <ClInclude Include="..\02-Sprite\Mario.h" />
-    <ClInclude Include="..\02-Sprite\Sprite.h" />
-    <ClInclude Include="..\02-Sprite\Sprites.h" />
-    <ClInclude Include="..\02-Sprite\Texture.h" />
-    <ClInclude Include="..\02-Sprite\Textures.h" />
-    <ClInclude Include="BackGround.h" />
-    <ClInclude Include="PlaySence.h" />
+    <ClInclude Include="CAnimation.h" />
+    <ClInclude Include="CBackGround.h" />
+    <ClInclude Include="CCam.h" />
+    <ClInclude Include="CDebug.h" />
+    <ClInclude Include="CEntity.h" />
+    <ClInclude Include="CGame.h" />
+    <ClInclude Include="CGameObject.h" />
+    <ClInclude Include="CGrid.h" />
+    <ClInclude Include="CKeyBoard.h" />
+    <ClInclude Include="CMario.h" />
+    <ClInclude Include="CPipeLine.h" />
+    <ClInclude Include="CSprite.h" />
+    <ClInclude Include="CTexture.h" />
+    <ClInclude Include="CUtil.h" />
+    <ClInclude Include="DefineMario.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

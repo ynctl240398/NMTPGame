@@ -1,18 +1,2 @@
-﻿  BackGround.cpp
-D:\work\GitHub\NMTPGame\Game\Game\BackGround.h(26,31): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-D:\work\GitHub\NMTPGame\Game\Game\BackGround.h(27,31): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-D:\work\GitHub\NMTPGame\Game\Game\BackGround.h(29,26): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
-D:\work\GitHub\NMTPGame\Game\Game\BackGround.h(30,26): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
-D:\work\GitHub\NMTPGame\Game\Game\BackGround.cpp(23,23): warning C4018: '<': signed/unsigned mismatch
-D:\work\GitHub\NMTPGame\Game\Game\BackGround.cpp(45,40): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-D:\work\GitHub\NMTPGame\Game\Game\BackGround.cpp(45,29): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-D:\work\GitHub\NMTPGame\Game\Game\BackGround.cpp(92,6): warning C4101: 'id': unreferenced local variable
-D:\work\GitHub\NMTPGame\Game\Game\BackGround.cpp(122,23): warning C4018: '<': signed/unsigned mismatch
-D:\work\GitHub\NMTPGame\Game\Game\BackGround.cpp(124,45): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-  main.cpp
-D:\work\GitHub\NMTPGame\Game\Game\BackGround.h(26,31): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-D:\work\GitHub\NMTPGame\Game\Game\BackGround.h(27,31): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-D:\work\GitHub\NMTPGame\Game\Game\BackGround.h(29,26): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
-D:\work\GitHub\NMTPGame\Game\Game\BackGround.h(30,26): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
-  Generating Code...
-  Game.vcxproj -> D:\work\GitHub\NMTPGame\Game\Debug\Game.exe
+﻿  CCam.cpp
+  Game.vcxproj -> D:\git\Game\Debug\Game.exe
