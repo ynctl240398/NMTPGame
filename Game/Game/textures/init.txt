@@ -1,0 +1,12 @@
+[SETTINGS]
+start	1
+
+[TEXTURES]
+-100	textures\bbox.png
+000	textures\tileset.png
+100	textures\mario.png
+200	textures\items.png
+
+[SCENES]
+0	textures\intro.txt
+1	textures\world1-1\assets.txt

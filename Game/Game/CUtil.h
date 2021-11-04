@@ -9,6 +9,7 @@
 #include <vector>
 #include <codecvt>
 
+#include <Windows.h>
 #include <D3DX10.h>
 #include <d3d10.h>
 
@@ -21,17 +22,14 @@
 #define MAX_SCENE_LINE 1024
 
 //ID_IMG
+#define ID_IMG_BBOX -100		// special texture to draw object bounding box
 #define ID_IMG_TITLE_SET 000
 #define ID_IMG_MARIO 100
+#define ID_IMG_ITEM 200
 
-//PATH_IMG
-#define PATH_IMG_TITLE_SET "textures\\tileset.png"
-#define PATH_IMG_MARIO L"textures\\mario.png"
-
-//PATH file
-#define FILE_PATH_BG_WORLD_1 "textures//world1-1//bg.txt"
-#define FILE_PATH_MARIO "textures//animation//mario.txt"
-#define FILE_PATH_CAMERA "textures//world1-1//camera.txt"
+//mario 1xxx
+//brick_question 2xxx
+//item 3xxx
 
 using namespace std;
 
@@ -47,3 +45,4 @@ namespace CUtil {
 
 wstring ToWSTR(string st);
 vector<string> split(string line, string delimeter = "\t");
+LPCWSTR ToLPCWSTR(string st);

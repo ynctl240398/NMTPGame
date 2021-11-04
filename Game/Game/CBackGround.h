@@ -6,7 +6,7 @@ class CBackGround : public CGameObject
 {
 	CTextures* _tex;
 
-	std::vector<std::pair<RECT, D3DXVECTOR2>> _sprites;
+	vector<pair<RECT, D3DXVECTOR2>> _sprites;
 
 	D3DXMATRIX _scaleMatrix;
 	D3DX10_SPRITE _sprite;
@@ -15,9 +15,9 @@ class CBackGround : public CGameObject
 	void _ScaleSprite(const RECT& spriteBound);
 public:
 	CBackGround();
-	void Load(string filePath);
+	void Load(LPCWSTR filePath);
 	void Render() override;
 	void Release() override;
-
+	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
 	~CBackGround();
 };

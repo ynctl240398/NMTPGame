@@ -8,30 +8,12 @@
 #include "CUtil.h"
 #include "CMario.h"
 
-//id sprite
-//mario 1xxx
-//
+#define INIT_FILE_PATH L"textures\\init.txt"
 
-CBackGround* bg;
-CCam* _camera;
-CMario* _mario;
-
-void LoadResources() {
-	bg = new CBackGround();
-	bg->Load(FILE_PATH_BG_WORLD_1);
-
-	_camera = CCam::GetInstance();
-	_camera->Load(FILE_PATH_CAMERA);
-
-	_mario = CMario::GetInstance();
-	_mario->SetPosition({ 25 , 384 });
-	_mario->Load(FILE_PATH_MARIO);
-}
 
 void Update(DWORD dt)
 {
-	_mario->Update(dt);
-	_camera->Update(dt);
+	CGame::GetInstance()->GetCurrentScene()->Update(dt);
 }
 
 void Render()
@@ -60,11 +42,11 @@ void Render()
 
 		// Uncomment this line to see how to draw a porttion of a texture  
 		//g->Draw(10, 10, texMisc, 300, 117, 316, 133);
-		bg->Render();
-		_mario->Render();
 
 		float newBlendFactor[4] = { 0.0f };
 		device->OMSetBlendState(blendState, newBlendFactor, 0xffffffff);
+
+		CGame::GetInstance()->GetCurrentScene()->Render();
 
 		spriteHandler->End();
 		swapChain->Present(0, 0);
@@ -102,10 +84,11 @@ int Run()
 
 			Update((DWORD)dt);
 			Render();
-			Sleep(0);
+			
+			CGame::GetInstance()->SwitchScene();
 		}
 		else {
-			//Sleep((DWORD)(tickPerFrame - dt));
+			Sleep((DWORD)(tickPerFrame - dt));
 		}
 	}
 
@@ -137,12 +120,12 @@ int __stdcall WinMain(
 		return -1;
 	};
 
+	gameInstance->Load(INIT_FILE_PATH);
+
 	RECT windowRect;
 	GetWindowRect(hWND, &windowRect);
 	unsigned int xPos = (GetSystemMetrics(SM_CXSCREEN) - windowRect.right) / 3;
 	unsigned int yPos = (GetSystemMetrics(SM_CYSCREEN) - windowRect.bottom) / 4;
-
-	LoadResources();
 
 	SetWindowPos(hWND, nullptr, xPos, yPos, SCREEN_WIDTH * 3, SCREEN_HEIGHT * 3 , SWP_NOOWNERZORDER | SWP_NOZORDER);
 	

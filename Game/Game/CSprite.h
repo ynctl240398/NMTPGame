@@ -19,14 +19,14 @@ class CSprite
 	D3DX10_SPRITE _sprite;
 	D3DXMATRIX _scaleMatrix;
 
-	void _ScaleSprite(const RECT& rect, int idTex, D3DXVECTOR2 scale, unsigned int alpha);
+	void _ScaleSprite(D3DXVECTOR2 scale, unsigned int alpha);
 
 public:
 	CSprite(int id, int left, int top, int right, int bottom, LPTEXTURE tex);
 
 	RECT GetBoundingBoxSprite() { return{ left, top, right, bottom }; }
 
-	void Draw(RECT rect, float x, float y, int idTex, D3DXVECTOR2, unsigned int);
+	void Draw(float x, float y, D3DXVECTOR2, unsigned int);
 	void Release();
 };
 
@@ -38,9 +38,12 @@ class CSprites
 	
 	unordered_map<int, LPSPRITE> sprites;
 
+
 public:
+
 	void Add(int id, int left, int top, int right, int bottom, LPTEXTURE tex);
 	LPSPRITE Get(int id);
+	void Clear();
 
 	static CSprites* GetInstance();
 };

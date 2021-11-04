@@ -37,7 +37,11 @@ float CCam::GetUpVector(int index) const {
 	return _upVectors.at(index);
 }
 
-void CCam::Load(string filePath) {
+void CCam::GetBoundingBox(float& left, float& top, float& right, float& bottom) {
+
+}
+
+void CCam::Load(LPCWSTR filePath) {
 	ifstream f;
 	f.open(filePath);
 	char str[MAX_SCENE_LINE];
@@ -65,6 +69,7 @@ void CCam::Load(string filePath) {
 
 		AddCameraBound(cameraBound);
 	}
+	f.close();
 }
 
 void CCam::AddUpVector(float upVector) {
@@ -80,6 +85,9 @@ LPRECTCUSTOM CCam::GetViewport() const {
 }
 
 LPRECTCUSTOM CCam::GetCameraBound(int index) const {
+	if (index < 0) {
+		return new CRect(0, 0, 0, 0);
+	}
 	return _cameraBounds.at(index);
 }
 
@@ -88,19 +96,19 @@ void CCam::AddCameraBound(LPRECTCUSTOM cameraBound) {
 }
 
 void CCam::Update(DWORD dt, vector<CGameObject*>* collidableObjects) {
-	/*CKeyBoardCustom* _keyboard = CKeyBoardCustom::GetInstance();
+	CKeyBoardCustom* _keyboard = CKeyBoardCustom::GetInstance();
 	if (_keyboard->IsKeyDown(DIK_RIGHTARROW)) {
-		_position.x += dt * 0.1f;
+		_position.x += dt * 0.2f;
 	}
 	else if (_keyboard->IsKeyDown(DIK_LEFTARROW)) {
-		_position.x -= dt * 0.1f;
+		_position.x -= dt * 0.2f;
 	}
 	else if (_keyboard->IsKeyDown(DIK_UPARROW)) {
-		_position.y -= dt * 0.1f;
+		_position.y -= dt * 0.2f;
 	}
 	else if (_keyboard->IsKeyDown(DIK_DOWNARROW)) {
-		_position.y += dt * 0.1f;
-	}*/
+		_position.y += dt * 0.2f;
+	}
 }
 
 void CCam::Release() {
@@ -110,4 +118,8 @@ void CCam::Release() {
 		delete _cameraInstance;
 		_cameraInstance = NULL;
 	}
+}
+
+void CCam::Render() {
+
 }

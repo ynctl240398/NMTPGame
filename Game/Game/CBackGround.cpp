@@ -8,10 +8,7 @@
 #define HEIGHT_TITLE_SET 16
 
 CBackGround::CBackGround() {
-	wstring path = ToWSTR(PATH_IMG_TITLE_SET);
 	this->_tex = CTextures::GetInstance();
-	_tex->Add(ID_IMG_TITLE_SET, path.c_str());
-	_sprite.pTexture = _tex->Get(ID_IMG_TITLE_SET)->getShaderResourceView();
 }
 
 void CBackGround::_ParseSectionSprites(string line) {
@@ -48,7 +45,7 @@ void CBackGround::_ScaleSprite(const RECT& spriteBound) {
 	D3DXMatrixScaling(&_scaleMatrix, static_cast<float>(spriteWidth), static_cast<float>(spriteHeight), 1.0f);
 }
 
-void CBackGround::Load(string filePath) {
+void CBackGround::Load(LPCWSTR filePath) {
 	ifstream f;
 	f.open(filePath);
 	char str[MAX_SCENE_LINE];
@@ -59,6 +56,8 @@ void CBackGround::Load(string filePath) {
 		if (line[0] == '#') continue; //comment line
 		_ParseSectionSprites(line);
 	}
+	f.close();
+	_sprite.pTexture = _tex->Get(ID_IMG_TITLE_SET)->getShaderResourceView();
 }
 
 void CBackGround::Render() {
@@ -81,6 +80,10 @@ void CBackGround::Release() {
 	_sprites.clear();
 	_sprite.pTexture = nullptr;
 	_tex = nullptr;
+}
+
+void CBackGround::GetBoundingBox(float& left, float& top, float& right, float& bottom) {
+
 }
 
 CBackGround::~CBackGround() {}

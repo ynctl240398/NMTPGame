@@ -1,10 +1,14 @@
 #include "CGameObject.h"
-#include "CEntity.h"
+#include "CGame.h"
+#include "CCam.h"
 
 CGameObject::CGameObject() {
 	_isActive = true;
 	_normal = D3DXVECTOR2(1.0f, 1.0f);
 	_scale = D3DXVECTOR2(1.0f, 1.0f);
+	_isDeleted = false;
+	_state = -1;
+	_velocity = { 0.0f,0.0f };
 }
 
 CGameObject::~CGameObject() {}
@@ -19,30 +23,25 @@ bool CGameObject::IsActive() const {
 	return _isActive;
 }
 
-void CGameObject::SetOjectType(GameObjectType objectType) {
-	_objectType = objectType;
-}
-
-CGameObject::GameObjectType CGameObject::GetObjectType() const
+void CGameObject::RenderBoundingBox()
 {
-	return _objectType;
-}
+	D3DXVECTOR3 p(_position.x, _position.y, 0);
+	RECT rect;
 
-CRect CGameObject::GetBoundingBox(int index) const {
-	CRect rect;
-	rect.SetLeft(_position.x + _boundingBox.GetBoxOffsetX(index));
-	rect.SetTop(_position.y + _boundingBox.GetBoxOffsetY(index));
-	rect.SetRight(rect.GetLeft() + _boundingBox.GetBoxWidth(index));
-	rect.SetBottom(rect.GetTop() + _boundingBox.GetBoxHeight(index));
-	return rect;
-}
+	LPTEXTURE bbox = CTextures::GetInstance()->Get(ID_IMG_BBOX);
 
-float CGameObject::GetBoxWidth(int index) const {
-	return _boundingBox.GetBoxWidth(index);
-}
+	float l, t, r, b;
 
-float CGameObject::GetBoxHeight(int index)  const {
-	return _boundingBox.GetBoxHeight(index);
+	GetBoundingBox(l, t, r, b);
+
+	rect.left = 0;
+	rect.top = 0;
+	rect.right = (int)r - (int)l;
+	rect.bottom = (int)b - (int)t;
+
+	float cx = CCam::GetInstance()->GetPosition().x, cy = CCam::GetInstance()->GetPosition().y;
+
+	//CGame::GetInstance()->Draw(_position.x - cx, _position.y - cy, bbox, &rect, BBOX_ALPHA);
 }
 
 void CGameObject::SetVelocity(D3DXVECTOR2 velocity) {
@@ -101,160 +100,8 @@ D3DXVECTOR2 CGameObject::GetScale() const {
 	return _scale;
 }
 
-void CGameObject::SweptAABB(
-	CRect movingObject,
-	CRect staticObject,
-	D3DXVECTOR2 distance,
-	D3DXVECTOR2& normal,
-	float& time)
-{
-	D3DXVECTOR2 dEntry;
-	D3DXVECTOR2 dExit;
-
-	D3DXVECTOR2 tEntry;
-	D3DXVECTOR2 tExit;
-
-	float entry;
-	float exit;
-
-	//No collision
-	time = -1.0f;
-	normal = D3DXVECTOR2(0, 0);
-
-	//Broad phase test
-	CRect box;
-	box.SetLeft(distance.x > 0 ? movingObject.GetLeft() : movingObject.GetLeft() + distance.x);
-	box.SetTop(distance.y > 0 ? movingObject.GetTop() : movingObject.GetTop() + distance.y);
-	box.SetRight(distance.x > 0 ? movingObject.GetRight() + distance.x : movingObject.GetRight());
-	box.SetBottom(distance.y > 0 ? movingObject.GetBottom() + distance.y : movingObject.GetBottom());
-
-	if (box.GetRight() < staticObject.GetLeft() ||
-		box.GetLeft() > staticObject.GetRight() ||
-		box.GetBottom() < staticObject.GetTop() ||
-		box.GetTop() > staticObject.GetBottom())
-	{
-		return;
-	}
-
-	if (distance.x == 0.0f && distance.y == 0.0f) {
-		return;
-	}
-
-	if (distance.x > 0) {
-		dEntry.x = staticObject.GetLeft() - movingObject.GetRight();
-		dExit.x = staticObject.GetRight() - movingObject.GetLeft();
-	}
-	else if (distance.x < 0) {
-		dEntry.x = staticObject.GetRight() - movingObject.GetLeft();
-		dExit.x = staticObject.GetLeft() - movingObject.GetRight();
-	}
-
-	if (distance.y > 0) {
-		dEntry.y = staticObject.GetTop() - movingObject.GetBottom();
-		dExit.y = staticObject.GetBottom() - movingObject.GetTop();
-	}
-	else if (distance.y < 0) {
-		dEntry.y = staticObject.GetBottom() - movingObject.GetTop();
-		dExit.y = staticObject.GetTop() - movingObject.GetBottom();
-	}
-
-	if (distance.x == 0) {
-		tEntry.x = -std::numeric_limits<float>::infinity();
-		tExit.x = std::numeric_limits<float>::infinity();
-	}
-	else {
-		tEntry.x = dEntry.x / distance.x;
-		tExit.x = dExit.x / distance.x;
-	}
-
-	if (distance.y == 0) {
-		tEntry.y = -std::numeric_limits<float>::infinity();
-		tExit.y = std::numeric_limits<float>::infinity();
-	}
-	else {
-		tEntry.y = dEntry.y / distance.y;
-		tExit.y = dExit.y / distance.y;
-	}
-
-	if ((tEntry.x < 0.0f && tEntry.y < 0.0f) ||
-		tEntry.x > 1.0f ||
-		tEntry.y > 1.0f)
-	{
-		return;
-	}
-
-	entry = tEntry.x > tEntry.y ? tEntry.x : tEntry.y;
-	exit = tExit.x < tExit.y ? tExit.x : tExit.y;
-
-	if (entry > exit) {
-		return;
-	}
-
-	time = entry;
-
-	if (tEntry.x > tEntry.y) {
-		normal.y = 0.0f;
-		distance.x > 0 ? normal.x = -1.0f : normal.x = 1.0f;
-	}
-	else {
-		normal.x = 0.0f;
-		distance.y > 0 ? normal.y = -1.0f : normal.y = 1.0f;
-	}
-}
-
-void CGameObject::FilterCollision(
-	const vector<LPCOLLISIONEVENT>& collisionEvents,
-	vector<LPCOLLISIONEVENT>& eventsResult,
-	D3DXVECTOR2& minTime,
-	D3DXVECTOR2& normal,
-	D3DXVECTOR2& relativeDistance)
-{
-	minTime = D3DXVECTOR2(1.0f, 1.0f);
-	normal = D3DXVECTOR2(0.0f, 0.0f);
-
-	int minIndX = -1, minIndY = -1;
-
-	for (unsigned int i = 0; i < collisionEvents.size(); ++i) {
-		LPCOLLISIONEVENT coEvent = collisionEvents.at(i);
-
-		if (coEvent->entity->isPassThroughable) {
-			continue;
-		}
-
-		if (coEvent->time < minTime.x && coEvent->normal.x != 0) {
-			minTime.x = coEvent->time;
-			normal.x = coEvent->normal.x;
-			relativeDistance.x = coEvent->distance.x;
-			minIndX = i;
-		}
-
-		if (coEvent->time < minTime.y && coEvent->normal.y != 0) {
-			minTime.y = coEvent->time;
-			normal.y = coEvent->normal.y;
-			relativeDistance.y = coEvent->distance.y;
-			minIndY = i;
-		}
-	}
-
-	if (minIndX >= 0) {
-		eventsResult.emplace_back(collisionEvents.at(minIndX));
-	}
-
-	if (minIndY >= 0) {
-		eventsResult.emplace_back(collisionEvents.at(minIndY));
-	}
-
-	for (unsigned int i = 0; i < collisionEvents.size(); ++i) {
-		LPCOLLISIONEVENT coEvent = collisionEvents.at(i);
-		if (coEvent->entity->isPassThroughable) {
-			eventsResult.emplace_back(coEvent);
-		}
-	}
-}
-
 void CGameObject::Update(DWORD dt, std::vector<CGameObject*>* collidableObjects) {
-	_deltaTime = dt;
-	_distance = _velocity * static_cast<float>(_deltaTime);
+	
 }
 
 void CGameObject::Render() {}

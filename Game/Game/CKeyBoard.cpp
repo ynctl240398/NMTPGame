@@ -1,4 +1,5 @@
 #include "CKeyBoard.h"
+#include "CMario.h"
 
 CKeyBoardCustom* CKeyBoardCustom::__instance = NULL;
 
@@ -83,6 +84,7 @@ void CKeyBoardCustom::ProcessKeyboardInputs() {
 	}
 
 	//_managerInstance->GetCurrentScene()->HandleStates();
+	CMario::GetInstance()->KeyState((BYTE*)&_keyStates);
 
 	DWORD elements = KEYBOARD_BUFFER_SIZE;
 
@@ -96,12 +98,12 @@ void CKeyBoardCustom::ProcessKeyboardInputs() {
 		int keyCode = _keyEvents[i].dwOfs;
 		int keyState = _keyEvents[i].dwData;
 
-		/*if ((keyState & 0x80) > 0) {
-			_managerInstance->GetCurrentScene()->OnKeyDown(keyCode);
+		if ((keyState & 0x80) > 0) {
+			CMario::GetInstance()->OnKeyDown(keyCode);
 		}
 		else {
-			_managerInstance->GetCurrentScene()->OnKeyUp(keyCode);
-		}*/
+			CMario::GetInstance()->OnKeyUp(keyCode);
+		}
 	}
 }
 

@@ -1,4 +1,5 @@
 #include "CAnimation.h"
+#include "CDebug.h"
 
 void CAnimation::Add(int spriteId, DWORD time)
 {
@@ -10,8 +11,9 @@ void CAnimation::Add(int spriteId, DWORD time)
 	frames.push_back(frame);
 }
 
-void CAnimation::Render(int idTex, float x, float y, D3DXVECTOR2 scale, unsigned int alpha)
+void CAnimation::Render(float x, float y, D3DXVECTOR2 scale, unsigned int alpha)
 {
+
 	ULONGLONG now = GetTickCount64();
 	if (currentFrame == -1)
 	{
@@ -25,13 +27,12 @@ void CAnimation::Render(int idTex, float x, float y, D3DXVECTOR2 scale, unsigned
 		{
 			currentFrame++;
 			lastFrameTime = now;
+
 			if (currentFrame == frames.size()) currentFrame = 0;
-			//DebugOut(L"now: %d, lastFrameTime: %d, t: %d\n", now, lastFrameTime, t);
 		}
 
 	}
-	RECT rect = frames[currentFrame]->GetSprite()->GetBoundingBoxSprite();
-	frames[currentFrame]->GetSprite()->Draw(rect, x, y, idTex, scale, alpha);
+	frames[currentFrame]->GetSprite()->Draw(x, y, scale, alpha);
 }
 
 CAnimations* CAnimations::__instance = NULL;
@@ -49,5 +50,19 @@ void CAnimations::Add(int id, LPANIMATION ani)
 
 LPANIMATION CAnimations::Get(int id)
 {
-	return animations[id];
+	LPANIMATION ani = animations[id];
+	if (ani == NULL) {}
+		//DebugOut(L"[ERROR] Animation ID %d not found\n", id);
+	return ani;
+}
+
+void CAnimations::Clear()
+{
+	for (auto x : animations)
+	{
+		LPANIMATION ani = x.second;
+		delete ani;
+	}
+
+	animations.clear();
 }

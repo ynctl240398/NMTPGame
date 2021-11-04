@@ -30,18 +30,13 @@ CSprite::CSprite(int id, int left, int top, int right, int bottom, LPTEXTURE tex
 	_cameraInstance = CCam::GetInstance();
 }
 
-void CSprite::_ScaleSprite(const RECT& spriteBound, int idTex, D3DXVECTOR2 scale, unsigned int alpha) {
+void CSprite::_ScaleSprite(D3DXVECTOR2 scale, unsigned int alpha) {
 
-	LPTEXTURE texture = CTextures::GetInstance()->Get(idTex);
-	if (texture == nullptr) {
-		return;
-	}
+	_sprite.TexCoord.x = left / static_cast<float>(texture->getWidth());
+	_sprite.TexCoord.y = top / static_cast<float>(texture->getHeight());
 
-	_sprite.TexCoord.x = spriteBound.left / static_cast<float>(texture->getWidth());
-	_sprite.TexCoord.y = spriteBound.top / static_cast<float>(texture->getHeight());
-
-	int spriteWidth = spriteBound.right - spriteBound.left;
-	int spriteHeight = spriteBound.bottom - spriteBound.top;
+	int spriteWidth = right - left;
+	int spriteHeight = bottom - top;
 	_sprite.TexSize.x = spriteWidth / static_cast<float>(texture->getWidth());
 	_sprite.TexSize.y = spriteHeight / static_cast<float>(texture->getHeight());
 	_sprite.ColorModulate = { 1.0f, 1.0f, 1.0f, alpha / 255.0f };
@@ -50,17 +45,21 @@ void CSprite::_ScaleSprite(const RECT& spriteBound, int idTex, D3DXVECTOR2 scale
 	D3DXMatrixScaling(&_scaleMatrix, static_cast<float>(spriteWidth) * scale.x, static_cast<float>(spriteHeight) * scale.y, 1.0f);
 }
 
-void CSprite::Draw(RECT rect,float x, float y, int idTex, D3DXVECTOR2 scale, unsigned int alpha)
+void CSprite::Draw(float x, float y, D3DXVECTOR2 scale, unsigned int alpha)
 {
+
 	CGame* g = CGame::GetInstance();
 
-	_ScaleSprite(rect, idTex, scale, alpha);
+	_ScaleSprite(scale, alpha);
 
 	D3DXMATRIX matTranslation;
 
 	float nx = x - _cameraInstance->GetPosition().x;
 	float ny = (g->GetBackBufferHeight() - y) + _cameraInstance->GetPosition().y;
-	D3DXMatrixTranslation(&matTranslation, nx, ny, 0.1f);
+
+	D3DXVECTOR2 spritePosition = { floor(nx), floor(ny) };
+
+	D3DXMatrixTranslation(&matTranslation, spritePosition.x, spritePosition.y, 0.1f);
 	this->_sprite.matWorld = (this->_scaleMatrix * matTranslation);
 
 	CUtil::SpriteHandler->DrawSpritesImmediate(&_sprite, 1, 0, 0);
@@ -88,4 +87,15 @@ LPSPRITE CSprites::Get(int id)
 void CSprite::Release() {
 	//_sprite = nullptr;
 	//_tex = nullptr;
+}
+
+void CSprites::Clear()
+{
+	for (auto x : sprites)
+	{
+		LPSPRITE s = x.second;
+		delete s;
+	}
+
+	sprites.clear();
 }

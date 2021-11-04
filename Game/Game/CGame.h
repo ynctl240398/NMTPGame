@@ -6,6 +6,7 @@
 #include "CTexture.h"
 #include "CPipeLine.h"
 #include "CKeyBoard.h"
+#include "CScene.h"
 
 #define MAX_FRAME_RATE 60
 #define FRAME_RATE 60
@@ -45,6 +46,14 @@ class CGame
 	unsigned int _defaultSceneID;
 	bool _isRunning;
 
+	unordered_map<int, LPSCENE> scenes;
+	int current_scene;
+	int next_scene = -1;
+
+	void _ParseSection_SETTINGS(string line);
+	void _ParseSection_SCENES(string line);
+	void _ParseSection_TEXTURES(string line);
+
 	void _CreateContentWindow(HINSTANCE);
 	static void _ResizeWindow(int, RECT&);
 
@@ -72,7 +81,7 @@ public:
 	// Draw a portion or ALL the texture at position (x,y) on the screen
 	// rect : if NULL, the whole texture will be drawn
 	//        if NOT NULL, only draw that portion of the texture 
-	void Draw(float x, float y, LPTEXTURE tex, RECT* rect = NULL);
+	void Draw(float x, float y, LPTEXTURE tex, RECT* rect = NULL, float alpha = 1.0f, int sprite_width = 0, int sprite_height = 0);
 
 	void Draw(float x, float y, LPTEXTURE tex, int l, int t, int r, int b)
 	{
@@ -93,9 +102,15 @@ public:
 		return _pipeline->GetInstance();
 	}
 
-	HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int width, int height);
+	LPSCENE GetCurrentScene() { return scenes[current_scene]; }
+	void Load(LPCWSTR gameFile);
+	void SwitchScene();
+	void InitiateSwitchScene(int scene_id);
 
+	HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int width, int height);
+	
 	static CGame* GetInstance();
 
 	~CGame();
 };
+typedef CGame* LPGAME;

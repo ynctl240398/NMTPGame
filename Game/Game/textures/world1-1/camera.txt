@@ -1,2 +1,2 @@
 #left	top	right	bottom	x	y	upvector
-0	-8	2808	465	0	0	1
+-8	-8	2808	465	0	0	1

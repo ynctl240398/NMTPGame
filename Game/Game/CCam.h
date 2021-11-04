@@ -16,7 +16,7 @@ private:
 public:
 	static CCam* GetInstance();
 
-	void Load(string);
+	void Load(LPCWSTR);
 
 	void SetCameraWidth(unsigned int);
 	unsigned int GetCameraWidth() const;
@@ -28,6 +28,10 @@ public:
 
 	LPRECTCUSTOM GetViewport() const;
 	LPRECTCUSTOM GetCameraBound(int = 0) const;
+
+	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
+	void Render() override;
+
 	void AddCameraBound(LPRECTCUSTOM);
 
 	void Update(DWORD, vector<CGameObject*>* = nullptr) override;

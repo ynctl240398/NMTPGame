@@ -60,5 +60,7 @@ public:
 	void Add(int id, LPCWSTR filePath);
 	LPTEXTURE Get(unsigned int i);
 
+	void Load(LPCWSTR filePath);
+
 	static CTextures* GetInstance();
 };
