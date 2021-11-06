@@ -63,7 +63,10 @@ private:
 
 	void _OnCollisionWithBrick(LPCOLLISIONEVENT e);
 	void _OnCollisionWithBrickQuestion(LPCOLLISIONEVENT e);
+	void _OnCollisionWithItem(LPCOLLISIONEVENT e);
 	void _OnCollisionWithGoomba(LPCOLLISIONEVENT e);
+
+	void _SetLevel(string level);
 
 public:
 	CMario();
@@ -88,7 +91,7 @@ public:
 	void OnKeyUp(int);
 	void OnKeyDown(int);
 	void KeyState(BYTE* states);
-
+	
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 

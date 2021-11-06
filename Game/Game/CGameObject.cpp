@@ -41,7 +41,7 @@ void CGameObject::RenderBoundingBox()
 
 	float cx = CCam::GetInstance()->GetPosition().x, cy = CCam::GetInstance()->GetPosition().y;
 
-	//CGame::GetInstance()->Draw(_position.x - cx, _position.y - cy, bbox, &rect, BBOX_ALPHA);
+	CGame::GetInstance()->Draw(_position.x - cx, _position.y - cy, bbox, &rect, BBOX_ALPHA);
 }
 
 void CGameObject::SetVelocity(D3DXVECTOR2 velocity) {

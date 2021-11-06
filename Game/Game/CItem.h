@@ -34,6 +34,8 @@ public:
 	void Release() override;
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
 
+	string GetType() { return this->_type; }
+
 	~CItem();
 };
 

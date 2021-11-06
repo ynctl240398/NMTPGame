@@ -2,6 +2,7 @@
 #include "DefineMario.h"
 
 #include "CBrick.h"
+#include "CItem.h"
 #include "CBrickQuestion.h"
 
 #define LENGTH_SPRITES 5
@@ -134,31 +135,50 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
 	{
 		_velocity.y = 0;
 		if (e->ny < 0) _isOnPlatform = true;
-		if (e->ny > 0) {
-		}
 	}
 	else
 		if (e->nx != 0 && e->obj->IsBlocking())
 		{
-			_isOnPlatform = true;
 			_velocity.x = 0;
 		}
+
 	if (dynamic_cast<CBrick*>(e->obj))
 		_OnCollisionWithBrick(e);
 	else if (dynamic_cast<CBrickQuestion*>(e->obj))
 		_OnCollisionWithBrickQuestion(e);
+	else if (dynamic_cast<CItem*>(e->obj)) {
+		_OnCollisionWithItem(e);
+	}
 }
 
 void CMario::_OnCollisionWithBrick(LPCOLLISIONEVENT e) {
 	CBrick* brick = dynamic_cast<CBrick*>(e->obj);
-	
-	
+
+	if(brick->IsBig()) {
+		if (e->nx != 0 && e->obj->IsBlocking()) {
+			_velocity.x = MARIO_JUMP_DEFLECT_SPEED * -_direction;
+		}
+	}
 }
 
 void CMario::_OnCollisionWithBrickQuestion(LPCOLLISIONEVENT e) {
 	CBrickQuestion* brick = dynamic_cast<CBrickQuestion*>(e->obj);
+
 	if (e->ny > 0) {
 		brick->SetState(STATE_BRICK_QUESTION_IDLE);
+	}
+
+}
+
+void CMario::_OnCollisionWithItem(LPCOLLISIONEVENT e) {
+	CItem* item = dynamic_cast<CItem*>(e->obj);
+
+	item->Delete();
+
+	if (item->GetType() == TYPE_MUSHROOM_RED) {
+		if (this->_level == LEVEL_SMALL) {
+			this->_SetLevel(LEVEL_BIG);
+		}
 	}
 }
 
@@ -174,7 +194,7 @@ void CMario::OnNoCollision(DWORD dt) {
 	}
 	else _position.x += dx;
 
-	_position.y += _velocity.y * dt / 4.5;
+	_position.y += _velocity.y * dt;
 }
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
@@ -191,7 +211,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	}
 
 	_isOnPlatform = false;
+
 	_UpdateCamPosition();
+
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
@@ -200,11 +222,10 @@ void CMario::_HandleKeyDown(int keyCode) {
 	switch (keyCode)
 	{
 	case DIK_1:
-		_level = LEVEL_SMALL;
+		_SetLevel(LEVEL_SMALL);
 		break;
 	case DIK_2:
-		_level = LEVEL_BIG;
-		_position.y -= MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT / 2;
+		_SetLevel(LEVEL_BIG);
 		break;
 	case DIK_DOWN:
 		_HandleState(STATE_MARIO_SIT);
@@ -284,6 +305,9 @@ void CMario::_HandleState(int state) {
 	case STATE_MARIO_DIE:
 		this->_Die();
 		break;
+	case STATE_MARIO_RUN:
+		this->_Run();
+		break;
 	default:
 		break;
 	}
@@ -325,8 +349,9 @@ void CMario::_Walk() {
 }
 
 void CMario::_Run() {
-
-	
+	if (_isSitting) return;
+	_maxVx = MARIO_RUNNING_SPEED * -_direction;
+	_ax = MARIO_ACCEL_RUN_X * -_direction;
 }
 
 void CMario::_Jump() {
@@ -423,9 +448,9 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
 		}
 		else
 		{
-			left = _position.x - MARIO_BIG_BBOX_WIDTH / 2;
+			left = _position.x - MARIO_BIG_BBOX_WIDTH / 2 + ZONE;
 			top = _position.y - MARIO_BIG_BBOX_HEIGHT / 2;
-			right = left + MARIO_BIG_BBOX_WIDTH;
+			right = left + MARIO_BIG_BBOX_WIDTH - ZONE;
 			bottom = top + MARIO_BIG_BBOX_HEIGHT;
 		}
 	}
@@ -538,4 +563,11 @@ int CMario::_HandleAnimationSmall() {
 	if (aniId == -1) aniId = ID_SMALL_MARIO_ANI_IDLE;
 
 	return aniId;
+}
+
+void CMario::_SetLevel(string level) {
+	_level = level;
+	if (level == LEVEL_BIG) {
+		_velocity.y = -MARIO_JUMP_DEFLECT_SPEED;
+	}
 }

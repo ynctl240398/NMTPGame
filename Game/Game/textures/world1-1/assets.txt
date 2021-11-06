@@ -17,7 +17,7 @@
 8	192	352	textures\animation\brick_question.txt
 
 #big_brick
-9	256	386	48	48
+9	256	384	48	48
 
 #item
 10	400	400	16	16	mushroom_red	textures\animation\item.txt
