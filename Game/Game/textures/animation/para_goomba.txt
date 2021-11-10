@@ -1,0 +1,23 @@
+[SPRITE]
+#id	l	t	w	h
+
+#walk
+4000	0	16	16	16
+4001	17	16	16	16
+
+#die
+4002	34	16	16	16
+
+#id_sprite	time(ms)
+#walk
+[FRAME]
+4000	100
+4001	100
+[ANIMATION]
+4000
+
+#run
+[FRAME]
+4002	100
+[ANIMATION]
+4001

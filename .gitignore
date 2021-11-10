@@ -1,1 +1,4 @@
 Game/.vs/*
+Game/Debug
+Game/Game/debug
+Game/Game/x64
