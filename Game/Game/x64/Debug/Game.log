@@ -1,5 +1,0 @@
-﻿  CKeyBoard.cpp
-D:\git\NMTPGame\Game\Game\CKeyBoard.cpp(27,51): error C2065: 'GWL_HINSTANCE': undeclared identifier
-  CMario.cpp
-  main.cpp
-  Generating Code...
