@@ -1,5 +1,8 @@
 #include "CGoomba.h"
 #include "CAnimation.h"
+#include "CItem.h"
+#include "CBrick.h"
+#include "CBrickQuestion.h"
 
 #define GOOMBA_WIDTH 16
 #define GOOMBA_HEIGHT 16
@@ -19,8 +22,8 @@ CGoomba::CGoomba(float x, float y) {
 	_velocity = { 0.0f,0.0f };
 	_ay = GOOMBA_GRAVITY;
 	_ax = 0;
-	_state = -1;
 	_dieStart = -1;
+	_state = -1;
 }
 
 int CGoomba::_GetAnimationId() {
@@ -43,7 +46,7 @@ void CGoomba::SetState(int state) {
 		_ax = 0;
 		break;
 	case STATE_GOOMBA_WALK:
-		_velocity.x = -GOOMBA_WALK_SPEED;
+		_velocity.x = _velocity.x == 0 ? -GOOMBA_WALK_SPEED : _velocity.x;
 		break;
 	}
 	CGameObject::SetState(state);
@@ -56,7 +59,10 @@ void CGoomba::OnNoCollision(DWORD dt) {
 
 void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
 	if (!e->obj->IsBlocking()) return;
-	if (dynamic_cast<CGoomba*>(e->obj)) return;
+	if (dynamic_cast<CItem*>(e->obj)) {
+		_handleNoCollisionX = true;
+		return;
+	}
 
 	if (e->ny != 0)
 	{
@@ -64,7 +70,14 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
 	}
 	else if (e->nx != 0)
 	{
-		_velocity.x = -_velocity.x;
+		if (dynamic_cast<CBrick*>(e->obj) || dynamic_cast<CBrickQuestion*>(e->obj) || dynamic_cast<CGoomba*>(e->obj)) {
+			if (dynamic_cast<CBrick*>(e->obj) && dynamic_cast<CBrick*>(e->obj)->IsBig()) {
+				_handleNoCollisionX = true;
+			}
+			else {
+				_velocity.x = -_velocity.x;
+			}
+		}
 	}
 }
 
@@ -85,20 +98,22 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	_velocity.y += _ay * dt;
 	_velocity.x += _ax * dt;
 
-	int leftCam = CCam::GetInstance()->GetCameraBound()->GetLeft();
-	int rightCam = CCam::GetInstance()->GetCameraBound()->GetRight();
+	int leftWindow = CCam::GetInstance()->GetPosition().x;
+	int rightWindow = CGame::GetInstance()->GetWindowHeight() * 2.25f + leftWindow;
 
-	if (_position.x >= leftCam - GOOMBA_WIDTH / 2 && _position.x < rightCam - GOOMBA_WIDTH / 2) {
-		if (_state != STATE_GOOMBA_DIE) {
-			SetState(STATE_GOOMBA_WALK);
-		}
+	if (_state == -1 && leftWindow <= _position.x && rightWindow >= _position.x) {
+		SetState(STATE_GOOMBA_WALK);
 	}
-	else if (_position.x < leftCam) { _ax = 0; this->Delete(); }
 
 	if ((_state == STATE_GOOMBA_DIE) && (GetTickCount64() - _dieStart > GOOMBA_DIE_TIMEOUT))
 	{
 		_isDeleted = true;
 		return;
+	}
+
+	if (_handleNoCollisionX) {
+		_handleNoCollisionX = false;
+		_position.x += _velocity.x * dt;
 	}
 
 	CGameObject::Update(dt, coObjects);

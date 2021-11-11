@@ -46,7 +46,8 @@ class CGameObject
 {
 protected:
 	bool _isActive;
-
+	bool _handleNoCollisionX;
+	bool _handleNoCollisionY;
 
 	D3DXVECTOR2 _velocity;
 	D3DXVECTOR2 _distance;

@@ -35,6 +35,7 @@
 //item 3xxx
 //goomba 4xxx
 //para_goomba 5xxx
+//koopa_para_tropa 6xxx
 
 using namespace std;
 

@@ -6,6 +6,7 @@
 #include "CBrickQuestion.h"
 #include "CDebug.h"
 #include "CGoomba.h"
+#include "CKoopaParaTropa.h"
 
 #define MIN_X 0
 #define MAX_Y 400
@@ -27,12 +28,9 @@ CMario::CMario() {
 	_untouchable = 0;
 	_untouchable_start = -1;
 	_isOnPlatform = false;
-	_isCollectionX = false;
-	_isCollectionY = false;
 }
 
 void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
-	
 	if (dynamic_cast<CBrick*>(e->obj))
 		_OnCollisionWithBrick(e);
 	else if (dynamic_cast<CBrickQuestion*>(e->obj))
@@ -41,6 +39,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
 		_OnCollisionWithItem(e);
 	else if (dynamic_cast<CGoomba*>(e->obj)) 
 		_OnCollisionWithGoomba(e);
+	else if (dynamic_cast<CKoopaParaTropa*>(e->obj))
+		_OnCollisionWithKoopaParaTropa(e);
 }
 
 void CMario::_OnCollisionWithBrick(LPCOLLISIONEVENT e) {
@@ -48,7 +48,6 @@ void CMario::_OnCollisionWithBrick(LPCOLLISIONEVENT e) {
 	if (brick->IsBig()) {
 		if (e->ny != 0 && e->obj->IsBlocking())
 		{
-			_isCollectionY = true;
 			if (e->ny < 0) {
 				_velocity.y = 0;
 				_isOnPlatform = true;
@@ -60,21 +59,19 @@ void CMario::_OnCollisionWithBrick(LPCOLLISIONEVENT e) {
 		else
 			if (e->nx != 0 && e->obj->IsBlocking())
 			{
-				_isCollectionX = true;
+				_handleNoCollisionX = true;
 				_velocity.x += _ax * _dt;
 			}
 	}
 	else {
 		if (e->ny != 0 && e->obj->IsBlocking())
 		{
-			_isCollectionY = true;
 			_velocity.y = 0;
 			if (e->ny < 0) _isOnPlatform = true;
 		}
 		else
 			if (e->nx != 0 && e->obj->IsBlocking())
 			{
-				_isCollectionX = true;
 				_velocity.x = 0;
 			}
 	}
@@ -87,7 +84,6 @@ void CMario::_OnCollisionWithBrickQuestion(LPCOLLISIONEVENT e) {
 	{
 		_velocity.y = 0;
 		if (e->ny < 0) {
-			_isCollectionY = true;
 			_isOnPlatform = true;
 		}
 		else if (brick->GetState() == STATE_BRICK_QUESTION_RUN && e->ny > 0 && e->obj->IsBlocking())
@@ -98,10 +94,10 @@ void CMario::_OnCollisionWithBrickQuestion(LPCOLLISIONEVENT e) {
 	else
 		if (e->nx != 0 && e->obj->IsBlocking())
 		{
-			_isCollectionX = true;
 			_velocity.x = 0;
 		}
 }
+
 
 void CMario::_OnCollisionWithItem(LPCOLLISIONEVENT e) {
 	CItem* item = dynamic_cast<CItem*>(e->obj);
@@ -129,27 +125,66 @@ void CMario::_OnCollisionWithGoomba(LPCOLLISIONEVENT e) {
 		{
 			if (goomba->GetState() != STATE_GOOMBA_DIE)
 			{
-				if (_level != LEVEL_SMALL)
-				{
-					_SetLevel(LEVEL_SMALL);
-					StartUntouchable();
+				_OnCollisionWithEnemy(e);
+			}
+			else {
+				_handleNoCollisionX = true;
+				_handleNoCollisionY = true;
+			}
+		}
+	}
+}
+
+void CMario::_OnCollisionWithKoopaParaTropa(LPCOLLISIONEVENT e) {
+	CKoopaParaTropa* koopaParaTropa = dynamic_cast<CKoopaParaTropa*>(e->obj);
+	if (e->ny < 0) {
+		if (koopaParaTropa->GetState() != STATE_KOOPA_PARA_TROPA_DIE) {
+			if (koopaParaTropa->GetState() == STATE_KOOPA_PARA_TROPA_WALK || koopaParaTropa->GetState() == STATE_KOOPA_PARA_TROPA_SHELD_RUN) {
+				_velocity.y = -MARIO_JUMP_DEFLECT_SPEED;
+				koopaParaTropa->SetState(STATE_KOOPA_PARA_TROPA_SHELD);
+			}
+			else if (koopaParaTropa->GetState() == STATE_KOOPA_PARA_TROPA_SHELD) {
+				if (_position.x < koopaParaTropa->GetPosition().x) {
+					koopaParaTropa->SetScale({ -koopaParaTropa->GetScale().x, koopaParaTropa->GetScale().y });
 				}
-				else
-				{
-					DebugOut(L">>> Mario DIE >>> \n");
-					_HandleState(STATE_MARIO_DIE);
+				else koopaParaTropa->SetScale({ koopaParaTropa->GetScale().x, koopaParaTropa->GetScale().y });
+				koopaParaTropa->SetState(STATE_KOOPA_PARA_TROPA_SHELD_RUN);
+			}
+		}
+	}
+	else {
+		if (_untouchable == 0) {
+			if (koopaParaTropa->GetState() == STATE_KOOPA_PARA_TROPA_WALK 
+				|| koopaParaTropa->GetState() == STATE_KOOPA_PARA_TROPA_FLY
+				|| koopaParaTropa->GetState() == STATE_KOOPA_PARA_TROPA_SHELD_RUN) {
+				_OnCollisionWithEnemy(e);
+			}
+			else {
+				if (koopaParaTropa->GetState() == STATE_KOOPA_PARA_TROPA_SHELD) {
+					koopaParaTropa->SetScale({ _scale.x, koopaParaTropa->GetScale().y });
+					koopaParaTropa->SetState(STATE_KOOPA_PARA_TROPA_SHELD_RUN);
 				}
 			}
 		}
 	}
 }
 
+void CMario::_OnCollisionWithEnemy(LPCOLLISIONEVENT e) {
+	if (_level != LEVEL_SMALL)
+	{
+		_SetLevel(LEVEL_SMALL);
+		StartUntouchable();
+	}
+	else
+	{
+		DebugOut(L">>> Mario DIE >>> \n");
+		_HandleState(STATE_MARIO_DIE);
+	}
+}
 
 void CMario::OnNoCollision(DWORD dt) {
-	_isCollectionX = false;
-	_isCollectionY = false;
 	_position.x += _velocity.x * dt;
-	_position.y += _velocity.y * dt / 2;
+	_position.y += _velocity.y * dt / 2.5;
 }
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
@@ -172,18 +207,15 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 
-	if (_isCollectionX) {
-		_isCollectionX = false;
+	if (_handleNoCollisionX) {
+		_handleNoCollisionX = false;
 		_position.x += _velocity.x * dt;
 	}
 
-	if (_isCollectionY) {
-		_isCollectionY = false;
-		_position.y += _velocity.y * dt;
+	if (_handleNoCollisionY) {
+		_handleNoCollisionY = false;
+		_position.y += _velocity.y * dt / 2;
 	}
-
-	DebugOut(L"vx = %f\n", _velocity.x);
-	DebugOut(L"x = %f\n", _position.x);
 }
 
 void CMario::_HandleKeyDown(int keyCode) {
@@ -430,9 +462,9 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
 		else
 		{
 			left = _position.x - MARIO_BIG_BBOX_WIDTH / 2 + ZONE;
-			top = _position.y - MARIO_BIG_BBOX_HEIGHT / 2;
+			top = _position.y - MARIO_BIG_BBOX_HEIGHT / 2 + ZONE;
 			right = left + MARIO_BIG_BBOX_WIDTH - ZONE;
-			bottom = top + MARIO_BIG_BBOX_HEIGHT;
+			bottom = top + MARIO_BIG_BBOX_HEIGHT - ZONE;
 		}
 	}
 	else

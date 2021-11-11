@@ -13,8 +13,6 @@ class CMario : public CGameObject
 {
 private:
 	BOOLEAN _isSitting;
-	bool _isCollectionX;
-	bool _isCollectionY;
 	float _maxVx;
 	float _ax;				// acceleration on x 
 	float _ay;				// acceleration on y 
@@ -58,6 +56,8 @@ private:
 	void _OnCollisionWithBrickQuestion(LPCOLLISIONEVENT e);
 	void _OnCollisionWithItem(LPCOLLISIONEVENT e);
 	void _OnCollisionWithGoomba(LPCOLLISIONEVENT e);
+	void _OnCollisionWithKoopaParaTropa(LPCOLLISIONEVENT e);
+	void _OnCollisionWithEnemy(LPCOLLISIONEVENT e);
 
 	void _SetLevel(string level);
 

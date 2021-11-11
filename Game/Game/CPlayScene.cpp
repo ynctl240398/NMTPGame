@@ -11,6 +11,7 @@
 #include "CBrickQuestion.h"
 #include "CItem.h"
 #include "CGoomba.h"
+#include "CKoopaParaTropa.h"
 
 using namespace std;
 
@@ -106,6 +107,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_GOOMBA: 
 		obj = new CGoomba(x, y); 
 		break;
+	case OBJECT_TYPE_KOOPAS_PARA_TROPA:
+	{
+		int state = atoi(tokens[3].c_str());
+		int minPx = atoi(tokens[4].c_str());
+		int maxPx = atoi(tokens[5].c_str());
+		obj = new CKoopaParaTropa(x, y, state, maxPx, minPx);
+		break;
+	}
 	case OBJECT_TYPE_BRICK: 
 	{
 		int w = atoi(tokens[3].c_str());
@@ -178,7 +187,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 
 	default:
-		//DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
+		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
 		return;
 	}
 
@@ -247,7 +256,7 @@ void CPlayScene::_LoadAssets(LPCWSTR assetFile) {
 
 void CPlayScene::Load()
 {
-	//DebugOut(L"[INFO] Start loading scene from : %s \n", sceneFilePath);
+	DebugOut(L"[INFO] Start loading scene from : %s \n", sceneFilePath);
 
 	ifstream f;
 	f.open(sceneFilePath);
@@ -277,7 +286,7 @@ void CPlayScene::Load()
 
 	f.close();
 
-	//DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
+	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
 }
 
 void CPlayScene::Update(DWORD dt)
@@ -286,9 +295,11 @@ void CPlayScene::Update(DWORD dt)
 	// TO-DO: This is a "dirty" way, need a more organized way 
 
 	vector<LPGAMEOBJECT> coObjects;
-	for (size_t i = 1; i < objects.size(); i++)
+	for (size_t i = 0; i < objects.size(); i++)
 	{
-		coObjects.push_back(objects[i]);
+		if (!dynamic_cast<CMario*>(objects[i])) {
+			coObjects.push_back(objects[i]);
+		}
 	}
 
 	for (size_t i = 0; i < objects.size(); i++)
@@ -298,10 +309,6 @@ void CPlayScene::Update(DWORD dt)
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return;
-
-	// Update camera to follow mario
-	float cx, cy;
-	player->GetPosition(cx, cy);
 
 	PurgeDeletedObjects();
 }

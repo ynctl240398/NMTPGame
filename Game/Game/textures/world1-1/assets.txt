@@ -1,8 +1,10 @@
 [ASSETS]
+#id_tex	path
 100	textures\animation\mario.txt
 000	textures\animation\brick_question.txt
 200	textures\animation\item.txt
 300	textures\animation\goomba.txt
+300	textures\animation\koopa_para_tropa.txt
 
 [OBJECTS]
 #bg
@@ -10,9 +12,6 @@
 
 #cam
 7	0	0	textures\world1-1\camera.txt
-
-#mario
-0	25	350
 
 #big_brick
 9	240	368	48	48
@@ -27,7 +26,10 @@
 9	1312	144	64	32
 9	2176	272	48	144
 9	2144	368	48	48
-								
+
+#mario
+0	10	350
+
 #brick
 1	0	416	624	16
 1	624	400	464	32
@@ -67,5 +69,8 @@
 #goomba
 2	224	400
 2	528	400
-2	832	385
-2	880	385
+2	832	384
+2	880	384
+
+#koopa_para_tropa
+11	575	350	6900	512	607
