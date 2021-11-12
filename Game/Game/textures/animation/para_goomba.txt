@@ -1,23 +1,47 @@
 [SPRITE]
 #id	l	t	w	h
 
-#walk
-4000	0	16	16	16
-4001	17	16	16	16
+#para_walk
+5000	136	68	20	24
+5001	157	68	20	24
+
+#para_fly
+5002	178	68	20	24
+5003	199	68	20	24
+
+#red_goomba_walk
+5004	51	0	16	16
+5005	68	0	16	16
 
 #die
-4002	34	16	16	16
+5006	85	8	16	16
 
 #id_sprite	time(ms)
-#walk
+#para_walk
 [FRAME]
-4000	100
-4001	100
+5000	100
+5001	100
 [ANIMATION]
-4000
+5000
 
-#run
+#para_fly
 [FRAME]
-4002	100
+5000	100
+5002	100
+5001	100
+5003	100
 [ANIMATION]
-4001
+5001
+
+#red_goomba_walk
+[FRAME]
+5004	100
+5005	100
+[ANIMATION]
+5002
+
+#die
+[FRAME]
+5006	0
+[ANIMATION]
+5003

@@ -11,6 +11,7 @@
 #include "CBrickQuestion.h"
 #include "CItem.h"
 #include "CGoomba.h"
+#include "CParaGoomba.h"
 #include "CKoopaParaTropa.h"
 
 using namespace std;
@@ -106,6 +107,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	case OBJECT_TYPE_GOOMBA: 
 		obj = new CGoomba(x, y); 
+		break;
+	case OBJECT_TYPE_PARA_GOOMBA:
+		obj = new CParaGoomba(x, y);
 		break;
 	case OBJECT_TYPE_KOOPAS_PARA_TROPA:
 	{
