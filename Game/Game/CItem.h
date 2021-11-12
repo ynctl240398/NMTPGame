@@ -8,26 +8,50 @@
 #define ITEM_HEIGHT 16
 
 //syntax
-#define TYPE_MUSHROOM_RED "mushroom_red"
-#define TYPE_MUSHROOM_GREEN "mushroom_green"
+#define TYPE_ITEM_MUSHROOM_RED "mushroom_red"
+#define TYPE_ITEM_MUSHROOM_GREEN "mushroom_green"
+#define TYPE_ITEM_COIN_BRICK "coin_brick"
+#define TYPE_ITEM_COIN "coin"
+
+#define STATE_ITEM_MUSHROOM_RED 3900
+#define STATE_ITEM_MUSHROOM_GREEN 3901
+#define STATE_ITEM_COIN_BRICK 3902
+#define STATE_ITEM_COIN 3903
 
 #define ID_ITEM_MUSHROOM_RED_ANI 3000
 #define ID_ITEM_MUSHROOM_GREEN_ANI 3001
+#define ID_ITEM_COIN_ANI 3002
 
 class CItem : public CGameObject
 {
+	float _maxVy;
+	float _ay;
+	float _ax;
+	float _startY;
 	string _type;
+
 public:
 
 	CItem(float x, float y, string type);
+
+	int IsCollidable()
+	{
+		return 1;
+	}
 
 	void Render() override;
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) override;
 	void Release() override;
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
 
+	void OnNoCollision(DWORD dt);
+	void OnCollisionWith(LPCOLLISIONEVENT e);
+
 	string GetType() { return this->_type; }
+	void SetType(string type);
+
+	void SetState(int state);
+
 
 	~CItem();
 };
-

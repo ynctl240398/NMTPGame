@@ -21,7 +21,7 @@ class CBrickQuestion : public CGameObject
 {
 	float _maxVy;
 	float _ay;
-
+	
 	float _startY;
 
 	int _GetAnimationId();

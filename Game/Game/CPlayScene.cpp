@@ -124,10 +124,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_ITEM:
 	{
-		int w = atoi(tokens[3].c_str());
-		int h = atoi(tokens[4].c_str());
-		string type = tokens[5];
-		obj = new CItem(x, y, type);
+		string itemType = tokens[3];
+		obj = new CItem(x, y, itemType);
 		break;
 	}
 	case OBJECT_TYPE_BIG_BRICK:
@@ -291,6 +289,10 @@ void CPlayScene::Load()
 
 void CPlayScene::Update(DWORD dt)
 {
+	if (player->GetState() == STATE_MARIO_DIE) {
+		player->Update(dt);
+		return;
+	}
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
 

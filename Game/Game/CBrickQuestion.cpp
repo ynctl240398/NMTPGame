@@ -1,5 +1,6 @@
 #include "CBrickQuestion.h"
 #include "CUtil.h"
+#include "CItem.h"
 
 
 CBrickQuestion::CBrickQuestion(float x, float y) {
@@ -49,7 +50,7 @@ void CBrickQuestion::Release() {
 }
 
 void CBrickQuestion::GetBoundingBox(float& left, float& top, float& right, float& bottom) {
-	left = _position.x - BRICK_WIDTH / 2 + DIF / 4;
+	left = _position.x - BRICK_WIDTH / 2;
 	top = _position.y - BRICK_HEIGHT / 2;
 	right = left + BRICK_WIDTH;
 	bottom = top + BRICK_HEIGHT;
@@ -67,6 +68,6 @@ int CBrickQuestion::_GetAnimationId() {
 	if (_state == STATE_BRICK_QUESTION_RUN) {
 		aniId = ID_BRICK_QUESTION_ANI_RUN;
 	}
-	aniId = aniId == -1 ? ID_BRICK_QUESTION_ANI_IDLE : aniId;
+	else aniId = ID_BRICK_QUESTION_ANI_IDLE;
 	return aniId;
 }

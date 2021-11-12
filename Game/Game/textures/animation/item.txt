@@ -1,15 +1,38 @@
 #type	id	left	top	w	h
 [SPRITE]
+#mushroom_red
 3000	34	0	16	16
+#mushroom_green
 3001	51	0	16	16
+#coin
+3002	0	17	16	16
+3003	17	17	16	16
+3004	34	17	16	16
+3005	51	17	16	16
+3006	68	17	16	16
+3007	85	17	16	16
+3008	102	17	16	16
+3009	119	17	16	16
 #id_sprite	time(ms)
 #mushroom_red
 [FRAME]
 3000	0
 [ANIMATION]
 3000
-mushroom_green
+#mushroom_green
 [FRAME]
 3001	0
 [ANIMATION]
 3001
+#coid
+[FRAME]
+3002	100
+3003	100
+3004	100
+3005	100
+3006	100
+3007	100
+3008	100
+3009	100
+[ANIMATION]
+3002

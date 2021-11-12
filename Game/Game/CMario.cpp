@@ -102,11 +102,16 @@ void CMario::_OnCollisionWithBrickQuestion(LPCOLLISIONEVENT e) {
 void CMario::_OnCollisionWithItem(LPCOLLISIONEVENT e) {
 	CItem* item = dynamic_cast<CItem*>(e->obj);
 
-	item->Delete();
 
-	if (item->GetType() == TYPE_MUSHROOM_RED) {
+	if (item->GetType() == TYPE_ITEM_MUSHROOM_RED) {
+		item->Delete();
 		if (this->_level == LEVEL_SMALL) {
 			this->_SetLevel(LEVEL_BIG);
+		}
+	}
+	else if (item->GetType() == TYPE_ITEM_COIN_BRICK) {
+		if (e->ny > 0 && e->obj->IsBlocking()) {
+			item->SetState(STATE_ITEM_COIN_BRICK);
 		}
 	}
 }
@@ -118,6 +123,10 @@ void CMario::_OnCollisionWithGoomba(LPCOLLISIONEVENT e) {
 		if (goomba->GetState() != STATE_GOOMBA_DIE) {
 			goomba->SetState(STATE_GOOMBA_DIE);
 			_velocity.y = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+		else {
+			_handleNoCollisionX = true;
+			_handleNoCollisionY = true;
 		}
 	}
 	else {
