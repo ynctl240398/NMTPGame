@@ -95,8 +95,8 @@ void CGoomba::Render() {
 
 void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
-	_velocity.y += _ay * dt;
 	_velocity.x += _ax * dt;
+	_velocity.y += _ay * dt;
 
 	int leftWindow = CCam::GetInstance()->GetPosition().x;
 	int rightWindow = CGame::GetInstance()->GetWindowHeight() * 2.25f + leftWindow;

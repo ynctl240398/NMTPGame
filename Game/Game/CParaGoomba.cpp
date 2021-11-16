@@ -29,6 +29,9 @@ CParaGoomba::CParaGoomba(float x, float y) {
 	_position = { x,y };
 	_ax = 0;
 	_ay = GOOMBA_GRAVITY;
+	//_ay = 0;
+	_dieStart = -1;
+	_velocity = { 0.0f,0.0f };
 	SetState(STATE_PARA_GOOMBA_FLY);
 }
 
@@ -106,6 +109,15 @@ void CParaGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
 void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	_velocity.x += _ax * dt;
 	_velocity.y += _ay * dt;
+
+	if ((_state == STATE_GOOMBA_DIE) && (GetTickCount64() - _dieStart > GOOMBA_DIE_TIMEOUT))
+	{
+		_isDeleted = true;
+		return;
+	}
+
+	CGameObject::Update(dt, coObjects);
+	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
 void CParaGoomba::Render() {
@@ -126,20 +138,20 @@ void CParaGoomba::Release() {
 
 void CParaGoomba::GetBoundingBox(float& left, float& top, float& right, float& bottom) {
 	if (_state <= STATE_PARA_GOOMBA_FLY) {
-		left = _position.x + PARA_GOOMBA_BBOX_WIDTH / 2;
-		top = _position.y + PARA_GOOMBA_BBOX_HEIGHT / 2;
+		left = _position.x - PARA_GOOMBA_BBOX_WIDTH / 2;
+		top = _position.y - PARA_GOOMBA_BBOX_HEIGHT / 2;
 		right = left + PARA_GOOMBA_BBOX_WIDTH;
 		bottom = top + PARA_GOOMBA_BBOX_HEIGHT;
 	}
 	else if (STATE_RED_GOOMBA_WALK == _state) {
-		left = _position.x + RED_GOOMBA_BBOX_WIDTH / 2;
-		top = _position.y + RED_GOOMBA_BBOX_HEIGHT / 2;
+		left = _position.x - RED_GOOMBA_BBOX_WIDTH / 2;
+		top = _position.y - RED_GOOMBA_BBOX_HEIGHT / 2;
 		right = left + RED_GOOMBA_BBOX_WIDTH;
 		bottom = top + RED_GOOMBA_BBOX_HEIGHT;
 	}
 	else {
-		left = _position.x + RED_GOOMBA_BBOX_WIDTH / 2;
-		top = _position.y + RED_GOOMBA_BBOX_HEIGHT_DIE / 2;
+		left = _position.x - RED_GOOMBA_BBOX_WIDTH / 2;
+		top = _position.y - RED_GOOMBA_BBOX_HEIGHT_DIE / 2;
 		right = left + RED_GOOMBA_BBOX_WIDTH;
 		bottom = top + RED_GOOMBA_BBOX_HEIGHT_DIE;
 	}
