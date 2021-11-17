@@ -114,9 +114,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_KOOPAS_PARA_TROPA:
 	{
 		int state = atoi(tokens[3].c_str());
-		int minPx = atoi(tokens[4].c_str());
-		int maxPx = atoi(tokens[5].c_str());
-		obj = new CKoopaParaTropa(x, y, state, maxPx, minPx);
+		obj = new CKoopaParaTropa(x, y, state);
 		break;
 	}
 	case OBJECT_TYPE_BRICK: 

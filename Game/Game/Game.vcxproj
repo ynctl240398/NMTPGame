@@ -157,6 +157,7 @@
     <ClCompile Include="CKoopaParaTropa.cpp" />
     <ClCompile Include="CKoopaTropa.cpp" />
     <ClCompile Include="CMario.cpp" />
+    <ClCompile Include="CObjKoopaTropa.cpp" />
     <ClCompile Include="CParaGoomba.cpp" />
     <ClCompile Include="CPipeLine.cpp" />
     <ClCompile Include="CPiranhaPlant.cpp" />
@@ -190,6 +191,7 @@
     <ClInclude Include="CKoopaParaTropa.h" />
     <ClInclude Include="CKoopaTropa.h" />
     <ClInclude Include="CMario.h" />
+    <ClInclude Include="CObjKoopaTropa.h" />
     <ClInclude Include="CParaGoomba.h" />
     <ClInclude Include="CPipeLine.h" />
     <ClInclude Include="CPiranhaPlant.h" />

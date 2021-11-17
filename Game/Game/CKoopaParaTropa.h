@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CGameObject.h"
+#include "CObjKoopaTropa.h"
 
 #define STATE_KOOPA_PARA_TROPA_WALK 6900
 #define STATE_KOOPA_PARA_TROPA_SHELD 6901
@@ -9,16 +10,20 @@
 #define STATE_KOOPA_PARA_TROPA_FLY 6904
 #define STATE_KOOPA_PARA_TROPA_DIE 6905
 
+
+
 class CKoopaParaTropa : public CGameObject
 {
 	float _ax;
 	float _ay;
-	float _maxPx;
-	float _minPx;
+
+	CObjKoopaTropa* _obj;
 
 	int _GetAnimationId();
+
+	void _SetPositionXObj(float x);
 public:
-	CKoopaParaTropa(float x, float y, int state, float maxPx, float minPx);
+	CKoopaParaTropa(float x, float y, int state);
 
 	void SetState(int) override;
 
@@ -37,4 +42,3 @@ public:
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
 };
-

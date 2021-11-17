@@ -19,6 +19,7 @@
 #define KOOPA_PARA_TROPA_BBOX_WIDTH 16
 #define KOOPA_PARA_TROPA_BBOX_HEIGHT 26
 
+
 #define KOOPA_PARA_TROPA_SHELD_BBOX_WIDTH 16
 #define KOOPA_PARA_TROPA_SHELD_BBOX_HEIGHT 16
 
@@ -26,14 +27,14 @@
 #define KOOPA_PARA_TROPA_WALK_SPEED 0.05f
 #define KOOPA_PARA_TROPA_SHELD_SPEED 0.2f
 
-CKoopaParaTropa::CKoopaParaTropa(float x, float y, int state, float maxPx, float minPx){
+
+CKoopaParaTropa::CKoopaParaTropa(float x, float y, int state){
 	_position = { x,y };
 	_ax = 0;
-	_maxPx = maxPx;
-	_minPx = minPx;
 	_ay = KOOPA_PARA_TROPA_GRAVITY;
 	_velocity = { 0,0 };
 	_scale = { -1.0f, 1.0f };
+	_obj = new CObjKoopaTropa(x + KOOPA_PARA_TROPA_BBOX_WIDTH / 2 + OBJ_BBOX_WIDTH / 2, y);
 	SetState(state);
 }
 
@@ -83,7 +84,29 @@ void CKoopaParaTropa::SetState(int state) {
 	CGameObject::SetState(state);
 }
 
-void CKoopaParaTropa::OnNoCollision(DWORD dt) {
+void CKoopaParaTropa::_SetPositionXObj(float x)
+{
+	float px, py;
+
+	if (_obj->IsNoCollisionWithPlatform()) {
+		_velocity.x = -_velocity.x;
+		_scale.x = -_scale.x;
+		_obj->SetIsNoCollisionWithPlatform(false);
+		py = _position.y;
+	}
+	else py = _obj->GetPosition().y;
+
+	if (_scale.x < 0) { //right
+		px = x + KOOPA_PARA_TROPA_BBOX_WIDTH / 2 + OBJ_BBOX_WIDTH / 2;
+	}
+	else if(_scale > 0) { // left
+		px = x - KOOPA_PARA_TROPA_BBOX_WIDTH / 2 - OBJ_BBOX_WIDTH / 2;
+	}
+	_obj->SetPosition({ px, py });
+}
+
+void CKoopaParaTropa::OnNoCollision(DWORD dt) 
+{
 	_position.x += _velocity.x * dt;
 	_position.y += _velocity.y * dt;
 }
@@ -142,6 +165,9 @@ void CKoopaParaTropa::Render() {
 
 	animations->Get(aniId)->Render(_position.x, _position.y, _scale);
 	RenderBoundingBox();
+	if (_state == STATE_KOOPA_PARA_TROPA_WALK) {
+		_obj->Render();
+	}
 }
 
 void CKoopaParaTropa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
@@ -152,19 +178,16 @@ void CKoopaParaTropa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	int leftCam = CCam::GetInstance()->GetCameraBound()->GetLeft();
 	int rightCam = CCam::GetInstance()->GetCameraBound()->GetRight();
 
-	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
-
-	if (_state == STATE_KOOPA_PARA_TROPA_WALK) {
-		if (_position.x <= _minPx || _position.x >= _maxPx - KOOPA_PARA_TROPA_SHELD_BBOX_WIDTH) {
-			_velocity.x = -_velocity.x;
-			_scale.x = -_scale.x;
-		}
-	}
 
 	if (_handleNoCollisionX) {
 		_handleNoCollisionX = false;
 		_position.x += _velocity.x * dt;
+	}
+
+	if (_state == STATE_KOOPA_PARA_TROPA_WALK) {
+		_obj->Update(dt, coObjects);
+		_SetPositionXObj(_position.x);
 	}
 }
 
