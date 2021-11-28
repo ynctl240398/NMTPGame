@@ -10,13 +10,12 @@
 //syntax
 #define TYPE_ITEM_MUSHROOM_RED "mushroom_red"
 #define TYPE_ITEM_MUSHROOM_GREEN "mushroom_green"
-#define TYPE_ITEM_COIN_BRICK "coin_brick"
 #define TYPE_ITEM_COIN "coin"
 
-#define STATE_ITEM_MUSHROOM_RED 3900
-#define STATE_ITEM_MUSHROOM_GREEN 3901
-#define STATE_ITEM_COIN_BRICK 3902
-#define STATE_ITEM_COIN 3903
+#define STATE_ITEM_IDLE 3900
+#define STATE_ITEM_MOVE 3901
+#define STATE_ITEM_JUMP 3902
+#define STATE_ITEM_DISAPPEAR 3903
 
 #define ID_ITEM_MUSHROOM_RED_ANI 3000
 #define ID_ITEM_MUSHROOM_GREEN_ANI 3001
@@ -29,6 +28,8 @@ class CItem : public CGameObject
 	float _ax;
 	float _startY;
 	string _type;
+
+	int _GetAnimationId();
 
 public:
 

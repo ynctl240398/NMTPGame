@@ -2,11 +2,12 @@
 #include "CUtil.h"
 #include "CBrickQuestion.h"
 #include "CBrick.h"
+#include "CMario.h"
 
 #define ITEM_GRAVITY 0.002f
 #define ITEM_RUN_SPEED 0.05f
 #define ITEM_JUMP_SPEED 0.015f
-#define MAX_JUMP 0.6f
+#define MAX_JUMP 0.75f
 
 CItem::CItem(float x, float y, string type) {
 	_position = { x,y };
@@ -18,10 +19,15 @@ CItem::CItem(float x, float y, string type) {
 	_isDeleted = false;
 	_state = -1;
 	SetType(type);
+	SetState(STATE_ITEM_IDLE);
 }
 
 void CItem::OnCollisionWith(LPCOLLISIONEVENT e) {
 	if (!e->obj->IsBlocking()) return;
+
+	if (dynamic_cast<CMario*>(e->obj)) {
+		
+	}
 
 	if (dynamic_cast<CBrick*>(e->obj) || dynamic_cast<CBrickQuestion*>(e->obj)) {
 		
@@ -67,11 +73,12 @@ void CItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 	float dy = _velocity.y * dt / 4;
 
-	if (_state == STATE_ITEM_COIN_BRICK) {
+	if (_state == STATE_ITEM_JUMP) {
 		if (_position.y + dy >= _startY) {
 			_position.y = _startY;
 			_ay = 0;
 			Delete();
+			SetState(STATE_ITEM_DISAPPEAR);
 		}
 		else
 			_position.y += dy;
@@ -86,42 +93,34 @@ void CItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 }
 
 void CItem::SetType(string type) {
-	if (type == TYPE_ITEM_COIN) {
-		SetState(STATE_ITEM_COIN);
-	}
-	else if (type == TYPE_ITEM_COIN_BRICK) {
-		//SetState(STATE_ITEM_COIN_BRICK);
-	}
-	else if (type == TYPE_ITEM_MUSHROOM_GREEN) {
-		SetState(STATE_ITEM_MUSHROOM_GREEN);
-	}
-	else if (type == TYPE_ITEM_MUSHROOM_RED) {
-		SetState(STATE_ITEM_MUSHROOM_RED);
-	}
 	_type = type;
 }
 
 void CItem::SetState(int state) {
-	if (state == STATE_ITEM_COIN_BRICK) {
+	if (state == STATE_ITEM_JUMP) {
 		_ay = -JUMP_SPEED;
 	}
-	else if (state == STATE_ITEM_MUSHROOM_GREEN) {
+	else if (state == STATE_ITEM_MOVE) {
 
 	}
-	else if (state == STATE_ITEM_MUSHROOM_RED) {
+	else if (state == STATE_ITEM_IDLE) {
 
 	}
-	else if (state == STATE_ITEM_COIN) {
+	else if (state == STATE_ITEM_DISAPPEAR) {
 
 	}
 	
 	CGameObject::SetState(state);
 }
 
-void CItem::Render() {
-	CAnimations* animations = CAnimations::GetInstance();
+int CItem::_GetAnimationId() {
 	int aniId;
-	if (_type == TYPE_ITEM_COIN_BRICK || _type == TYPE_ITEM_COIN) {
+
+	if (_state == STATE_ITEM_DISAPPEAR) {
+		return -1;
+	}
+
+	if (_type == TYPE_ITEM_COIN) {
 		aniId = ID_ITEM_COIN_ANI;
 	}
 	else if (_type == TYPE_ITEM_MUSHROOM_GREEN) {
@@ -131,6 +130,13 @@ void CItem::Render() {
 		aniId = ID_ITEM_MUSHROOM_RED_ANI;
 	}
 	else aniId = -1;
+
+	return aniId;
+}
+
+void CItem::Render() {
+	CAnimations* animations = CAnimations::GetInstance();
+	int aniId = _GetAnimationId();
 
 	LPANIMATION animation = animations->Get(aniId);
 

@@ -89,6 +89,7 @@ void CMario::_OnCollisionWithBrickQuestion(LPCOLLISIONEVENT e) {
 		else if (brick->GetState() == STATE_BRICK_QUESTION_RUN && e->ny > 0 && e->obj->IsBlocking())
 		{
 			brick->SetState(STATE_BRICK_QUESTION_IDLE);
+			brick->SetStateItem(STATE_ITEM_JUMP);
 		}
 	}
 	else
@@ -107,11 +108,6 @@ void CMario::_OnCollisionWithItem(LPCOLLISIONEVENT e) {
 		item->Delete();
 		if (this->_level == LEVEL_SMALL) {
 			this->_SetLevel(LEVEL_BIG);
-		}
-	}
-	else if (item->GetType() == TYPE_ITEM_COIN_BRICK) {
-		if (e->ny > 0 && e->obj->IsBlocking()) {
-			item->SetState(STATE_ITEM_COIN_BRICK);
 		}
 	}
 }

@@ -139,7 +139,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_BRICK_QUESTION:
 	{
-		obj = new CBrickQuestion(x, y);
+		string typeItem = tokens[3].c_str();
+		obj = new CBrickQuestion(x, y, typeItem);
 		break;
 	}
 	case OBJECT_TYPE_COIN: 

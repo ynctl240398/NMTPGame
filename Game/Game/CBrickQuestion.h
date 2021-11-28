@@ -4,6 +4,7 @@
 #include "CAnimation.h"
 #include "CTexture.h"
 #include "CGameObject.h"
+#include "CItem.h"
 
 #define BRICK_WIDTH 16
 #define BRICK_HEIGHT 16
@@ -24,11 +25,15 @@ class CBrickQuestion : public CGameObject
 	
 	float _startY;
 
+	CItem* _item;
+
 	int _GetAnimationId();
 public:
-	CBrickQuestion(float x, float y);
+	CBrickQuestion(float x, float y, string typeItem);
 
 	void SetState(int) override;
+
+	void SetStateItem(int);
 
 	void Render() override;
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) override;

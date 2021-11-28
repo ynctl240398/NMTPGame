@@ -3,12 +3,13 @@
 #include "CItem.h"
 
 
-CBrickQuestion::CBrickQuestion(float x, float y) {
+CBrickQuestion::CBrickQuestion(float x, float y, string typeItem) {
 	_position = { x,y };
 	_startY = y;
 	_state = STATE_BRICK_QUESTION_RUN;
 	_maxVy = MAX_JUMP;
 	_ay = 0;
+	_item = new CItem(x, y, typeItem);
 }
 
 void CBrickQuestion::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
@@ -31,6 +32,8 @@ void CBrickQuestion::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	}
 	else
 		_position.y += dy;
+
+	_item->Update(dt, coObjects);
 }
 
 void CBrickQuestion::Render() {
@@ -41,6 +44,7 @@ void CBrickQuestion::Render() {
 		return;
 	}
 
+	_item->Render();
 	animations->Get(aniId)->Render(_position.x, _position.y, _scale);
 	RenderBoundingBox();
 }
@@ -70,4 +74,8 @@ int CBrickQuestion::_GetAnimationId() {
 	}
 	else aniId = ID_BRICK_QUESTION_ANI_IDLE;
 	return aniId;
+}
+
+void CBrickQuestion::SetStateItem(int state) {
+	_item->SetState(state);
 }

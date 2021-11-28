@@ -55,27 +55,19 @@
 1	2320	384	32	32
 
 #brick_question
-#type_obj	x	y
-8	176	352
-8	192	352
-8	224	304
-8	240	304
-8	416	320
-8	656	384
-8	704	352
-8	1472	368
+#type_obj	x	y	type_item
+8	176	352	coin
+8	192	352	coin
+8	224	304	coin
+8	240	304	coin
+8	416	320	coin
+8	656	384	coin
+8	704	352	coin
+8	1472	368	coin
 
 #item
 #type_obj	x	y	type
-10	176	352	coin_brick
-10	192	352	coin_brick
-10	224	304	coin_brick
-10	240	304	coin_brick
-10	416	320	coin_brick
-10	656	384	coin_brick
-10	704	352	coin_brick
-10	1472	368	coin_brick
-10	400	400	mushroom_red
+
 
 #goomba
 2	224	400
