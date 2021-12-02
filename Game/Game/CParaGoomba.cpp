@@ -4,6 +4,7 @@
 #include "CBrick.h"
 #include "CItem.h"
 #include "CGoomba.h"
+#include "CDebug.h"
 
 #define PARA_GOOMBA_BBOX_WIDTH 20
 #define PARA_GOOMBA_BBOX_HEIGHT 24
@@ -20,19 +21,24 @@
 
 #define GOOMBA_DIE_TIMEOUT 500
 
-#define GOOMBA_GRAVITY 0.002f
-#define GOOMBA_WALK_SPEED 0.05f
-#define PARA_GOOMBA_FLY_SPEED 0.015f
-#define PARA_GOOMBA_MAX_FLY 0.03f
+#define GOOMBA_GRAVITY 0.001f
+#define GOOMBA_WALK_SPEED 0.03f
+#define PARA_GOOMBA_WALK_SPEED 0.015f
+#define PARA_GOOMBA_FLY_SPEED 0.4f
+#define PARA_GOOMBA_FLY_SPEED_SHORT 0.15f
+
+#define MAX_COUNT_JUMP 4
+#define MAX_TIME_WALK 500
 
 CParaGoomba::CParaGoomba(float x, float y) {
 	_position = { x,y };
 	_ax = 0;
 	_ay = GOOMBA_GRAVITY;
-	//_ay = 0;
+	_countJump = 0;
+	_warkStartTime = 0;
 	_dieStart = -1;
 	_velocity = { 0.0f,0.0f };
-	SetState(STATE_PARA_GOOMBA_FLY);
+	_state = -1;
 }
 
 int CParaGoomba::_GetAnimationId() {
@@ -59,6 +65,7 @@ int CParaGoomba::_GetAnimationId() {
 }
 
 void CParaGoomba::SetState(int state) {
+	_warkStartTime = 0;
 	switch (state)
 	{
 	case STATE_RED_GOOMBA_DIE:
@@ -72,8 +79,20 @@ void CParaGoomba::SetState(int state) {
 		_velocity.x = _velocity.x == 0 ? -GOOMBA_WALK_SPEED : _velocity.x;
 		break;
 	case STATE_PARA_GOOMBA_FLY:
+		_velocity.x = -PARA_GOOMBA_WALK_SPEED;
+		if (_countJump < MAX_COUNT_JUMP) {
+			_velocity.y = -PARA_GOOMBA_FLY_SPEED_SHORT;
+			_countJump++;
+		}
+		else {
+			_velocity.y = -PARA_GOOMBA_FLY_SPEED;
+			_countJump++;
+			
+		}
 		break;
 	case STATE_PARA_GOOMBA_WALK:
+		_warkStartTime = GetTickCount64();
+		_velocity.x = -GOOMBA_WALK_SPEED;
 		break;
 	}
 	CGameObject::SetState(state);
@@ -81,7 +100,7 @@ void CParaGoomba::SetState(int state) {
 
 void CParaGoomba::OnNoCollision(DWORD dt) {
 	_position.x += _velocity.x * dt;
-	_position.y += _velocity.y * dt;
+	_position.y += _velocity.y * dt / 2;
 }
 
 void CParaGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
@@ -94,6 +113,17 @@ void CParaGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
 	if (e->ny != 0)
 	{
 		_velocity.y = 0;
+		if (e->ny < 0) { 
+			_isOnGround = true;  
+			if (_countJump > MAX_COUNT_JUMP ) {
+				if (_warkStartTime == 0) {
+					SetState(STATE_PARA_GOOMBA_WALK);
+				}
+			}
+			else {
+				SetState(STATE_PARA_GOOMBA_FLY);
+			}
+		}
 	}
 	else if (e->nx != 0)
 	{
@@ -114,6 +144,19 @@ void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	{
 		_isDeleted = true;
 		return;
+	}
+
+	int leftWindow = CCam::GetInstance()->GetPosition().x;
+	int rightWindow = CGame::GetInstance()->GetWindowHeight() * 2.25f + leftWindow;
+
+	if (_state == -1 && leftWindow <= _position.x && rightWindow >= _position.x) {
+		SetState(STATE_PARA_GOOMBA_FLY);
+	}
+
+	if (_warkStartTime != 0 && GetTickCount64() - _warkStartTime >= MAX_TIME_WALK) {
+		_countJump = 0;
+		_warkStartTime = 0;
+		SetState(STATE_PARA_GOOMBA_FLY);
 	}
 
 	CGameObject::Update(dt, coObjects);

@@ -12,8 +12,10 @@ class CParaGoomba : public CGameObject
 	int _GetAnimationId();
 	float _ax;
 	float _ay;
-
+	int _countJump;
+	int _warkStartTime;
 	ULONGLONG _dieStart;
+	bool _isOnGround;
 
 public:
 	CParaGoomba(float x, float y);
