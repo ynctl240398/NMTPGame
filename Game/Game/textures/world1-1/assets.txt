@@ -56,18 +56,22 @@
 
 #brick_question
 #type_obj	x	y	type_item
-8	176	352	coin
-8	192	352	coin
-8	224	304	coin
-8	240	304	coin
-8	416	320	coin
-8	656	384	coin
-8	704	352	coin
-8	1472	368	coin
+8	176	352	coin_brick
+8	192	352	coin_brick
+8	224	304	coin_brick
+8	240	304	coin_brick
+8	416	320	coin_brick
+8	656	384	coin_brick
+8	704	352	coin_brick
+8	1472	368	coin_brick
 
 #item
 #type_obj	x	y	type
-
+10	1072	320	coin
+10	1104	288	coin
+10	1136	256	coin
+10	1168	224	coin
+10	1200	192	coin
 
 #goomba
 2	224	400

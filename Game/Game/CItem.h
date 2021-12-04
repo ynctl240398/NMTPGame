@@ -11,6 +11,7 @@
 #define TYPE_ITEM_MUSHROOM_RED "mushroom_red"
 #define TYPE_ITEM_MUSHROOM_GREEN "mushroom_green"
 #define TYPE_ITEM_COIN "coin"
+#define TYPE_ITEM_COIN_BRICK "coin_brick"
 
 #define STATE_ITEM_IDLE 3900
 #define STATE_ITEM_MOVE 3901
@@ -20,10 +21,10 @@
 #define ID_ITEM_MUSHROOM_RED_ANI 3000
 #define ID_ITEM_MUSHROOM_GREEN_ANI 3001
 #define ID_ITEM_COIN_ANI 3002
+#define ID_ITEM_COIN_BRICK_ANI 3003
 
 class CItem : public CGameObject
 {
-	float _maxVy;
 	float _ay;
 	float _ax;
 	float _startY;

@@ -304,6 +304,13 @@ void CPlayScene::Update(DWORD dt)
 	{
 		if (!dynamic_cast<CMario*>(objects[i])) {
 			coObjects.push_back(objects[i]);
+			if (dynamic_cast<CBrickQuestion*>(objects[i])) {
+				CBrickQuestion* brickQuestion = dynamic_cast<CBrickQuestion*>(objects[i]);
+				CItem* item = brickQuestion->GetItem();
+				if (item->GetType() == TYPE_ITEM_MUSHROOM_GREEN || item->GetType() == TYPE_ITEM_MUSHROOM_RED) {
+					coObjects.push_back(item);
+				}
+			}
 		}
 	}
 

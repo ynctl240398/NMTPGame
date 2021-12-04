@@ -40,5 +40,9 @@ public:
 
 	void Release() override;
 
+	CItem* GetItem() {
+		return _item;
+	}
+
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
 };

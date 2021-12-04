@@ -4,16 +4,14 @@
 #include "CBrick.h"
 #include "CMario.h"
 
-#define ITEM_GRAVITY 0.002f
+#define ITEM_GRAVITY 0.001f
 #define ITEM_RUN_SPEED 0.05f
-#define ITEM_JUMP_SPEED 0.015f
-#define MAX_JUMP 0.75f
+#define ITEM_JUMP_SPEED 0.3f
 
 CItem::CItem(float x, float y, string type) {
 	_position = { x,y };
 	_isActive = false;
 	_startY = y;
-	_maxVy = MAX_JUMP;
 	_ay = 0;
 	_ax = 0;
 	_isDeleted = false;
@@ -24,18 +22,6 @@ CItem::CItem(float x, float y, string type) {
 
 void CItem::OnCollisionWith(LPCOLLISIONEVENT e) {
 	if (!e->obj->IsBlocking()) return;
-
-	if (dynamic_cast<CMario*>(e->obj)) {
-		
-	}
-
-	if (dynamic_cast<CBrick*>(e->obj) || dynamic_cast<CBrickQuestion*>(e->obj)) {
-		
-	}
-	else {
-		_handleNoCollisionX = true;
-		return;
-	}
 
 	if (e->ny != 0)
 	{
@@ -57,7 +43,7 @@ void CItem::OnCollisionWith(LPCOLLISIONEVENT e) {
 
 void CItem::OnNoCollision(DWORD dt) {
 	_position.x += _velocity.x * dt;
-	_position.y += _velocity.y * dt / 2.5;
+	_position.y += _velocity.y * dt;
 }
 
 void CItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
@@ -67,17 +53,11 @@ void CItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	_velocity.x += _ax * dt;
 	_velocity.y += _ay * dt;
 
-	if (abs(_velocity.y) >= _maxVy) {
-		_ay = JUMP_SPEED;
-	}
-
-	float dy = _velocity.y * dt / 4;
+	float dy = _velocity.y * dt;
 
 	if (_state == STATE_ITEM_JUMP) {
 		if (_position.y + dy >= _startY) {
 			_position.y = _startY;
-			_ay = 0;
-			Delete();
 			SetState(STATE_ITEM_DISAPPEAR);
 		}
 		else
@@ -98,7 +78,8 @@ void CItem::SetType(string type) {
 
 void CItem::SetState(int state) {
 	if (state == STATE_ITEM_JUMP) {
-		_ay = -JUMP_SPEED;
+		_velocity.y = -ITEM_JUMP_SPEED;
+		_ay = ITEM_GRAVITY;
 	}
 	else if (state == STATE_ITEM_MOVE) {
 
@@ -107,7 +88,10 @@ void CItem::SetState(int state) {
 
 	}
 	else if (state == STATE_ITEM_DISAPPEAR) {
-
+		_isDeleted = true;
+		_velocity = { 0.0f,0.0f };
+		_ay = 0;
+		_ax = 0;
 	}
 	
 	CGameObject::SetState(state);
@@ -122,6 +106,9 @@ int CItem::_GetAnimationId() {
 
 	if (_type == TYPE_ITEM_COIN) {
 		aniId = ID_ITEM_COIN_ANI;
+	}
+	else if (_type == TYPE_ITEM_COIN_BRICK) {
+		aniId = ID_ITEM_COIN_BRICK_ANI;
 	}
 	else if (_type == TYPE_ITEM_MUSHROOM_GREEN) {
 		aniId = ID_ITEM_MUSHROOM_GREEN_ANI;

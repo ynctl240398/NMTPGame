@@ -110,6 +110,9 @@ void CMario::_OnCollisionWithItem(LPCOLLISIONEVENT e) {
 			this->_SetLevel(LEVEL_BIG);
 		}
 	}
+	else if (item->GetType() == TYPE_ITEM_COIN) {
+		item->Delete();
+	}
 }
 
 void CMario::_OnCollisionWithGoomba(LPCOLLISIONEVENT e) {
