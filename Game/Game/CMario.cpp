@@ -7,6 +7,7 @@
 #include "CDebug.h"
 #include "CGoomba.h"
 #include "CKoopaParaTropa.h"
+#include "CParaGoomba.h"
 
 #define MIN_X 0
 #define MAX_Y 400
@@ -41,6 +42,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
 		_OnCollisionWithGoomba(e);
 	else if (dynamic_cast<CKoopaParaTropa*>(e->obj))
 		_OnCollisionWithKoopaParaTropa(e);
+	else if (dynamic_cast<CParaGoomba*>(e->obj))
+		_OnCollisionWithParaGoomba(e);
 }
 
 void CMario::_OnCollisionWithBrick(LPCOLLISIONEVENT e) {
@@ -171,6 +174,30 @@ void CMario::_OnCollisionWithKoopaParaTropa(LPCOLLISIONEVENT e) {
 					koopaParaTropa->SetScale({ _scale.x, koopaParaTropa->GetScale().y });
 					koopaParaTropa->SetState(STATE_KOOPA_PARA_TROPA_SHELD_RUN);
 				}
+			}
+		}
+	}
+}
+
+void CMario::_OnCollisionWithParaGoomba(LPCOLLISIONEVENT e) {
+	CParaGoomba* paragoomba = dynamic_cast<CParaGoomba*>(e->obj);
+
+	if (e->ny < 0) {
+		if (paragoomba->GetState() != STATE_RED_GOOMBA_DIE) {
+			if (paragoomba->GetState() == STATE_PARA_GOOMBA_FLY || paragoomba->GetState() == STATE_PARA_GOOMBA_WALK) {
+				_velocity.y = -MARIO_JUMP_DEFLECT_SPEED;
+				paragoomba->SetState(STATE_RED_GOOMBA_WALK);
+			}
+			else if (paragoomba->GetState() == STATE_RED_GOOMBA_WALK) {
+				_velocity.y = -MARIO_JUMP_DEFLECT_SPEED;
+				paragoomba->SetState(STATE_RED_GOOMBA_DIE);
+			}
+		}
+	}
+	else {
+		if (_untouchable == 0) {
+			if (paragoomba->GetState() != STATE_PARA_GOOMBA_IDLE || paragoomba->GetState() != STATE_RED_GOOMBA_DIE) {
+				_OnCollisionWithEnemy(e);
 			}
 		}
 	}

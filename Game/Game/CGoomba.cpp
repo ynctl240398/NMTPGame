@@ -23,7 +23,7 @@ CGoomba::CGoomba(float x, float y) {
 	_ay = GOOMBA_GRAVITY;
 	_ax = 0;
 	_dieStart = -1;
-	_state = -1;
+	_state = STATE_GOOMBA_IDLE;
 }
 
 int CGoomba::_GetAnimationId() {
@@ -46,7 +46,9 @@ void CGoomba::SetState(int state) {
 		_ax = 0;
 		break;
 	case STATE_GOOMBA_WALK:
-		_velocity.x = _velocity.x == 0 ? -GOOMBA_WALK_SPEED : _velocity.x;
+		_velocity.x = -GOOMBA_WALK_SPEED;
+		break;
+	case STATE_GOOMBA_IDLE:
 		break;
 	}
 	CGameObject::SetState(state);
@@ -70,13 +72,18 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
 	}
 	else if (e->nx != 0)
 	{
-		if (dynamic_cast<CBrick*>(e->obj) || dynamic_cast<CBrickQuestion*>(e->obj) || dynamic_cast<CGoomba*>(e->obj)) {
+		if (dynamic_cast<CGoomba*>(e->obj)) {
+			CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+			_velocity.x = -_velocity.x;
+			goomba->SetVelocity({ -goomba->GetVelocity().x, goomba->GetVelocity().y });
+		}
+		if (dynamic_cast<CBrick*>(e->obj) || dynamic_cast<CBrickQuestion*>(e->obj)) {
 			if (dynamic_cast<CBrick*>(e->obj) && dynamic_cast<CBrick*>(e->obj)->IsBig()) {
+
 				_handleNoCollisionX = true;
 			}
-			else {
+			else
 				_velocity.x = -_velocity.x;
-			}
 		}
 	}
 }
@@ -99,9 +106,9 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	_velocity.y += _ay * dt;
 
 	int leftWindow = CCam::GetInstance()->GetPosition().x;
-	int rightWindow = CGame::GetInstance()->GetWindowHeight() * 2.25f + leftWindow;
+	int rightWindow = CGame::GetInstance()->GetWindowWidth() + leftWindow;
 
-	if (_state == -1 && leftWindow <= _position.x && rightWindow >= _position.x) {
+	if (_state == STATE_GOOMBA_IDLE && leftWindow <= _position.x && rightWindow >= _position.x) {
 		SetState(STATE_GOOMBA_WALK);
 	}
 
@@ -116,7 +123,6 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		_position.x += _velocity.x * dt;
 	}
 
-	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 

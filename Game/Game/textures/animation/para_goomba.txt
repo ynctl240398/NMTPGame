@@ -14,7 +14,7 @@
 5005	68	0	16	16
 
 #die
-5006	85	8	16	16
+5006	85	8	16	8
 
 #id_sprite	time(ms)
 #para_walk

@@ -22,13 +22,13 @@
 #define GOOMBA_DIE_TIMEOUT 500
 
 #define GOOMBA_GRAVITY 0.001f
-#define GOOMBA_WALK_SPEED 0.03f
-#define PARA_GOOMBA_WALK_SPEED 0.015f
+#define GOOMBA_WALK_SPEED 0.04f
+#define PARA_GOOMBA_WALK_SPEED 0.02f
 #define PARA_GOOMBA_FLY_SPEED 0.4f
 #define PARA_GOOMBA_FLY_SPEED_SHORT 0.15f
 
 #define MAX_COUNT_JUMP 4
-#define MAX_TIME_WALK 500
+#define MAX_TIME_WALK 600
 
 CParaGoomba::CParaGoomba(float x, float y) {
 	_position = { x,y };
@@ -38,7 +38,7 @@ CParaGoomba::CParaGoomba(float x, float y) {
 	_warkStartTime = 0;
 	_dieStart = -1;
 	_velocity = { 0.0f,0.0f };
-	_state = -1;
+	_state = STATE_PARA_GOOMBA_IDLE;
 }
 
 int CParaGoomba::_GetAnimationId() {
@@ -76,7 +76,7 @@ void CParaGoomba::SetState(int state) {
 		_ax = 0;
 		break;
 	case STATE_RED_GOOMBA_WALK:
-		_velocity.x = _velocity.x == 0 ? -GOOMBA_WALK_SPEED : _velocity.x;
+		_velocity.x = -GOOMBA_WALK_SPEED;
 		break;
 	case STATE_PARA_GOOMBA_FLY:
 		_velocity.x = -PARA_GOOMBA_WALK_SPEED;
@@ -103,6 +103,20 @@ void CParaGoomba::OnNoCollision(DWORD dt) {
 	_position.y += _velocity.y * dt / 2;
 }
 
+void CParaGoomba::_HandleJump() {
+	if (_state == STATE_PARA_GOOMBA_FLY || _state == STATE_PARA_GOOMBA_WALK) {
+
+		if (_countJump > MAX_COUNT_JUMP) {
+			if (_warkStartTime == 0) {
+				SetState(STATE_PARA_GOOMBA_WALK);
+			}
+		}
+		else {
+			SetState(STATE_PARA_GOOMBA_FLY);
+		}
+	}
+}
+
 void CParaGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
 	if (!e->obj->IsBlocking()) return;
 	if (dynamic_cast<CItem*>(e->obj)) {
@@ -114,24 +128,18 @@ void CParaGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
 	{
 		_velocity.y = 0;
 		if (e->ny < 0) { 
-			_isOnGround = true;  
-			if (_countJump > MAX_COUNT_JUMP ) {
-				if (_warkStartTime == 0) {
-					SetState(STATE_PARA_GOOMBA_WALK);
-				}
-			}
-			else {
-				SetState(STATE_PARA_GOOMBA_FLY);
-			}
+			_HandleJump();
 		}
 	}
 	else if (e->nx != 0)
 	{
-		if (dynamic_cast<CBrick*>(e->obj) && dynamic_cast<CBrick*>(e->obj)->IsBig()) {
-			_handleNoCollisionX = true;
-		}
-		else {
-			_velocity.x = -_velocity.x;
+		if (dynamic_cast<CBrick*>(e->obj) || dynamic_cast<CBrickQuestion*>(e->obj)) {
+			if (dynamic_cast<CBrick*>(e->obj) && dynamic_cast<CBrick*>(e->obj)->IsBig()) {
+
+				_handleNoCollisionX = true;
+			}
+			else
+				_velocity.x = -_velocity.x;
 		}
 	}
 }
@@ -140,27 +148,33 @@ void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	_velocity.x += _ax * dt;
 	_velocity.y += _ay * dt;
 
-	if ((_state == STATE_GOOMBA_DIE) && (GetTickCount64() - _dieStart > GOOMBA_DIE_TIMEOUT))
+	if ((_state == STATE_RED_GOOMBA_DIE) && (GetTickCount64() - _dieStart > GOOMBA_DIE_TIMEOUT))
 	{
 		_isDeleted = true;
 		return;
 	}
+		
+	_HandleStatePara();
+
+	CCollision::GetInstance()->Process(this, dt, coObjects);
+}
+
+void CParaGoomba::_HandleStatePara() {
 
 	int leftWindow = CCam::GetInstance()->GetPosition().x;
-	int rightWindow = CGame::GetInstance()->GetWindowHeight() * 2.25f + leftWindow;
+	int rightWindow = CGame::GetInstance()->GetWindowWidth() + leftWindow;
 
-	if (_state == -1 && leftWindow <= _position.x && rightWindow >= _position.x) {
+	if (_state == STATE_PARA_GOOMBA_IDLE && leftWindow <= _position.x && rightWindow >= _position.x) {
 		SetState(STATE_PARA_GOOMBA_FLY);
 	}
 
-	if (_warkStartTime != 0 && GetTickCount64() - _warkStartTime >= MAX_TIME_WALK) {
+	bool checkTime = _warkStartTime != 0 && GetTickCount64() - _warkStartTime >= MAX_TIME_WALK;
+	bool checkState = _state == STATE_PARA_GOOMBA_WALK;
+	if (checkTime && checkState) {
 		_countJump = 0;
 		_warkStartTime = 0;
 		SetState(STATE_PARA_GOOMBA_FLY);
 	}
-
-	CGameObject::Update(dt, coObjects);
-	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
 void CParaGoomba::Render() {

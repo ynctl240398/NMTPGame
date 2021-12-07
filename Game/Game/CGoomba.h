@@ -2,8 +2,9 @@
 
 #include "CGameObject.h"
 
-#define STATE_GOOMBA_WALK 4900
-#define STATE_GOOMBA_DIE 4901
+#define STATE_GOOMBA_IDLE 4900
+#define STATE_GOOMBA_WALK 4901
+#define STATE_GOOMBA_DIE 4902
 
 class CGoomba : public CGameObject
 {

@@ -2,10 +2,11 @@
 
 #include "CGameObject.h"
 
-#define STATE_PARA_GOOMBA_WALK 5900
-#define STATE_PARA_GOOMBA_FLY 5901
-#define STATE_RED_GOOMBA_WALK 5902
-#define STATE_RED_GOOMBA_DIE 5903
+#define STATE_PARA_GOOMBA_IDLE 5900
+#define STATE_PARA_GOOMBA_WALK 5901
+#define STATE_PARA_GOOMBA_FLY 5902
+#define STATE_RED_GOOMBA_WALK 5903
+#define STATE_RED_GOOMBA_DIE 5904
 
 class CParaGoomba : public CGameObject
 {
@@ -15,7 +16,9 @@ class CParaGoomba : public CGameObject
 	int _countJump;
 	int _warkStartTime;
 	ULONGLONG _dieStart;
-	bool _isOnGround;
+
+	void _HandleJump();
+	void _HandleStatePara();
 
 public:
 	CParaGoomba(float x, float y);
