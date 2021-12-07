@@ -19,7 +19,6 @@
 #define KOOPA_PARA_TROPA_BBOX_WIDTH 16
 #define KOOPA_PARA_TROPA_BBOX_HEIGHT 26
 
-
 #define KOOPA_PARA_TROPA_SHELD_BBOX_WIDTH 16
 #define KOOPA_PARA_TROPA_SHELD_BBOX_HEIGHT 16
 
@@ -89,8 +88,13 @@ void CKoopaParaTropa::SetState(int state) {
 		_liveStart = GetTickCount64();
 		break;
 	case STATE_KOOPA_PARA_TROPA_IDLE:
+		_liveStart = 0;
 		_position = _startPostion;
-		SetState(_startState);
+		_ax = 0;
+		_ay = KOOPA_PARA_TROPA_GRAVITY;
+		_velocity = { 0,0 };
+		_scale = { -1.0f, 1.0f };
+		_obj = new CObjKoopaTropa(_position.x + KOOPA_PARA_TROPA_BBOX_WIDTH / 2 + OBJ_BBOX_WIDTH / 2, _position.y);
 		break;
 	}
 	CGameObject::SetState(state);
@@ -111,7 +115,7 @@ void CKoopaParaTropa::_SetPositionXObj(float x)
 	if (_scale.x < 0) { //right
 		px = x + KOOPA_PARA_TROPA_BBOX_WIDTH / 2 + OBJ_BBOX_WIDTH / 2;
 	}
-	else if(_scale > 0) { // left
+	else {
 		px = x - KOOPA_PARA_TROPA_BBOX_WIDTH / 2 - OBJ_BBOX_WIDTH / 2;
 	}
 	_obj->SetPosition({ px, py });
@@ -144,15 +148,6 @@ void CKoopaParaTropa::OnCollisionWith(LPCOLLISIONEVENT e) {
 	}
 	else if (e->nx != 0)
 	{
-		if (dynamic_cast<CBrick*>(e->obj) || dynamic_cast<CBrickQuestion*>(e->obj)) {
-			if (dynamic_cast<CBrick*>(e->obj) && dynamic_cast<CBrick*>(e->obj)->IsBig()) {
-				_handleNoCollisionX = true;
-			}
-			else {
-				_velocity.x = -_velocity.x;
-				_scale.x = -_scale.x;
-			}
-		}
 		if (_state == STATE_KOOPA_PARA_TROPA_SHELD_RUN) {
 			if (dynamic_cast<CGoomba*>(e->obj)) {
 				CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
@@ -165,10 +160,19 @@ void CKoopaParaTropa::OnCollisionWith(LPCOLLISIONEVENT e) {
 			}
 			if (dynamic_cast<CBrickQuestion*>(e->obj)) {
 				CBrickQuestion* brickQuestion = dynamic_cast<CBrickQuestion*>(e->obj);
-				if (brickQuestion->GetState() == STATE_BRICK_QUESTION_RUN && e->ny > 0 && e->obj->IsBlocking())
+				if (brickQuestion->GetState() == STATE_BRICK_QUESTION_RUN && e->obj->IsBlocking())
 				{
 					brickQuestion->SetState(STATE_BRICK_QUESTION_IDLE);
 				}
+			}
+		}
+		if (dynamic_cast<CBrick*>(e->obj) || dynamic_cast<CBrickQuestion*>(e->obj)) {
+			if (dynamic_cast<CBrick*>(e->obj) && dynamic_cast<CBrick*>(e->obj)->IsBig()) {
+				_handleNoCollisionX = true;
+			}
+			else {
+				_velocity.x = -_velocity.x;
+				_scale.x = -_scale.x;
 			}
 		}
 	}
@@ -194,15 +198,17 @@ void CKoopaParaTropa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	_velocity.y += _ay * dt;
 	_velocity.x += _ax * dt;
 
-	float leftCam = CCam::GetInstance()->GetCameraBound()->GetLeft();
+	float leftCam = CCam::GetInstance()->GetPosition().x;
 	float rightCam = CGame::GetInstance()->GetWindowWidth() + leftCam;
 
-	if (_state == STATE_KOOPA_PARA_TROPA_SHELD_RUN && _position.x < leftCam + KOOPA_PARA_TROPA_WIDTH && _position.x > rightCam) {
+	if (_state == STATE_KOOPA_PARA_TROPA_SHELD_RUN && 
+		(_position.x + KOOPA_PARA_TROPA_SHELD_BBOX_WIDTH < leftCam + KOOPA_PARA_TROPA_WIDTH || _position.x - KOOPA_PARA_TROPA_SHELD_BBOX_WIDTH > rightCam)) {
 		SetState(STATE_KOOPA_PARA_TROPA_DIE);
 	}
 
 	if (_state == STATE_KOOPA_PARA_TROPA_DIE && _liveStart != 0 && GetTickCount64() - _liveStart > TIME_TO_LIVE) {
 		SetState(STATE_KOOPA_PARA_TROPA_IDLE);
+		SetState(_startState);
 	}
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
