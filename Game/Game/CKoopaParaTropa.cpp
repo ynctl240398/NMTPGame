@@ -28,13 +28,18 @@
 #define KOOPA_PARA_TROPA_SHELD_SPEED 0.2f
 
 
+#define TIME_TO_LIVE 5000
+#define TIME_TO_SHELD_LIVE 3000
+
 CKoopaParaTropa::CKoopaParaTropa(float x, float y, int state){
 	_position = { x,y };
+	_startPostion = _position;
 	_ax = 0;
 	_ay = KOOPA_PARA_TROPA_GRAVITY;
 	_velocity = { 0,0 };
 	_scale = { -1.0f, 1.0f };
 	_obj = new CObjKoopaTropa(x + KOOPA_PARA_TROPA_BBOX_WIDTH / 2 + OBJ_BBOX_WIDTH / 2, y);
+	_startState = state;
 	SetState(state);
 }
 
@@ -79,6 +84,13 @@ void CKoopaParaTropa::SetState(int state) {
 	case STATE_KOOPA_PARA_TROPA_SHELD_LIVE:
 		break;
 	case STATE_KOOPA_PARA_TROPA_FLY:
+		break;
+	case STATE_KOOPA_PARA_TROPA_DIE:
+		_liveStart = GetTickCount64();
+		break;
+	case STATE_KOOPA_PARA_TROPA_IDLE:
+		_position = _startPostion;
+		SetState(_startState);
 		break;
 	}
 	CGameObject::SetState(state);
@@ -151,6 +163,13 @@ void CKoopaParaTropa::OnCollisionWith(LPCOLLISIONEVENT e) {
 					_handleNoCollisionX = true;
 				}
 			}
+			if (dynamic_cast<CBrickQuestion*>(e->obj)) {
+				CBrickQuestion* brickQuestion = dynamic_cast<CBrickQuestion*>(e->obj);
+				if (brickQuestion->GetState() == STATE_BRICK_QUESTION_RUN && e->ny > 0 && e->obj->IsBlocking())
+				{
+					brickQuestion->SetState(STATE_BRICK_QUESTION_IDLE);
+				}
+			}
 		}
 	}
 }
@@ -175,8 +194,16 @@ void CKoopaParaTropa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	_velocity.y += _ay * dt;
 	_velocity.x += _ax * dt;
 
-	int leftCam = CCam::GetInstance()->GetCameraBound()->GetLeft();
-	int rightCam = CCam::GetInstance()->GetCameraBound()->GetRight();
+	float leftCam = CCam::GetInstance()->GetCameraBound()->GetLeft();
+	float rightCam = CGame::GetInstance()->GetWindowWidth() + leftCam;
+
+	if (_state == STATE_KOOPA_PARA_TROPA_SHELD_RUN && _position.x < leftCam + KOOPA_PARA_TROPA_WIDTH && _position.x > rightCam) {
+		SetState(STATE_KOOPA_PARA_TROPA_DIE);
+	}
+
+	if (_state == STATE_KOOPA_PARA_TROPA_DIE && _liveStart != 0 && GetTickCount64() - _liveStart > TIME_TO_LIVE) {
+		SetState(STATE_KOOPA_PARA_TROPA_IDLE);
+	}
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 
@@ -185,6 +212,7 @@ void CKoopaParaTropa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		_position.x += _velocity.x * dt;
 	}
 
+	//handle position obj front
 	if (_state == STATE_KOOPA_PARA_TROPA_WALK) {
 		_obj->Update(dt, coObjects);
 		_SetPositionXObj(_position.x);
@@ -201,6 +229,9 @@ void CKoopaParaTropa::GetBoundingBox(float& left, float& top, float& right, floa
 		top = _position.y - KOOPA_PARA_TROPA_BBOX_HEIGHT / 2;
 		right = left + KOOPA_PARA_TROPA_BBOX_WIDTH;
 		bottom = top + KOOPA_PARA_TROPA_BBOX_HEIGHT;
+	}
+	else if (_state == STATE_KOOPA_PARA_TROPA_DIE) {
+		left = top = right = bottom = 0;
 	}
 	else
 	{

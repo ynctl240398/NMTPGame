@@ -105,6 +105,9 @@ void CMario::_OnCollisionWithBrickQuestion(LPCOLLISIONEVENT e) {
 void CMario::_OnCollisionWithItem(LPCOLLISIONEVENT e) {
 	CItem* item = dynamic_cast<CItem*>(e->obj);
 
+	if (item->GetState() == STATE_ITEM_IDLE) {
+		return;
+	}
 
 	if (item->GetType() == TYPE_ITEM_MUSHROOM_RED) {
 		item->SetState(STATE_ITEM_DISAPPEAR);
@@ -217,8 +220,8 @@ void CMario::_OnCollisionWithEnemy(LPCOLLISIONEVENT e) {
 }
 
 void CMario::OnNoCollision(DWORD dt) {
-	_position.x += _velocity.x * dt;
-	_position.y += _velocity.y * dt / 2.5;
+	_position.x += (_velocity.x * dt);
+	_position.y += (_velocity.y * dt);
 }
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {

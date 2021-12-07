@@ -57,8 +57,10 @@ protected:
 	D3DXVECTOR2 _rotation;
 	D3DXVECTOR2 _translation;
 	D3DXVECTOR2 _scale;
+	D3DXVECTOR2 _startPostion;
 
 	int _state;
+	int _startState;
 
 	bool _isDeleted;
 
@@ -101,6 +103,9 @@ public:
 
 	void SetScale(D3DXVECTOR2);
 	D3DXVECTOR2 GetScale() const;
+
+	D3DXVECTOR2 GetStartPostion() { return _startPostion; }
+	int GetStartState() { return _startState; }
 
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
 	virtual void Render() = 0;

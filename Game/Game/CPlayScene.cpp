@@ -39,6 +39,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 	_ani = new CAnimation(DEFAULT_TIME);
 	_currentIdTex = -1;
 	player = NULL;
+	_bg = NULL;
+	_cam = NULL;
 }
 
 void CPlayScene::_ParseSectionSprites(string line) {
@@ -329,7 +331,7 @@ void CPlayScene::Render()
 {
 	_bg->Render();
 	_cam->Render();
-	for (int i = 0; i < objects.size(); i++)
+	for (int i = 0; i < (int)objects.size(); i++)
 		objects[i]->Render();
 }
 
@@ -354,7 +356,7 @@ void CPlayScene::Clear()
 */
 void CPlayScene::Unload()
 {
-	for (int i = 0; i < objects.size(); i++)
+	for (int i = 0; i < (int)objects.size(); i++)
 		delete objects[i];
 
 	objects.clear();

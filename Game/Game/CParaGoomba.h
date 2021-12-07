@@ -14,7 +14,7 @@ class CParaGoomba : public CGameObject
 	float _ax;
 	float _ay;
 	int _countJump;
-	int _warkStartTime;
+	ULONGLONG _warkStartTime;
 	ULONGLONG _dieStart;
 
 	void _HandleJump();

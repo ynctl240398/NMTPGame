@@ -6,7 +6,10 @@
 
 CCam* CCam::_cameraInstance = NULL;
 
-CCam::CCam() {}
+CCam::CCam() {
+	_cameraWidth = 0;
+	_cameraHeight = 0;
+}
 
 CCam::~CCam() {}
 
@@ -54,10 +57,10 @@ void CCam::Load(LPCWSTR filePath) {
 		vector<string> tokens = split(line);
 		if (tokens.size() < LENGTH_NUMBER) return; // skip invalid lines
 
-		int l = atoi(tokens[0].c_str());
-		int t = atoi(tokens[1].c_str());
-		int r = atoi(tokens[2].c_str());
-		int b = atoi(tokens[3].c_str());
+		float l = stof(tokens[0].c_str());
+		float t = stof(tokens[1].c_str());
+		float r = stof(tokens[2].c_str());
+		float b = stof(tokens[3].c_str());
 		float x = stof(tokens[4].c_str());
 		float y = stof(tokens[5].c_str());
 		float upVector = stof(tokens[6].c_str());

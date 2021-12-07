@@ -161,8 +161,8 @@ void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 void CParaGoomba::_HandleStatePara() {
 
-	int leftWindow = CCam::GetInstance()->GetPosition().x;
-	int rightWindow = CGame::GetInstance()->GetWindowWidth() + leftWindow;
+	float leftWindow = CCam::GetInstance()->GetPosition().x;
+	float rightWindow = CGame::GetInstance()->GetWindowWidth() + leftWindow;
 
 	if (_state == STATE_PARA_GOOMBA_IDLE && leftWindow <= _position.x && rightWindow >= _position.x) {
 		SetState(STATE_PARA_GOOMBA_FLY);
