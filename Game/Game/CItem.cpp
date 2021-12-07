@@ -4,9 +4,9 @@
 #include "CBrick.h"
 #include "CMario.h"
 
-#define ITEM_GRAVITY 0.001f
-#define ITEM_RUN_SPEED 0.05f
-#define ITEM_JUMP_SPEED 0.3f
+#define ITEM_GRAVITY 0.0015f
+#define ITEM_RUN_SPEED 0.1f
+#define ITEM_JUMP_SPEED 0.4f
 
 CItem::CItem(float x, float y, string type) {
 	_position = { x,y };
@@ -15,7 +15,6 @@ CItem::CItem(float x, float y, string type) {
 	_ay = 0;
 	_ax = 0;
 	_isDeleted = false;
-	_state = -1;
 	SetType(type);
 	SetState(STATE_ITEM_IDLE);
 }
@@ -53,9 +52,9 @@ void CItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	_velocity.x += _ax * dt;
 	_velocity.y += _ay * dt;
 
-	float dy = _velocity.y * dt;
 
 	if (_state == STATE_ITEM_JUMP) {
+		float dy = _velocity.y * dt;
 		if (_position.y + dy >= _startY) {
 			_position.y = _startY;
 			SetState(STATE_ITEM_DISAPPEAR);
@@ -63,12 +62,21 @@ void CItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		else
 			_position.y += dy;
 	}
+	else if (_state == STATE_ITEM_UP) {
+		if (_position.y + ITEM_HEIGHT > _startY) {
+			_position.y--;
+		}
+		else SetState(STATE_ITEM_MOVE);
+	}
+	
+	if (_type == TYPE_ITEM_MUSHROOM_GREEN || _type == TYPE_ITEM_MUSHROOM_RED) {
 
-	CCollision::GetInstance()->Process(this, dt, coObjects);
+		CCollision::GetInstance()->Process(this, dt, coObjects);
 
-	if (_handleNoCollisionX) {
-		_handleNoCollisionX = false;
-		_position.x += _velocity.x * dt;
+		if (_handleNoCollisionX) {
+			_handleNoCollisionX = false;
+			_position.x += _velocity.x * dt;
+		}
 	}
 }
 
@@ -82,7 +90,8 @@ void CItem::SetState(int state) {
 		_ay = ITEM_GRAVITY;
 	}
 	else if (state == STATE_ITEM_MOVE) {
-
+		_velocity.x = ITEM_RUN_SPEED;
+		_ay = ITEM_GRAVITY;
 	}
 	else if (state == STATE_ITEM_IDLE) {
 
@@ -92,6 +101,9 @@ void CItem::SetState(int state) {
 		_velocity = { 0.0f,0.0f };
 		_ay = 0;
 		_ax = 0;
+	}
+	else {
+		//_position.y += ITEM_HEIGHT / 3;
 	}
 	
 	CGameObject::SetState(state);

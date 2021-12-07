@@ -28,12 +28,13 @@ class CBrickQuestion : public CGameObject
 	CItem* _item;
 
 	int _GetAnimationId();
+	void _HandleStateItem();
+
 public:
 	CBrickQuestion(float x, float y, string typeItem);
 
 	void SetState(int) override;
 
-	void SetStateItem(int);
 
 	void Render() override;
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) override;

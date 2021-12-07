@@ -34,6 +34,7 @@ void CBrickQuestion::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		_position.y += dy;
 
 	_item->Update(dt, coObjects);
+	
 }
 
 void CBrickQuestion::Render() {
@@ -63,6 +64,7 @@ void CBrickQuestion::GetBoundingBox(float& left, float& top, float& right, float
 void CBrickQuestion::SetState(int state) {
 	if (state == STATE_BRICK_QUESTION_IDLE && _state == STATE_BRICK_QUESTION_RUN) {
 		_ay = -JUMP_SPEED;
+		_HandleStateItem();
 	}
 	CGameObject::SetState(state);
 }
@@ -76,6 +78,11 @@ int CBrickQuestion::_GetAnimationId() {
 	return aniId;
 }
 
-void CBrickQuestion::SetStateItem(int state) {
-	_item->SetState(state);
+void CBrickQuestion::_HandleStateItem() {
+	if (_item->GetType() == TYPE_ITEM_COIN_BRICK) {
+		_item->SetState(STATE_ITEM_JUMP);
+	}
+	else if (_item->GetType() == TYPE_ITEM_MUSHROOM_GREEN || _item->GetType() == TYPE_ITEM_MUSHROOM_RED) {
+		_item->SetState(STATE_ITEM_UP);
+	}
 }
