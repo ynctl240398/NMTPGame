@@ -30,13 +30,6 @@
 
 #define DIF 8
 
-//mario 1xxx
-//brick_question 2xxx
-//item 3xxx
-//goomba 4xxx
-//para_goomba 5xxx
-//koopa_para_tropa 6xxx
-//koopa_tropa 7xxx
 
 using namespace std;
 

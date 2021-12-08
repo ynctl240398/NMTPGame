@@ -14,3 +14,12 @@
 #define OBJECT_TYPE_PARA_GOOMBA 12
 
 #define OBJECT_TYPE_PORTAL	50
+
+
+//mario 1xxx
+//brick_question 2xxx
+//item 3xxx
+//goomba 4xxx
+//para_goomba 5xxx
+//koopa_para_tropa 6xxx
+//koopa_tropa 7xxx

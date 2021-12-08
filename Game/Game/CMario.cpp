@@ -8,6 +8,7 @@
 #include "CGoomba.h"
 #include "CKoopaParaTropa.h"
 #include "CParaGoomba.h"
+#include "CKoopaTropa.h"
 
 #define MIN_X 0
 #define MAX_Y 400
@@ -42,6 +43,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
 		_OnCollisionWithGoomba(e);
 	else if (dynamic_cast<CKoopaParaTropa*>(e->obj))
 		_OnCollisionWithKoopaParaTropa(e);
+	else if (dynamic_cast<CKoopaTropa*>(e->obj))
+		_OnCollisionWithKoopaTropa(e);
 	else if (dynamic_cast<CParaGoomba*>(e->obj))
 		_OnCollisionWithParaGoomba(e);
 }
@@ -182,6 +185,44 @@ void CMario::_OnCollisionWithKoopaParaTropa(LPCOLLISIONEVENT e) {
 	}
 }
 
+void CMario::_OnCollisionWithKoopaTropa(LPCOLLISIONEVENT e) {
+	CKoopaTropa* koopaTropa = dynamic_cast<CKoopaTropa*>(e->obj);
+	if (e->ny < 0) {
+		if (koopaTropa->GetState() != STATE_KOOPA_TROPA_DIE) {
+			if (koopaTropa->GetState() == STATE_KOOPA_TROPA_FLY) {
+				_velocity.y = -MARIO_JUMP_DEFLECT_SPEED;
+				koopaTropa->SetState(STATE_KOOPA_TROPA_WALK);
+			}
+			else if (koopaTropa->GetState() == STATE_KOOPA_TROPA_WALK || koopaTropa->GetState() == STATE_KOOPA_TROPA_SHELD_RUN) {
+				_velocity.y = -MARIO_JUMP_DEFLECT_SPEED;
+				koopaTropa->SetState(STATE_KOOPA_TROPA_SHELD);
+			}
+			else if (koopaTropa->GetState() == STATE_KOOPA_TROPA_SHELD) {
+				if (_position.x < koopaTropa->GetPosition().x) {
+					koopaTropa->SetScale({ -koopaTropa->GetScale().x, koopaTropa->GetScale().y });
+				}
+				else koopaTropa->SetScale({ koopaTropa->GetScale().x, koopaTropa->GetScale().y });
+				koopaTropa->SetState(STATE_KOOPA_TROPA_SHELD_RUN);
+			}
+		}
+	}
+	else {
+		if (_untouchable == 0) {
+			if (koopaTropa->GetState() == STATE_KOOPA_TROPA_WALK
+				|| koopaTropa->GetState() == STATE_KOOPA_TROPA_FLY
+				|| koopaTropa->GetState() == STATE_KOOPA_TROPA_SHELD_RUN) {
+				_OnCollisionWithEnemy(e);
+			}
+			else {
+				if (koopaTropa->GetState() == STATE_KOOPA_TROPA_SHELD) {
+					koopaTropa->SetScale({ _scale.x, koopaTropa->GetScale().y });
+					koopaTropa->SetState(STATE_KOOPA_TROPA_SHELD_RUN);
+				}
+			}
+		}
+	}
+}
+
 void CMario::_OnCollisionWithParaGoomba(LPCOLLISIONEVENT e) {
 	CParaGoomba* paragoomba = dynamic_cast<CParaGoomba*>(e->obj);
 
@@ -221,7 +262,7 @@ void CMario::_OnCollisionWithEnemy(LPCOLLISIONEVENT e) {
 
 void CMario::OnNoCollision(DWORD dt) {
 	_position.x += (_velocity.x * dt);
-	_position.y += (_velocity.y * dt);
+	_position.y += (_velocity.y * dt) / 2.25f;
 }
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
@@ -244,14 +285,19 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 
+	_HandleAfterCollicsion();
+	
+}
+
+void CMario::_HandleAfterCollicsion() {
 	if (_handleNoCollisionX) {
 		_handleNoCollisionX = false;
-		_position.x += _velocity.x * dt;
+		_position.x += _velocity.x * _dt;
 	}
 
 	if (_handleNoCollisionY) {
 		_handleNoCollisionY = false;
-		_position.y += _velocity.y * dt / 2;
+		_position.y += _velocity.y * _dt / 2;
 	}
 }
 

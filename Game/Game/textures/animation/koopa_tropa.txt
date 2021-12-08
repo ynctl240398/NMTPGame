@@ -1,0 +1,57 @@
+[SPRITE]
+#id	l	t	w	h
+
+#walk
+7000	0	17	16	32
+7001	17	17	16	32
+
+#sheld
+7002	34	17	16	16
+
+#sheld-run
+7003	0	51	16	16
+7004	17	51	16	16
+7005	34	51	16	16
+
+#sheld-live
+7006	34	34	16	16
+
+#fly
+7007	68	68	16	32
+7008	85	68	16	32
+
+#id_sprite	time(ms)
+
+#walk
+[FRAME]
+7000	100
+7001	100
+[ANIMATION]
+7000
+
+#sheld
+[FRAME]
+7002	0
+[ANIMATION]
+7001
+
+#sheld-run
+[FRAME]
+7003	100
+7004	100
+7005	100
+[ANIMATION]
+7002
+
+#sheld-live
+[FRAME]
+7006	0
+[ANIMATION]
+7003
+
+#fly
+[FRAME]
+7007	100
+7008	100
+[ANIMATION]
+7004

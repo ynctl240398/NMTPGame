@@ -33,13 +33,8 @@
 CKoopaParaTropa::CKoopaParaTropa(float x, float y, int state){
 	_position = { x,y };
 	_startPostion = _position;
-	_ax = 0;
-	_ay = KOOPA_PARA_TROPA_GRAVITY;
-	_velocity = { 0,0 };
-	_scale = { -1.0f, 1.0f };
-	_obj = new CObjKoopaTropa(x + KOOPA_PARA_TROPA_BBOX_WIDTH / 2 + OBJ_BBOX_WIDTH / 2, y);
 	_startState = state;
-	SetState(state);
+	SetState(STATE_KOOPA_PARA_TROPA_IDLE);
 }
 
 int CKoopaParaTropa::_GetAnimationId() {
@@ -208,6 +203,9 @@ void CKoopaParaTropa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 	if (_state == STATE_KOOPA_PARA_TROPA_DIE && _liveStart != 0 && GetTickCount64() - _liveStart > TIME_TO_LIVE) {
 		SetState(STATE_KOOPA_PARA_TROPA_IDLE);
+	}
+
+	if (_state == STATE_KOOPA_PARA_TROPA_IDLE && _position.x >= leftCam && _position.x <= rightCam) {
 		SetState(_startState);
 	}
 

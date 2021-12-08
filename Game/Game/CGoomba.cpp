@@ -105,8 +105,8 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	_velocity.x += _ax * dt;
 	_velocity.y += _ay * dt;
 
-	int leftWindow = CCam::GetInstance()->GetPosition().x;
-	int rightWindow = CGame::GetInstance()->GetWindowWidth() + leftWindow;
+	float leftWindow = CCam::GetInstance()->GetPosition().x;
+	float rightWindow = CGame::GetInstance()->GetWindowWidth() + leftWindow;
 
 	if (_state == STATE_GOOMBA_IDLE && leftWindow <= _position.x && rightWindow >= _position.x) {
 		SetState(STATE_GOOMBA_WALK);

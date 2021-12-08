@@ -6,6 +6,7 @@
 300	textures\animation\goomba.txt
 300	textures\animation\para_goomba.txt
 300	textures\animation\koopa_para_tropa.txt
+300	textures\animation\koopa_tropa.txt
 
 [OBJECTS]
 #bg
@@ -29,7 +30,7 @@
 9	2144	368	48	48
 
 #mario
-0	400	350
+0	1160	350
 
 #brick
 1	0	416	624	16
@@ -84,3 +85,8 @@
 
 #para_goomba
 12	880	350
+
+#koopa
+3	1328	293	7905
+3	1376	293	7905
+3	1424	293	7905

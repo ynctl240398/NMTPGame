@@ -57,10 +57,12 @@ private:
 	void _OnCollisionWithItem(LPCOLLISIONEVENT e);
 	void _OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void _OnCollisionWithKoopaParaTropa(LPCOLLISIONEVENT e);
+	void _OnCollisionWithKoopaTropa(LPCOLLISIONEVENT e);
 	void _OnCollisionWithParaGoomba(LPCOLLISIONEVENT e);
 	void _OnCollisionWithEnemy(LPCOLLISIONEVENT e);
 
 	void _SetLevel(string level);
+	void _HandleAfterCollicsion();
 
 public:
 	CMario();

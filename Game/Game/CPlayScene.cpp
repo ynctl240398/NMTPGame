@@ -13,6 +13,7 @@
 #include "CGoomba.h"
 #include "CParaGoomba.h"
 #include "CKoopaParaTropa.h"
+#include "CKoopaTropa.h"
 
 using namespace std;
 
@@ -188,7 +189,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		CCam::GetInstance()->Load(path.c_str());
 		_cam = CCam::GetInstance();
 		break;
-
+	case OBJECT_TYPE_KOOPAS: 
+	{
+		int state = atoi(tokens[3].c_str());
+		obj = new CKoopaTropa(x, y, state);
+		break;
+	}
 	default:
 		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
 		return;
