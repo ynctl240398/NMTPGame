@@ -148,6 +148,7 @@
     <ClCompile Include="CCollision.cpp" />
     <ClCompile Include="CDebug.cpp" />
     <ClCompile Include="CEntity.cpp" />
+    <ClCompile Include="CFirer.cpp" />
     <ClCompile Include="CGame.cpp" />
     <ClCompile Include="CGameObject.cpp" />
     <ClCompile Include="CGoomba.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="CCollision.h" />
     <ClInclude Include="CDebug.h" />
     <ClInclude Include="CEntity.h" />
+    <ClInclude Include="CFirer.h" />
     <ClInclude Include="CGame.h" />
     <ClInclude Include="CGameObject.h" />
     <ClInclude Include="CGoomba.h" />

@@ -15,6 +15,7 @@
 #include "CKoopaParaTropa.h"
 #include "CKoopaTropa.h"
 #include "CVenusFireTrap.h"
+#include "CPiranhaPlant.h"
 
 using namespace std;
 
@@ -199,9 +200,17 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_VENUS_FIRE_TRAP:
 	{
 		int type = atoi(tokens[3].c_str());
-		float offSetY = stoi(tokens[4].c_str());
+		float offSetY = (float)atof(tokens[4].c_str());
 		y += VENUS_FIRE_TRAP_BBOX_HIEGHT / 2 - DIF;
 		obj = new CVenusFireTrap(x, y, type, offSetY);
+		break;
+	}
+	case OBJECT_TYPE_PIRANHA_PLANT:
+	{
+		int type = atoi(tokens[3].c_str());
+		float offSetY = (float)atof(tokens[4].c_str());
+		y += PIRANHA_PLANT_BBOX_HIEGHT / 2 - DIF;
+		obj = new CPiranhaPlant(x, y, type, offSetY);
 		break;
 	}
 	default:
@@ -209,7 +218,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		return;
 	}
 
-	if (object_type != OBJECT_TYPE_BG && object_type != OBJECT_TYPE_CAM) 
+	if (object_type != OBJECT_TYPE_BG && object_type != OBJECT_TYPE_CAM)
 	{
 		objects.push_back(obj);
 	}

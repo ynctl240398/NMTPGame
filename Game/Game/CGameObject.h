@@ -12,11 +12,6 @@
 
 using namespace std;
 
-class CGameObject;
-
-class CCollisionEvent;
-typedef CCollisionEvent* LPCOLLISIONEVENT;
-
 class CRect {
 	float _left, _top, _right, _bottom;
 public:

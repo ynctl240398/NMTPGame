@@ -25,7 +25,7 @@ private:
 
 	static CMario* __instance;
 
-	string _level;
+	int _level;
 	int _direction;
 	CTextures* _tex;
 	CAnimation* _ani;
@@ -61,7 +61,7 @@ private:
 	void _OnCollisionWithParaGoomba(LPCOLLISIONEVENT e);
 	void _OnCollisionWithEnemy(LPCOLLISIONEVENT e);
 
-	void _SetLevel(string level);
+	void _SetLevel(int level);
 	void _HandleAfterCollicsion();
 
 public:
@@ -72,6 +72,8 @@ public:
 		}
 		return __instance; 
 	}
+
+	int GetLevel() { return _level; }
 
 	int IsCollidable()
 	{

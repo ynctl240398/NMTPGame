@@ -666,7 +666,7 @@ int CMario::_HandleAnimationSmall() {
 	return aniId;
 }
 
-void CMario::_SetLevel(string level) {
+void CMario::_SetLevel(int level) {
 	_level = level;
 	if (level == LEVEL_BIG) {
 		_velocity.y = -MARIO_JUMP_DEFLECT_SPEED / 2;

@@ -7,6 +7,7 @@ start	1
 100	textures\mario.png
 200	textures\items.png
 300	textures\enemies.png
+400	textures\projectiles.png
 
 [SCENES]
 0	textures\intro.txt

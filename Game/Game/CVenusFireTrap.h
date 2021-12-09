@@ -1,5 +1,6 @@
 #pragma once
 #include "CGameObject.h"
+#include "CFirer.h"
 
 #define STATE_VENUS_FIRE_TRAP_IDLE			8900
 #define STATE_VENUS_FIRE_TRAP_UP			8901
@@ -21,6 +22,8 @@ class CVenusFireTrap : public CGameObject
 	bool _isUp;
 	int _type;
 	int _GetAnimationId();
+
+	CFirer* _firer;
 
 public:
 	CVenusFireTrap(float x,float y, int type, float offSetY);

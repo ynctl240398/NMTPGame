@@ -9,6 +9,9 @@ CGameObject::CGameObject() {
 	_isDeleted = false;
 	_state = -1;
 	_velocity = { 0.0f,0.0f };
+	_handleNoCollisionX = false;
+	_handleNoCollisionY = false;
+	_startState = -1;
 }
 
 CGameObject::~CGameObject() {}

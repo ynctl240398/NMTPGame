@@ -8,6 +8,8 @@
 300	textures\animation\koopa_para_tropa.txt
 300	textures\animation\koopa_tropa.txt
 300	textures\animation\venus_fire_trap.txt
+300	textures\animation\piranha_plant.txt
+400	textures\animation\firer.txt
 
 [OBJECTS]
 #bg
@@ -31,7 +33,7 @@
 9	2144	368	48	48
 
 #mario
-0	1800	300
+0	0	300
 
 #brick
 1	0	416	624	16
@@ -74,6 +76,36 @@
 10	1136	256	coin
 10	1168	224	coin
 10	1200	192	coin
+10	1328	80	coin
+10	1344	80	coin
+10	1360	80	coin
+10	1472	112	coin
+10	1488	112	coin
+10	1536	128	coin
+10	1552	128	coin
+10	1568	128	coin
+10	1584	128	coin
+10	1616	112	coin
+10	1632	112	coin
+10	1648	112	coin
+10	1664	112	coin
+10	1696	144	coin
+10	1728	112	coin
+10	1760	128	coin
+10	1808	96	coin
+10	1840	128	coin
+10	2176	504	coin
+10	2192	488	coin
+10	2208	488	coin
+10	2224	504	coin
+10	2224	520	coin
+10	2208	536	coin
+10	2192	536	coin
+10	2224	552	coin
+10	2224	568	coin
+10	2176	568	coin
+10	2208	584	coin
+10	2192	536	coin
 
 #goomba
 2	224	400
@@ -96,3 +128,6 @@
 #venus_fire_trap
 13	360	336	8100	32
 13	1864	336	8101	24
+
+#piranha_plant
+14	1800	352	9101	24

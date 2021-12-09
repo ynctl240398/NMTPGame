@@ -2,17 +2,17 @@
 #include "CAnimation.h"
 #include "CMario.h"
 
-#define ID_ANI_VENUS_FIRE_RED_UP			8000
-#define ID_ANI_VENUS_FIRE_RED_UP_FIRER		8001
-#define ID_ANI_VENUS_FIRE_RED_DOWN			8002
-#define ID_ANI_VENUS_FIRE_RED_DOWN_FIRER	8003
-#define ID_ANI_VENUS_FIRE_GREEN_UP			8004
-#define ID_ANI_VENUS_FIRE_GREEN_UP_FIRER	8005
-#define ID_ANI_VENUS_FIRE_GREEN_DOWN		8006
-#define ID_ANI_VENUS_FIRE_GREEN_DOWN_FIRER	8007
+#define ID_ANI_VENUS_FIRE_TRAP_RED_UP			8000
+#define ID_ANI_VENUS_FIRE_TRAP_RED_UP_FIRER		8001
+#define ID_ANI_VENUS_FIRE_TRAP_RED_DOWN			8002
+#define ID_ANI_VENUS_FIRE_TRAP_RED_DOWN_FIRER	8003
+#define ID_ANI_VENUS_FIRE_TRAP_GREEN_UP			8004
+#define ID_ANI_VENUS_FIRE_TRAP_GREEN_UP_FIRER	8005
+#define ID_ANI_VENUS_FIRE_TRAP_GREEN_DOWN		8006
+#define ID_ANI_VENUS_FIRE_TRAP_GREEN_DOWN_FIRER	8007
 
-#define TIME_TO_FIRE						2000 //s
-#define VENUS_SPEED_Y						0.02f;
+#define TIME_TO_FIRE							2000 //s
+#define VENUS_SPEED_Y							0.02f
 
 CVenusFireTrap::CVenusFireTrap(float x, float y, int type, float offSetY)
 {
@@ -23,6 +23,7 @@ CVenusFireTrap::CVenusFireTrap(float x, float y, int type, float offSetY)
 	_type = type;
 	_isUp = true;
 	SetState(STATE_VENUS_FIRE_TRAP_IDLE);
+	_firer = NULL;
 }
 
 void CVenusFireTrap::SetState(int state)
@@ -47,6 +48,10 @@ void CVenusFireTrap::SetState(int state)
 
 void CVenusFireTrap::Render()
 {
+	if (_firer != NULL) {
+		_firer->Render();
+	}
+
 	CAnimations* animations = CAnimations::GetInstance();
 	int aniId = _GetAnimationId();
 	LPANIMATION animation = animations->Get(aniId);
@@ -65,16 +70,16 @@ int CVenusFireTrap::_GetAnimationId()
 	switch (_state)
 	{
 	case STATE_VENUS_FIRE_TRAP_UP_FIRER:
-		aniId = _type == TYPE_VENUS_FIRE_TRAP_RED ? ID_ANI_VENUS_FIRE_RED_UP_FIRER : ID_ANI_VENUS_FIRE_GREEN_UP_FIRER;
+		aniId = _type == TYPE_VENUS_FIRE_TRAP_RED ? ID_ANI_VENUS_FIRE_TRAP_RED_UP_FIRER : ID_ANI_VENUS_FIRE_TRAP_GREEN_UP_FIRER;
 		break;
 	case STATE_VENUS_FIRE_TRAP_DOWN_FIRER:
-		aniId = _type == TYPE_VENUS_FIRE_TRAP_RED ? ID_ANI_VENUS_FIRE_RED_DOWN_FIRER : ID_ANI_VENUS_FIRE_GREEN_DOWN_FIRER;
+		aniId = _type == TYPE_VENUS_FIRE_TRAP_RED ? ID_ANI_VENUS_FIRE_TRAP_RED_DOWN_FIRER : ID_ANI_VENUS_FIRE_TRAP_GREEN_DOWN_FIRER;
 		break;
 	case STATE_VENUS_FIRE_TRAP_UP:
-		aniId = _type == TYPE_VENUS_FIRE_TRAP_RED ? ID_ANI_VENUS_FIRE_RED_UP : ID_ANI_VENUS_FIRE_GREEN_UP;
+		aniId = _type == TYPE_VENUS_FIRE_TRAP_RED ? ID_ANI_VENUS_FIRE_TRAP_RED_UP : ID_ANI_VENUS_FIRE_TRAP_GREEN_UP;
 		break;
 	case STATE_VENUS_FIRE_TRAP_DOWN:
-		aniId = _type == TYPE_VENUS_FIRE_TRAP_RED ? ID_ANI_VENUS_FIRE_RED_DOWN : ID_ANI_VENUS_FIRE_GREEN_DOWN;
+		aniId = _type == TYPE_VENUS_FIRE_TRAP_RED ? ID_ANI_VENUS_FIRE_TRAP_RED_DOWN : ID_ANI_VENUS_FIRE_TRAP_GREEN_DOWN;
 		break;
 	default:
 		break;
@@ -133,6 +138,10 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (_startTime == 0) {
 				_startTime = GetTickCount64();
 			}
+			else if (GetTickCount64() - _startTime == TIME_TO_FIRE / 2) {
+				_firer = new CFirer(_position.x, _position.y - DIF);
+				_firer->SetState(STATE_FIRER_FLY);
+			}
 			else if (GetTickCount64() - _startTime > TIME_TO_FIRE) {
 				SetState(STATE_VENUS_FIRE_TRAP_UP);
 				_startTime = 0;
@@ -143,6 +152,12 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	_position.x += _velocity.x * dt;
 	_position.y += _velocity.y * dt;
+
+	if (_firer != NULL) {
+		vector<LPGAMEOBJECT> objs;
+		objs.push_back(CMario::GetInstance());
+		_firer->Update(dt, &objs);
+	}
 }
 
 void CVenusFireTrap::Release()

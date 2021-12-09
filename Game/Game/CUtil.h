@@ -22,11 +22,12 @@
 #define MAX_SCENE_LINE 1024
 
 //ID_IMG
-#define ID_IMG_BBOX -100		// special texture to draw object bounding box
-#define ID_IMG_TITLE_SET 000
-#define ID_IMG_MARIO 100
-#define ID_IMG_ITEM 200
-#define ID_IMG_ENEMIES 300
+#define ID_IMG_BBOX			-100		// special texture to draw object bounding box
+#define ID_IMG_TITLE_SET	000
+#define ID_IMG_MARIO		100
+#define ID_IMG_ITEM			200
+#define ID_IMG_ENEMIES		300
+#define ID_IMG_PROJECTTILE	400
 
 #define DIF 8
 
