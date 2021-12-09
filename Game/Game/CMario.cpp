@@ -9,6 +9,8 @@
 #include "CKoopaParaTropa.h"
 #include "CParaGoomba.h"
 #include "CKoopaTropa.h"
+#include "CVenusFireTrap.h"
+#include "CPiranhaPlant.h"
 
 #define MIN_X 0
 #define MAX_Y 400
@@ -47,6 +49,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
 		_OnCollisionWithKoopaTropa(e);
 	else if (dynamic_cast<CParaGoomba*>(e->obj))
 		_OnCollisionWithParaGoomba(e);
+	else if (dynamic_cast<CVenusFireTrap*>(e->obj) || dynamic_cast<CPiranhaPlant*>(e->obj))
+		_OnCollisionWithEnemy(e);
 }
 
 void CMario::_OnCollisionWithBrick(LPCOLLISIONEVENT e) {

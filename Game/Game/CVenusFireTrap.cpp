@@ -1,5 +1,6 @@
 #include "CVenusFireTrap.h"
 #include "CAnimation.h"
+#include "CMario.h"
 
 #define ID_ANI_VENUS_FIRE_RED_UP			8000
 #define ID_ANI_VENUS_FIRE_RED_UP_FIRER		8001
@@ -10,18 +11,38 @@
 #define ID_ANI_VENUS_FIRE_GREEN_DOWN		8006
 #define ID_ANI_VENUS_FIRE_GREEN_DOWN_FIRER	8007
 
-#define OFFSET_Y							32.0f
+#define TIME_TO_FIRE						2000 //s
+#define VENUS_SPEED_Y						0.02f;
 
-CVenusFireTrap::CVenusFireTrap(float x, float y, int type)
+CVenusFireTrap::CVenusFireTrap(float x, float y, int type, float offSetY)
 {
-	_position = { x,y };
+	_position = { x,y + VENUS_FIRE_TRAP_BBOX_HIEGHT };
+	_offSetY = offSetY;
 	_startPostion = _position;
+	_startTime = 0;
 	_type = type;
-	_state = STATE_VENUS_FIRE_TRAP_UP;
+	_isUp = true;
+	SetState(STATE_VENUS_FIRE_TRAP_IDLE);
 }
 
-void CVenusFireTrap::SetState(int)
+void CVenusFireTrap::SetState(int state)
 {
+	switch (state)
+	{
+	case STATE_VENUS_FIRE_TRAP_UP_FIRER:
+		break;
+	case STATE_VENUS_FIRE_TRAP_DOWN_FIRER:
+		break;
+	case STATE_VENUS_FIRE_TRAP_UP:
+		break;
+	case STATE_VENUS_FIRE_TRAP_DOWN:
+		break;
+	case STATE_VENUS_FIRE_TRAP_IDLE:
+		break;
+	default:
+		break;
+	}
+	CGameObject::SetState(state);
 }
 
 void CVenusFireTrap::Render()
@@ -64,6 +85,64 @@ int CVenusFireTrap::_GetAnimationId()
 
 void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	float leftCam = CCam::GetInstance()->GetPosition().x;
+	float rightCam = CGame::GetInstance()->GetBackBufferWidth() + leftCam;
+
+	if (_position.x >= leftCam && _position.x <= rightCam) {
+		CMario* mario = CMario::GetInstance();
+		if (mario->GetPosition().x < _position.x) {
+			_scale = { 1.0f,1.0f };
+		}
+		else _scale = { -1.0f,1.0f };
+
+		if (_state == STATE_VENUS_FIRE_TRAP_IDLE) {
+			if (_startTime == 0) {
+				_startTime = GetTickCount64();
+			}
+			else if (GetTickCount64() - _startTime > TIME_TO_FIRE) {
+				SetState(STATE_VENUS_FIRE_TRAP_UP);
+				_startTime = 0;
+			}
+		}
+		else if (_state == STATE_VENUS_FIRE_TRAP_UP) {
+			if (_isUp) {
+				if (_startPostion.y - _position.y < _offSetY) {
+					_velocity.y = -VENUS_SPEED_Y;
+				}
+				else {
+					_velocity.y = 0;
+					if (mario->GetPosition().y < _position.y) {
+						SetState(STATE_VENUS_FIRE_TRAP_UP_FIRER);
+					}
+					else SetState(STATE_VENUS_FIRE_TRAP_DOWN_FIRER);
+					_startTime = 0;
+				}
+			}
+			else {
+				if (_startPostion.y >= _position.y) {
+					_velocity.y = VENUS_SPEED_Y;
+				}
+				else {
+					_velocity.y = 0;
+					SetState(STATE_VENUS_FIRE_TRAP_IDLE);
+					_isUp = true;
+				}
+			}
+		}
+		else if (_state == STATE_VENUS_FIRE_TRAP_UP_FIRER || _state == STATE_VENUS_FIRE_TRAP_DOWN_FIRER) {
+			if (_startTime == 0) {
+				_startTime = GetTickCount64();
+			}
+			else if (GetTickCount64() - _startTime > TIME_TO_FIRE) {
+				SetState(STATE_VENUS_FIRE_TRAP_UP);
+				_startTime = 0;
+				_isUp = false;
+			}
+		}
+	}
+
+	_position.x += _velocity.x * dt;
+	_position.y += _velocity.y * dt;
 }
 
 void CVenusFireTrap::Release()

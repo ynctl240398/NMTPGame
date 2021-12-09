@@ -67,6 +67,7 @@ void CKoopaParaTropa::SetState(int state) {
 	switch (state)
 	{
 	case STATE_KOOPA_PARA_TROPA_WALK:
+		_ay = KOOPA_PARA_TROPA_GRAVITY;
 		_velocity.x = -KOOPA_PARA_TROPA_WALK_SPEED * _scale.x;
 		break;
 	case STATE_KOOPA_PARA_TROPA_SHELD:
@@ -78,6 +79,7 @@ void CKoopaParaTropa::SetState(int state) {
 	case STATE_KOOPA_PARA_TROPA_SHELD_LIVE:
 		break;
 	case STATE_KOOPA_PARA_TROPA_FLY:
+		_ay = KOOPA_PARA_TROPA_GRAVITY;
 		break;
 	case STATE_KOOPA_PARA_TROPA_DIE:
 		_liveStart = GetTickCount64();
@@ -86,7 +88,7 @@ void CKoopaParaTropa::SetState(int state) {
 		_liveStart = 0;
 		_position = _startPostion;
 		_ax = 0;
-		_ay = KOOPA_PARA_TROPA_GRAVITY;
+		_ay = 0;
 		_velocity = { 0,0 };
 		_scale = { -1.0f, 1.0f };
 		_obj = new CObjKoopaTropa(_position.x + KOOPA_PARA_TROPA_BBOX_WIDTH / 2 + OBJ_BBOX_WIDTH / 2, _position.y);

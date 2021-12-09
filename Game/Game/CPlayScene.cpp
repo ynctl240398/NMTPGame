@@ -199,8 +199,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_VENUS_FIRE_TRAP:
 	{
 		int type = atoi(tokens[3].c_str());
+		float offSetY = stoi(tokens[4].c_str());
 		y += VENUS_FIRE_TRAP_BBOX_HIEGHT / 2 - DIF;
-		obj = new CVenusFireTrap(x, y, type);
+		obj = new CVenusFireTrap(x, y, type, offSetY);
 		break;
 	}
 	default:

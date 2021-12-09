@@ -16,11 +16,14 @@
 
 class CVenusFireTrap : public CGameObject
 {
+	ULONGLONG _startTime;
+	float _offSetY;
+	bool _isUp;
 	int _type;
 	int _GetAnimationId();
 
 public:
-	CVenusFireTrap(float x,float y, int type);
+	CVenusFireTrap(float x,float y, int type, float offSetY);
 
 	int GetType() { return _type; }
 	void SetState(int) override;
