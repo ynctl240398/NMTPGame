@@ -12,6 +12,7 @@
 #define OBJECT_TYPE_ITEM 10
 #define OBJECT_TYPE_KOOPAS_PARA_TROPA 11
 #define OBJECT_TYPE_PARA_GOOMBA 12
+#define OBJECT_TYPE_VENUS_FIRE_TRAP 13
 
 #define OBJECT_TYPE_PORTAL	50
 
@@ -23,3 +24,4 @@
 //para_goomba 5xxx
 //koopa_para_tropa 6xxx
 //koopa_tropa 7xxx
+//Venus_fire_trap 8xx

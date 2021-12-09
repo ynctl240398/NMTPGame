@@ -19,7 +19,8 @@
 #define KOOPA_TROPA_SHELD_BBOX_WIDTH 16
 #define KOOPA_TROPA_SHELD_BBOX_HEIGHT 16
 
-#define KOOPA_TROPA_GRAVITY 0.001f
+#define KOOPA_TROPA_FLY_GRAVITY 0.001f
+#define KOOPA_TROPA_GRAVITY 0.002f
 #define KOOPA_TROPA_WALK_SPEED 0.05f
 #define KOOPA_TROPA_SHELD_SPEED 0.2f
 #define KOOPA_TROPA_JUMP_SPEED 0.4f
@@ -64,6 +65,7 @@ void CKoopaTropa::SetState(int state) {
 	switch (state)
 	{
 	case STATE_KOOPA_TROPA_WALK:
+		_ay = KOOPA_TROPA_GRAVITY;
 		_velocity.x = -KOOPA_TROPA_WALK_SPEED * _scale.x;
 		break;
 	case STATE_KOOPA_TROPA_SHELD:
@@ -75,6 +77,7 @@ void CKoopaTropa::SetState(int state) {
 	case STATE_KOOPA_TROPA_SHELD_LIVE:
 		break;
 	case STATE_KOOPA_TROPA_FLY:
+		_ay = KOOPA_TROPA_FLY_GRAVITY;
 		_velocity.y = -KOOPA_TROPA_JUMP_SPEED;
 		_velocity.x = -(KOOPA_TROPA_WALK_SPEED / 1.5f)* _scale.x;
 		break;
@@ -85,7 +88,7 @@ void CKoopaTropa::SetState(int state) {
 		_liveStart = 0;
 		_position = _startPostion;
 		_ax = 0;
-		_ay = KOOPA_TROPA_GRAVITY;
+		_ay = 0;
 		_velocity = { 0,0 };
 		_scale = { 1.0f, 1.0f };
 		break;
@@ -110,6 +113,7 @@ void CKoopaTropa::OnCollisionWith(LPCOLLISIONEVENT e) {
 	if (_state != STATE_KOOPA_TROPA_SHELD_RUN) {
 		if (dynamic_cast<CKoopaTropa*>(e->obj) || dynamic_cast<CGoomba*>(e->obj)) {
 			_handleNoCollisionX = true;
+			_handleNoCollisionY = true;
 			return;
 		}
 	}
@@ -194,6 +198,10 @@ void CKoopaTropa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	if (_handleNoCollisionX) {
 		_handleNoCollisionX = false;
 		_position.x += _velocity.x * dt;
+	}
+	if (_handleNoCollisionY) {
+		_handleNoCollisionY = false;
+		_position.y += _velocity.y * dt;
 	}
 }
 

@@ -14,16 +14,17 @@ CObjKoopaTropa::CObjKoopaTropa(float x, float y) {
 
 void CObjKoopaTropa::OnNoCollision(DWORD dt) {
 	_position.y += _velocity.y * dt;
-	_isNoCollisionWithPlatform = false;
+	_isNoCollisionWithPlatform = true;
 }
 
 void CObjKoopaTropa::OnCollisionWith(LPCOLLISIONEVENT e) 
 {
 	
-	if (dynamic_cast<CBrick*>(e->obj) && dynamic_cast<CBrick*>(e->obj)->IsBig()) {
+	if (dynamic_cast<CBrick*>(e->obj)) {
 		if (e->ny != 0)
 		{
 			_velocity.y = 0;
+			_isNoCollisionWithPlatform = false;
 		}
 	}
 	else

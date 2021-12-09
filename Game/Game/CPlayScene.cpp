@@ -14,6 +14,7 @@
 #include "CParaGoomba.h"
 #include "CKoopaParaTropa.h"
 #include "CKoopaTropa.h"
+#include "CVenusFireTrap.h"
 
 using namespace std;
 
@@ -193,6 +194,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		int state = atoi(tokens[3].c_str());
 		obj = new CKoopaTropa(x, y, state);
+		break;
+	}
+	case OBJECT_TYPE_VENUS_FIRE_TRAP:
+	{
+		int type = atoi(tokens[3].c_str());
+		y += VENUS_FIRE_TRAP_BBOX_HIEGHT / 2 - DIF;
+		obj = new CVenusFireTrap(x, y, type);
 		break;
 	}
 	default:

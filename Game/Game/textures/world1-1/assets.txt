@@ -7,6 +7,7 @@
 300	textures\animation\para_goomba.txt
 300	textures\animation\koopa_para_tropa.txt
 300	textures\animation\koopa_tropa.txt
+300	textures\animation\venus_fire_trap.txt
 
 [OBJECTS]
 #bg
@@ -30,7 +31,7 @@
 9	2144	368	48	48
 
 #mario
-0	1160	350
+0	1200	300
 
 #brick
 1	0	416	624	16
@@ -84,9 +85,13 @@
 11	530	350	6901
 
 #para_goomba
-12	880	350
+12	944	374
 
 #koopa
 3	1328	293	7905
 3	1376	293	7905
 3	1424	293	7905
+3	1472	380	7901
+
+#venus_fire_trap
+13	360	336	8100

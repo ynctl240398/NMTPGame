@@ -119,20 +119,31 @@ void CParaGoomba::_HandleJump() {
 
 void CParaGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
 	if (!e->obj->IsBlocking()) return;
+
 	if (dynamic_cast<CItem*>(e->obj)) {
 		_handleNoCollisionX = true;
 		return;
 	}
 
+	
+
 	if (e->ny != 0)
 	{
 		_velocity.y = 0;
-		if (e->ny < 0) { 
+		if (dynamic_cast<CGoomba*>(e->obj)) {
+			_handleNoCollisionY = true;
+		}
+		else if (e->ny < 0) { 
 			_HandleJump();
 		}
 	}
 	else if (e->nx != 0)
 	{
+		if (dynamic_cast<CGoomba*>(e->obj)) {
+			CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+			_velocity.x = -_velocity.x;
+			goomba->SetVelocity({ -goomba->GetVelocity().x, goomba->GetVelocity().y });
+		}
 		if (dynamic_cast<CBrick*>(e->obj) || dynamic_cast<CBrickQuestion*>(e->obj)) {
 			if (dynamic_cast<CBrick*>(e->obj) && dynamic_cast<CBrick*>(e->obj)->IsBig()) {
 
@@ -157,6 +168,15 @@ void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	_HandleStatePara();
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
+
+	if (_handleNoCollisionX) {
+		_handleNoCollisionX = false;
+		_position.x += _velocity.x * dt;
+	}
+	if (_handleNoCollisionY) {
+		_handleNoCollisionY = false;
+		_position.y += _velocity.y * dt;
+	}
 }
 
 void CParaGoomba::_HandleStatePara() {

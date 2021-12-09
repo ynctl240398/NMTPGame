@@ -108,6 +108,10 @@ void CMario::_OnCollisionWithBrickQuestion(LPCOLLISIONEVENT e) {
 void CMario::_OnCollisionWithItem(LPCOLLISIONEVENT e) {
 	CItem* item = dynamic_cast<CItem*>(e->obj);
 
+	if (item->GetType() == TYPE_ITEM_COIN) {
+		item->Delete();
+	}
+
 	if (item->GetState() == STATE_ITEM_IDLE) {
 		return;
 	}
@@ -117,9 +121,6 @@ void CMario::_OnCollisionWithItem(LPCOLLISIONEVENT e) {
 		if (this->_level == LEVEL_SMALL) {
 			this->_SetLevel(LEVEL_BIG);
 		}
-	}
-	else if (item->GetType() == TYPE_ITEM_COIN) {
-		item->Delete();
 	}
 }
 
