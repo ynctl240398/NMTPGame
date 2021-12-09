@@ -27,8 +27,6 @@ private:
 
 	int _level;
 	int _direction;
-	CTextures* _tex;
-	CAnimation* _ani;
 
 	void _HandleKeyDown(int);
 	void _HandleKeyUp(int);

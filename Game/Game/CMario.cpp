@@ -19,6 +19,7 @@
 CMario* CMario::__instance = NULL;
 
 CMario::CMario() {
+	_isSitting = false;
 	_position = { 0,0 };
 	_state = STATE_MARIO_IDLE;
 	_level = LEVEL_SMALL;
@@ -32,6 +33,7 @@ CMario::CMario() {
 	_untouchable = 0;
 	_untouchable_start = -1;
 	_isOnPlatform = false;
+	_dt = 0;
 }
 
 void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
@@ -96,7 +98,7 @@ void CMario::_OnCollisionWithBrickQuestion(LPCOLLISIONEVENT e) {
 		if (e->ny < 0) {
 			_isOnPlatform = true;
 		}
-		else if (brick->GetState() == STATE_BRICK_QUESTION_RUN && e->ny > 0 && e->obj->IsBlocking())
+		else if (brick->GetState() == STATE_BRICK_QUESTION_RUN && e->obj->IsBlocking())
 		{
 			brick->SetState(STATE_BRICK_QUESTION_IDLE);
 		}
@@ -121,10 +123,8 @@ void CMario::_OnCollisionWithItem(LPCOLLISIONEVENT e) {
 	}
 
 	if (item->GetType() == TYPE_ITEM_MUSHROOM_RED) {
+		_SetLevel(++_level);
 		item->SetState(STATE_ITEM_DISAPPEAR);
-		if (this->_level == LEVEL_SMALL) {
-			this->_SetLevel(LEVEL_BIG);
-		}
 	}
 }
 
@@ -253,9 +253,9 @@ void CMario::_OnCollisionWithParaGoomba(LPCOLLISIONEVENT e) {
 }
 
 void CMario::_OnCollisionWithEnemy(LPCOLLISIONEVENT e) {
-	if (_level != LEVEL_SMALL)
+	if (_level > LEVEL_SMALL)
 	{
-		_SetLevel(LEVEL_SMALL);
+		_SetLevel(--_level);
 		StartUntouchable();
 	}
 	else
@@ -669,6 +669,6 @@ int CMario::_HandleAnimationSmall() {
 void CMario::_SetLevel(int level) {
 	_level = level;
 	if (level == LEVEL_BIG) {
-		_velocity.y = -MARIO_JUMP_DEFLECT_SPEED / 2;
+		_velocity.y = -MARIO_JUMP_DEFLECT_SPEED;
 	}
 }
