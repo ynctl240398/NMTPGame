@@ -40,7 +40,7 @@ void CObjKoopaTropa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	//_velocity.x += _ax * dt;
 	_velocity.y += _ay * dt;
 
-	CCollision::GetInstance()->Process(this, dt, coObjects);
+	CGameObject::Update(dt, coObjects);
 }
 
 

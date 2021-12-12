@@ -193,16 +193,7 @@ void CKoopaTropa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		SetState(_startState);
 	}
 
-	CCollision::GetInstance()->Process(this, dt, coObjects);
-
-	if (_handleNoCollisionX) {
-		_handleNoCollisionX = false;
-		_position.x += _velocity.x * dt;
-	}
-	if (_handleNoCollisionY) {
-		_handleNoCollisionY = false;
-		_position.y += _velocity.y * dt;
-	}
+	CGameObject::Update(dt, coObjects);
 }
 
 void CKoopaTropa::GetBoundingBox(float& left, float& top, float& right, float& bottom) {

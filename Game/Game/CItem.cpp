@@ -71,12 +71,7 @@ void CItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	
 	if (_type == TYPE_ITEM_MUSHROOM_GREEN || _type == TYPE_ITEM_MUSHROOM_RED) {
 
-		CCollision::GetInstance()->Process(this, dt, coObjects);
-
-		if (_handleNoCollisionX) {
-			_handleNoCollisionX = false;
-			_position.x += _velocity.x * dt;
-		}
+		CGameObject::Update(dt, coObjects);
 	}
 }
 

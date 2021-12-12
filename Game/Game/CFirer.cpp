@@ -60,7 +60,7 @@ void CFirer::Render()
 
 void CFirer::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	CCollision::GetInstance()->Process(this, dt, coObjects);
+	CGameObject::Update(dt, coObjects);
 }
 
 void CFirer::OnNoCollision(DWORD dt)

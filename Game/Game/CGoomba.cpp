@@ -118,12 +118,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		return;
 	}
 
-	if (_handleNoCollisionX) {
-		_handleNoCollisionX = false;
-		_position.x += _velocity.x * dt;
-	}
-
-	CCollision::GetInstance()->Process(this, dt, coObjects);
+	CGameObject::Update(dt, coObjects);
 }
 
 void CGoomba::GetBoundingBox(float& left, float& top, float& right, float& bottom) {

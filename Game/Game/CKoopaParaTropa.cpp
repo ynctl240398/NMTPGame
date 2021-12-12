@@ -211,12 +211,7 @@ void CKoopaParaTropa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		SetState(_startState);
 	}
 
-	CCollision::GetInstance()->Process(this, dt, coObjects);
-
-	if (_handleNoCollisionX) {
-		_handleNoCollisionX = false;
-		_position.x += _velocity.x * dt;
-	}
+	CGameObject::Update(dt, coObjects);
 
 	//handle position obj front
 	if (_state == STATE_KOOPA_PARA_TROPA_WALK) {
