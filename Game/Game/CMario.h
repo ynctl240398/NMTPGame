@@ -30,7 +30,7 @@ private:
 
 	void _HandleKeyDown(int);
 	void _HandleKeyUp(int);
-	void _HandleState(int);
+	
 	void _HandleKeyState(BYTE* states);
 
 	void _Walk();
@@ -56,12 +56,10 @@ private:
 	void _OnCollisionWithKoopaTropa(LPCOLLISIONEVENT e);
 	void _OnCollisionWithParaGoomba(LPCOLLISIONEVENT e);
 	void _OnCollisionWithEnemy(LPCOLLISIONEVENT e);
-
-	void _SetLevel(int level);
-	void _HandleAfterCollicsion();
-
 public:
 	CMario();
+
+	void SetState(int);
 	static CMario* GetInstance() { 
 		if (__instance == NULL) {
 			__instance = new CMario;
@@ -70,7 +68,7 @@ public:
 	}
 
 	int GetLevel() { return _level; }
-
+	void SetLevel(int level);
 	int IsCollidable()
 	{
 		return (_state != STATE_MARIO_DIE);

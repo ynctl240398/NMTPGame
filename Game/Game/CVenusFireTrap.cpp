@@ -138,7 +138,7 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (_startTime == 0) {
 				_startTime = GetTickCount64();
 			}
-			else if (GetTickCount64() - _startTime == TIME_TO_FIRE / 2) {
+			else if (GetTickCount64() - _startTime >= TIME_TO_FIRE / 2 && _firer == NULL) {
 				_firer = new CFirer(_position.x, _position.y - DIF);
 				_firer->SetState(STATE_FIRER_FLY);
 			}

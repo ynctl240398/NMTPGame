@@ -126,7 +126,7 @@ void CMario::_OnCollisionWithItem(LPCOLLISIONEVENT e) {
 	}
 
 	if (item->GetType() == TYPE_ITEM_MUSHROOM_RED) {
-		_SetLevel(++_level);
+		SetLevel(++_level);
 		item->SetState(STATE_ITEM_DISAPPEAR);
 	}
 }
@@ -244,13 +244,13 @@ void CMario::_OnCollisionWithParaGoomba(LPCOLLISIONEVENT e) {
 void CMario::_OnCollisionWithEnemy(LPCOLLISIONEVENT e) {
 	if (_level > LEVEL_SMALL)
 	{
-		_SetLevel(--_level);
+		SetLevel(--_level);
 		StartUntouchable();
 	}
 	else
 	{
 		DebugOut(L">>> Mario DIE >>> \n");
-		_HandleState(STATE_MARIO_DIE);
+		SetState(STATE_MARIO_DIE);
 	}
 }
 
@@ -285,25 +285,25 @@ void CMario::_HandleKeyDown(int keyCode) {
 	switch (keyCode)
 	{
 	case DIK_1:
-		_SetLevel(LEVEL_SMALL);
+		SetLevel(LEVEL_SMALL);
 		break;
 	case DIK_2:
-		_SetLevel(LEVEL_BIG);
+		SetLevel(LEVEL_BIG);
 		break;
 	case DIK_3:
-		_HandleState(STATE_MARIO_DIE);
+		SetState(STATE_MARIO_DIE);
 		break;
 	case DIK_4:
 		_position.x += 500.0f * -_direction;
 		break;
 	case DIK_DOWN:
-		_HandleState(STATE_MARIO_SIT);
+		SetState(STATE_MARIO_SIT);
 		break;
 	case DIK_S:
-		_HandleState(STATE_MARIO_JUMP);
+		SetState(STATE_MARIO_JUMP);
 		break;
 	case DIK_0:
-		_HandleState(STATE_MARIO_DIE);
+		SetState(STATE_MARIO_DIE);
 		break;
 	default:
 		break;
@@ -315,10 +315,10 @@ void CMario::_HandleKeyUp(int keyCode) {
 	switch (keyCode)
 	{
 	case DIK_S:
-		_HandleState(STATE_MARIO_RELEASE_JUMP);
+		SetState(STATE_MARIO_RELEASE_JUMP);
 		break;
 	case DIK_DOWN:
-		_HandleState(STATE_MARIO_RELEASE_SIT);
+		SetState(STATE_MARIO_RELEASE_SIT);
 		break;
 	}
 }
@@ -331,26 +331,26 @@ void CMario::_HandleKeyState(BYTE* states) {
 		_direction = DIRECTION_RIGHT;
 		_scale.x = _direction * 1.0f;
 		if (keyHandle->IsKeyDown(DIK_A)) {
-			_HandleState(STATE_MARIO_RUN);
+			SetState(STATE_MARIO_RUN);
 		}
 		else {
-			_HandleState(STATE_MARIO_WALK);
+			SetState(STATE_MARIO_WALK);
 		}
 	}
 	else if (keyHandle->IsKeyDown(DIK_LEFTARROW)) {
 		_direction = DIRECTION_LEFT;
 		_scale.x = _direction * 1.0f;
 		if (keyHandle->IsKeyDown(DIK_A)) {
-			_HandleState(STATE_MARIO_RUN);
+			SetState(STATE_MARIO_RUN);
 		}
 		else {
-			_HandleState(STATE_MARIO_WALK);
+			SetState(STATE_MARIO_WALK);
 		}
 	}
-	else _HandleState(STATE_MARIO_IDLE);
+	else SetState(STATE_MARIO_IDLE);
 }
 
-void CMario::_HandleState(int state) {
+void CMario::SetState(int state) {
 
 	if (_state == STATE_MARIO_DIE) return;
 
@@ -592,7 +592,7 @@ int CMario::_GetAnimationId() {
 	return aniId;
 }
 
-void CMario::_SetLevel(int level) {
+void CMario::SetLevel(int level) {
 	_level = level;
 	if (level == LEVEL_BIG) {
 		_velocity.y = -MARIO_JUMP_DEFLECT_SPEED;

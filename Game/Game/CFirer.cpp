@@ -1,6 +1,7 @@
 #include "CFirer.h"
 #include "CAnimation.h"
 #include "CMario.h"
+#include "CDebug.h"
 
 #define ID_ANI_FIRER		10000
 
@@ -9,6 +10,9 @@
 #define FIRER_JUMP_SPEED_Y	0.02f
 
 #define FIRER_GRAVITY		0.0002f
+
+#define FIRER_BBOX_WIDTH	8
+#define FIRER_BBOX_HEIGHT	8
 
 int CFirer::_GetAnimationId()
 {
@@ -22,6 +26,7 @@ int CFirer::_GetAnimationId()
 CFirer::CFirer(float x, float y)
 {
 	_position = { x,y };
+	_state = -1;
 }
 
 void CFirer::SetState(int state) {
@@ -71,8 +76,28 @@ void CFirer::OnNoCollision(DWORD dt)
 
 void CFirer::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+	if (dynamic_cast<CMario*>(e->obj)) {
+		CMario* mario = dynamic_cast<CMario*>(e->obj);
+		int levelMario = mario->GetLevel();
+		if (levelMario > LEVEL_SMALL)
+		{
+			mario->SetLevel(--levelMario);
+			mario->StartUntouchable();
+		}
+		else
+		{
+			DebugOut(L">>> Mario DIE >>> \n");
+			mario->SetState(STATE_MARIO_DIE);
+		}
+	}
+	_handleNoCollisionX = true;
+	_handleNoCollisionY = true;
 }
 
 void CFirer::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
+	left = _position.x - FIRER_BBOX_WIDTH / 2;
+	top = _position.y - FIRER_BBOX_HEIGHT / 2;
+	right = left + FIRER_BBOX_WIDTH;
+	bottom = top + FIRER_BBOX_HEIGHT;
 }
