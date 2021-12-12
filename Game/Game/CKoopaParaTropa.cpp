@@ -138,6 +138,12 @@ void CKoopaParaTropa::OnCollisionWith(LPCOLLISIONEVENT e) {
 			return;
 		}
 	}
+	else {
+		if (dynamic_cast<CGoomba*>(e->obj)) {
+			CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+			goomba->SetState(STATE_GOOMBA_DIE);
+		}
+	}
 
 	if (e->ny != 0)
 	{
@@ -145,31 +151,21 @@ void CKoopaParaTropa::OnCollisionWith(LPCOLLISIONEVENT e) {
 	}
 	else if (e->nx != 0)
 	{
-		if (_state == STATE_KOOPA_PARA_TROPA_SHELD_RUN) {
-			if (dynamic_cast<CGoomba*>(e->obj)) {
-				CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
-				if (goomba->GetState() != STATE_GOOMBA_DIE) {
-					goomba->SetState(STATE_GOOMBA_DIE);
-				}
-				else {
-					_handleNoCollisionX = true;
-				}
-			}
-			if (dynamic_cast<CBrickQuestion*>(e->obj)) {
-				CBrickQuestion* brickQuestion = dynamic_cast<CBrickQuestion*>(e->obj);
-				if (brickQuestion->GetState() == STATE_BRICK_QUESTION_RUN && e->obj->IsBlocking())
-				{
-					brickQuestion->SetState(STATE_BRICK_QUESTION_IDLE);
-				}
-			}
-		}
 		if (dynamic_cast<CBrick*>(e->obj) || dynamic_cast<CBrickQuestion*>(e->obj)) {
-			if (dynamic_cast<CBrick*>(e->obj) && dynamic_cast<CBrick*>(e->obj)->IsBig()) {
+			if (dynamic_cast<CBrickQuestion*>(e->obj)) {
+				if (_state == STATE_KOOPA_PARA_TROPA_SHELD_RUN) {
+					CBrickQuestion* brickQuestion = dynamic_cast<CBrickQuestion*>(e->obj);
+					if (brickQuestion->GetState() == STATE_BRICK_QUESTION_RUN && e->obj->IsBlocking())
+					{
+						brickQuestion->SetState(STATE_BRICK_QUESTION_IDLE);
+					}
+				}
+			}
+			else if (dynamic_cast<CBrick*>(e->obj) && dynamic_cast<CBrick*>(e->obj)->IsBig()) {
 				_handleNoCollisionX = true;
 			}
 			else {
 				_velocity.x = -_velocity.x;
-				_scale.x = -_scale.x;
 			}
 		}
 	}

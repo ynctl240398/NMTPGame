@@ -134,17 +134,6 @@ void CMario::_OnCollisionWithItem(LPCOLLISIONEVENT e) {
 void CMario::_OnCollisionWithGoomba(LPCOLLISIONEVENT e) {
 	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
 
-	if (goomba->GetState() == STATE_RED_GOOMBA_DIE) {
-		if (e->ny != 0) {
-			_handleNoCollisionY = true;
-		}
-		else if (e->nx != 0)
-		{
-			_handleNoCollisionX = true;
-		}
-		return;
-	}
-
 	if (e->ny < 0) {
 		goomba->SetState(STATE_GOOMBA_DIE);
 		_velocity.y = -MARIO_JUMP_DEFLECT_SPEED;
@@ -171,6 +160,7 @@ void CMario::_OnCollisionWithKoopaParaTropa(LPCOLLISIONEVENT e) {
 				}
 				else koopaParaTropa->SetScale({ koopaParaTropa->GetScale().x, koopaParaTropa->GetScale().y });
 				koopaParaTropa->SetState(STATE_KOOPA_PARA_TROPA_SHELD_RUN);
+				_handleNoCollisionY = true;
 			}
 		}
 	}
@@ -210,6 +200,7 @@ void CMario::_OnCollisionWithKoopaTropa(LPCOLLISIONEVENT e) {
 				}
 				else koopaTropa->SetScale({ koopaTropa->GetScale().x, koopaTropa->GetScale().y });
 				koopaTropa->SetState(STATE_KOOPA_TROPA_SHELD_RUN);
+				_handleNoCollisionY = true;
 			}
 		}
 	}
@@ -232,17 +223,6 @@ void CMario::_OnCollisionWithKoopaTropa(LPCOLLISIONEVENT e) {
 
 void CMario::_OnCollisionWithParaGoomba(LPCOLLISIONEVENT e) {
 	CParaGoomba* paragoomba = dynamic_cast<CParaGoomba*>(e->obj);
-
-	if (paragoomba->GetState() == STATE_RED_GOOMBA_DIE) {
-		if (e->ny != 0) {
-			_handleNoCollisionY = true;
-		}
-		else if (e->nx != 0)
-		{
-			_handleNoCollisionX = true;
-		}
-		return;
-	}
 
 	if (e->ny < 0) {
 		if (paragoomba->GetState() == STATE_PARA_GOOMBA_FLY || paragoomba->GetState() == STATE_PARA_GOOMBA_WALK) {
@@ -576,13 +556,14 @@ int CMario::_GetAnimationId() {
 			{
 				aniId = ID_MARIO_ANI_SIT;
 			}
-			else if (_state == STATE_MARIO_KICK) {
-				aniId = ID_MARIO_ANI_KICK;
-			}
 			else
 				if (_velocity.x == 0)
 				{
-					aniId = ID_MARIO_ANI_IDLE;
+					if (_state == STATE_MARIO_KICK) {
+						aniId = ID_MARIO_ANI_KICK;
+					}
+					else
+						aniId = ID_MARIO_ANI_IDLE;
 				}
 				else if (_velocity.x > 0)
 				{
