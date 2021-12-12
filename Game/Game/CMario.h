@@ -27,6 +27,8 @@ private:
 
 	int _level;
 	int _direction;
+	int _coin;
+	int _live;
 
 	void _HandleKeyDown(int);
 	void _HandleKeyUp(int);
@@ -45,8 +47,6 @@ private:
 	void _HanldeDie();
 
 	int _GetAnimationId();
-	int _HandleAnimationBig();
-	int _HandleAnimationSmall();
 
 	void _UpdateCamPosition();
 
@@ -91,6 +91,17 @@ public:
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
+
+	int GetLive() {
+		return _live;
+	}
+
+	void ReStart() {
+		_position = _startPostion;
+		_level = LEVEL_SMALL;
+		_live--;
+		SetState(STATE_MARIO_IDLE);
+	}
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
 	void Release() override;

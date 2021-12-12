@@ -68,6 +68,10 @@ public:
 	void SetActive(bool);
 	bool IsActive() const;
 
+	void SetStartPosition(float x, float y) {
+		_startPostion = { x,y };
+	}
+
 	virtual void SetState(int state) { this->_state = state; }
 	int GetState() { return this->_state; }
 

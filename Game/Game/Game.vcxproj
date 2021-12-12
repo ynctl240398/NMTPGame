@@ -143,6 +143,7 @@
     <ClCompile Include="CAnimation.cpp" />
     <ClCompile Include="CBackGround.cpp" />
     <ClCompile Include="CBrick.cpp" />
+    <ClCompile Include="CBrickP.cpp" />
     <ClCompile Include="CBrickQuestion.cpp" />
     <ClCompile Include="CCam.cpp" />
     <ClCompile Include="CCollision.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="CAnimation.h" />
     <ClInclude Include="CBackGround.h" />
     <ClInclude Include="CBrick.h" />
+    <ClInclude Include="CBrickP.h" />
     <ClInclude Include="CBrickQuestion.h" />
     <ClInclude Include="CCam.h" />
     <ClInclude Include="CCollision.h" />

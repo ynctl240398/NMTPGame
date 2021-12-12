@@ -108,6 +108,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = CMario::GetInstance();
 		player = (CMario*)obj;
 		player->SetPosition({ x, y });
+		player->SetStartPosition(x, y);
 		//DebugOut(L"[INFO] Player object has been created!\n");
 		break;
 	case OBJECT_TYPE_GOOMBA: 
@@ -135,7 +136,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CItem(x, y, itemType);
 		break;
 	}
-	case OBJECT_TYPE_BIG_BRICK:
+	case OBJECT_TYPE_PLATFORM:
 	{
 		int w = atoi(tokens[3].c_str());
 		int h = atoi(tokens[4].c_str());
@@ -151,26 +152,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_COIN: 
 		//obj = new CCoin(x, y);
 		break;
-
-	case OBJECT_TYPE_PLATFORM:
-	{
-
-		float cell_width = (float)atof(tokens[3].c_str());
-		float cell_height = (float)atof(tokens[4].c_str());
-		int length = atoi(tokens[5].c_str());
-		int sprite_begin = atoi(tokens[6].c_str());
-		int sprite_middle = atoi(tokens[7].c_str());
-		int sprite_end = atoi(tokens[8].c_str());
-
-		obj = new CPlatform(
-			x, y,
-			cell_width, cell_height, length,
-			sprite_begin, sprite_middle, sprite_end
-		);
-
-		break;
-	}
-
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = (float)atof(tokens[3].c_str());
@@ -319,7 +300,10 @@ void CPlayScene::Load()
 void CPlayScene::Update(DWORD dt)
 {
 	if (player->GetState() == STATE_MARIO_DIE) {
-		player->Update(dt);
+		CMario* mario = dynamic_cast<CMario*>(player);
+		if (mario->GetLive() > 0) {
+			player->Update(dt);
+		} 
 		return;
 	}
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
@@ -416,10 +400,9 @@ void CPlayScene::HandleKeyDown(int keyCode) {
 	switch (keyCode)
 	{
 	case DIK_Q:
-		this->Clear();
+		this->Unload();
 		_ani = new CAnimation(DEFAULT_TIME);
 		_currentIdTex = -1;
-		player = NULL;
 		this->Load();
 		break;
 	default:

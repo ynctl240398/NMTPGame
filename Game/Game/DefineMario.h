@@ -36,39 +36,28 @@
 #define STATE_MARIO_DIE							1906
 #define STATE_MARIO_RELEASE_JUMP				1907
 #define STATE_MARIO_RELEASE_SIT					1908
+#define STATE_MARIO_KICK						1909
+
+//syntax x
+#define ID_MARIO_ANI_IDLE						0
+#define ID_MARIO_ANI_WALK						1
+#define ID_MARIO_ANI_JUMP_WALK					2
+#define ID_MARIO_ANI_RUN						3
+#define ID_MARIO_ANI_SIT						4
+#define ID_MARIO_ANI_BRACE						5
+#define ID_MARIO_ANI_DIE						6
+#define ID_MARIO_ANI_JUMP_RUN					7
+#define ID_MARIO_ANI_KICK						8
 
 //small syntax 1 + 0xx
-#define ID_SMALL_MARIO_ANI_IDLE					1000
-#define ID_SMALL_MARIO_ANI_WALK					1001
-#define ID_SMALL_MARIO_ANI_JUMP_WALK			1002
-#define ID_SMALL_MARIO_ANI_RUN					1003
-#define ID_SMALL_MARIO_ANI_SIT					1004
-#define ID_SMALL_MARIO_ANI_BRACE				1005
-#define ID_SMALL_MARIO_ANI_DIE					1006
-#define ID_SMALL_MARIO_ANI_JUMP_RUN				1007
-
 //big syntax 1 + 1xx
-#define ID_BIG_MARIO_ANI_IDLE					1100
-#define ID_BIG_MARIO_ANI_WALK					1101
-#define ID_BIG_MARIO_ANI_JUMP_WALK				1102
-#define ID_BIG_MARIO_ANI_RUN					1103
-#define ID_BIG_MARIO_ANI_SIT					1104
-#define ID_BIG_MARIO_ANI_BRACE					1105
-#define ID_BIG_MARIO_ANI_JUMP_RUN				1106
+//supper syntax 1 + 2xx
 
-//super syntax 1 + 2xx
-#define ID_SUPER_MARIO_ANI_IDLE					1200
-#define ID_SUPER_MARIO_ANI_WALK					1201
-#define ID_SUPER_MARIO_ANI_JUMP					1202
-#define ID_SUPER_MARIO_ANI_RUN					1203
-#define ID_SUPER_MARIO_ANI_SIT					1204
-#define ID_SUPER_MARIO_ANI_BRACE				1205
-
-//level syntax 1 + 8xx
-#define LEVEL_SMALL								1800
-#define LEVEL_BIG								1801
-#define LEVEL_SUPER								1802
-#define LEVEL_FIRER								1803
+//level syntax 1 + 81x
+#define LEVEL_SMALL								1810
+#define LEVEL_BIG								1811
+#define LEVEL_SUPER								1812
+#define LEVEL_FIRER								1813
 
 //direction
 #define DIRECTION_LEFT							1

@@ -105,6 +105,9 @@
     <ClCompile Include="CFirer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CBrickP.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -204,6 +207,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CFirer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CBrickP.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
