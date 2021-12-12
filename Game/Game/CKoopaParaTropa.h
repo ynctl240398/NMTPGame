@@ -14,8 +14,7 @@
 
 class CKoopaParaTropa : public CGameObject
 {
-	float _ax;
-	float _ay;
+
 	ULONGLONG _liveStart;
 
 	CObjKoopaTropa* _obj;
@@ -35,8 +34,6 @@ public:
 	{
 		return (_state != STATE_KOOPA_PARA_TROPA_DIE);
 	}
-
-	void Release() override;
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);

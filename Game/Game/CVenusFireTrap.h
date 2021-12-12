@@ -39,8 +39,6 @@ public:
 		return (_state != STATE_VENUS_FIRE_TRAP_DIE);
 	}
 
-	void Release() override;
-
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 

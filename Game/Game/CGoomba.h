@@ -9,8 +9,6 @@
 class CGoomba : public CGameObject
 {
 	int _GetAnimationId();
-	float _ax;
-	float _ay;
 
 	ULONGLONG _dieStart;
 
@@ -26,8 +24,6 @@ public:
 	{
 		return (_state != STATE_GOOMBA_DIE);
 	}
-
-	void Release() override;
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);

@@ -126,9 +126,6 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
-void CGoomba::Release() {
-}
-
 void CGoomba::GetBoundingBox(float& left, float& top, float& right, float& bottom) {
 	if (_state == STATE_GOOMBA_DIE)
 	{

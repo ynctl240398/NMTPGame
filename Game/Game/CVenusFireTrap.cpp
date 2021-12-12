@@ -160,10 +160,6 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 }
 
-void CVenusFireTrap::Release()
-{
-}
-
 void CVenusFireTrap::OnNoCollision(DWORD dt)
 {
 }

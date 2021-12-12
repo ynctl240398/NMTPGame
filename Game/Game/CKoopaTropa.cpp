@@ -205,9 +205,6 @@ void CKoopaTropa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	}
 }
 
-void CKoopaTropa::Release() {
-}
-
 void CKoopaTropa::GetBoundingBox(float& left, float& top, float& right, float& bottom) {
 	if (_state == STATE_KOOPA_TROPA_WALK || _state == STATE_KOOPA_TROPA_FLY)
 	{

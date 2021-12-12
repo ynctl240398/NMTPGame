@@ -14,9 +14,7 @@ class CMario : public CGameObject
 private:
 	BOOLEAN _isSitting;
 	float _maxVx;
-	float _ax;				// acceleration on x 
-	float _ay;				// acceleration on y 
-
+	
 	int _untouchable;
 	ULONGLONG _untouchable_start;
 	BOOLEAN _isOnPlatform;
@@ -104,6 +102,5 @@ public:
 	}
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
-	void Release() override;
 };
 

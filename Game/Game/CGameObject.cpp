@@ -104,7 +104,19 @@ D3DXVECTOR2 CGameObject::GetScale() const {
 }
 
 void CGameObject::Update(DWORD dt, std::vector<CGameObject*>* collidableObjects) {
-	
+
+	CCollision::GetInstance()->Process(this, dt, collidableObjects);
+
+	if (_handleNoCollisionX) {
+		_handleNoCollisionX = false;
+		_velocity.x += _ax * dt;
+		_position.x += _velocity.x * dt;
+	}
+	if (_handleNoCollisionY) {
+		_handleNoCollisionY = false;
+		_velocity.y += _ay * dt;
+		_position.y += _velocity.y * dt;
+	}
 }
 
 void CGameObject::Render() {}

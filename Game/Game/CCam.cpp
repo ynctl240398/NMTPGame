@@ -11,7 +11,14 @@ CCam::CCam() {
 	_cameraHeight = 0;
 }
 
-CCam::~CCam() {}
+CCam::~CCam() {
+	_cameraBounds.clear();
+
+	if (_cameraInstance) {
+		delete _cameraInstance;
+		_cameraInstance = NULL;
+	}
+}
 
 CCam* CCam::GetInstance() {
 	if (_cameraInstance == NULL) {
@@ -114,15 +121,7 @@ void CCam::Update(DWORD dt, vector<CGameObject*>* collidableObjects) {
 	}
 }
 
-void CCam::Release() {
-	_cameraBounds.clear();
-
-	if (_cameraInstance) {
-		delete _cameraInstance;
-		_cameraInstance = NULL;
-	}
-}
 
 void CCam::Render() {
-
+	
 }

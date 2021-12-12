@@ -19,10 +19,6 @@ void CBrick::Update(DWORD dt, vector<CGameObject*>* obj) {
 
 }
 
-void CBrick::Release() {
-
-}
-
 void CBrick::GetBoundingBox(float& left, float& top, float& right, float& bottom) {
 	left = _isBig ? _position.x - _width / 2 : _position.x - _width / 2 + DIF / 2;
 	top = _position.y - _height / 2;

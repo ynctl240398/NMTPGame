@@ -76,14 +76,12 @@ void CBackGround::Render() {
 	}
 }
 
-void CBackGround::Release() {
-	_sprites.clear();
-	_sprite.pTexture = nullptr;
-	_tex = nullptr;
-}
-
 void CBackGround::GetBoundingBox(float& left, float& top, float& right, float& bottom) {
 
 }
 
-CBackGround::~CBackGround() {}
+CBackGround::~CBackGround() {
+	_sprites.clear();
+	_sprite.pTexture = nullptr;
+	_tex = nullptr;
+}

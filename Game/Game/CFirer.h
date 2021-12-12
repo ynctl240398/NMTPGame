@@ -21,8 +21,6 @@ public:
 		return (_state != STATE_FIRER_DISAPPEAR);
 	}
 
-	void Release() override;
-
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 

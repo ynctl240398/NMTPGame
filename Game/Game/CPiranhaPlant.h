@@ -33,8 +33,6 @@ public:
 		return (_state != STATE_PIRANHA_PLANT_DIE);
 	}
 
-	void Release() override;
-
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 

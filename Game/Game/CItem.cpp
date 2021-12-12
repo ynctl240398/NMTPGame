@@ -11,7 +11,7 @@
 CItem::CItem(float x, float y, string type) {
 	_position = { x,y };
 	_isActive = false;
-	_startY = y;
+	_startPostion = _position;
 	_ay = 0;
 	_ax = 0;
 	_isDeleted = false;
@@ -55,15 +55,15 @@ void CItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 	if (_state == STATE_ITEM_JUMP) {
 		float dy = _velocity.y * dt;
-		if (_position.y + dy >= _startY) {
-			_position.y = _startY;
+		if (_position.y + dy >= _startPostion.y) {
+			_position = _startPostion;
 			SetState(STATE_ITEM_DISAPPEAR);
 		}
 		else
 			_position.y += dy;
 	}
 	else if (_state == STATE_ITEM_UP) {
-		if (_position.y + ITEM_HEIGHT > _startY) {
+		if (_position.y + ITEM_HEIGHT > _startPostion.y) {
 			_position.y--;
 		}
 		else SetState(STATE_ITEM_MOVE);
@@ -152,10 +152,6 @@ void CItem::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 	top = _position.y - ITEM_HEIGHT / 2;
 	right = left + ITEM_WIDTH;
 	bottom = top + ITEM_HEIGHT;
-}
-
-void CItem::Release() {
-
 }
 
 CItem::~CItem() {

@@ -17,7 +17,6 @@ public:
 	CBackGround();
 	void Load(LPCWSTR filePath);
 	void Render() override;
-	void Release() override;
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
 	~CBackGround();
 };

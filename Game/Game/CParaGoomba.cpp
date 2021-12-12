@@ -167,16 +167,7 @@ void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		
 	_HandleStatePara();
 
-	CCollision::GetInstance()->Process(this, dt, coObjects);
-
-	if (_handleNoCollisionX) {
-		_handleNoCollisionX = false;
-		_position.x += _velocity.x * dt;
-	}
-	if (_handleNoCollisionY) {
-		_handleNoCollisionY = false;
-		_position.y += _velocity.y * dt;
-	}
+	CGameObject::Update(dt, coObjects);
 }
 
 void CParaGoomba::_HandleStatePara() {
@@ -207,10 +198,6 @@ void CParaGoomba::Render() {
 
 	animations->Get(aniId)->Render(_position.x, _position.y, _scale);
 	RenderBoundingBox();
-}
-
-void CParaGoomba::Release() {
-
 }
 
 void CParaGoomba::GetBoundingBox(float& left, float& top, float& right, float& bottom) {

@@ -63,10 +63,6 @@ void CFirer::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
-void CFirer::Release()
-{
-}
-
 void CFirer::OnNoCollision(DWORD dt)
 {
 	_position.x += _velocity.x * dt;

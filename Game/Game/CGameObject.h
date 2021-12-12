@@ -40,6 +40,10 @@ typedef CRect* LPRECTCUSTOM;
 class CGameObject
 {
 protected:
+
+	float _ax;				// acceleration on x 
+	float _ay;				// acceleration on y 
+
 	bool _isActive;
 	bool _handleNoCollisionX;
 	bool _handleNoCollisionY;
@@ -122,10 +126,8 @@ public:
 	// Is this object blocking other object? If YES, collision framework will automatically push the other object
 	virtual int IsBlocking() { return 1; }
 
-	virtual void Release() = 0;
-
 	void RenderBoundingBox();
 
-	static bool IsDeleted(const LPGAMEOBJECT& o) { return o->_isDeleted; }
+	static bool IsDeleted(const LPGAMEOBJECT &o) { return o->_isDeleted; }
 };
 

@@ -11,8 +11,7 @@
 class CParaGoomba : public CGameObject
 {
 	int _GetAnimationId();
-	float _ax;
-	float _ay;
+
 	int _countJump;
 	ULONGLONG _warkStartTime;
 	ULONGLONG _dieStart;
@@ -32,8 +31,6 @@ public:
 	{
 		return (_state != STATE_RED_GOOMBA_DIE);
 	}
-
-	void Release() override;
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);

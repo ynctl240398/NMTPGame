@@ -29,9 +29,6 @@
 
 class CItem : public CGameObject
 {
-	float _ay;
-	float _ax;
-	float _startY;
 	string _type;
 
 	int _GetAnimationId();
@@ -47,7 +44,6 @@ public:
 
 	void Render() override;
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) override;
-	void Release() override;
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
 
 	void OnNoCollision(DWORD dt);

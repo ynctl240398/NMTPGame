@@ -21,10 +21,7 @@
 class CBrickQuestion : public CGameObject
 {
 	float _maxVy;
-	float _ay;
 	
-	float _startY;
-
 	CItem* _item;
 
 	int _GetAnimationId();
@@ -38,8 +35,6 @@ public:
 
 	void Render() override;
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) override;
-
-	void Release() override;
 
 	CItem* GetItem() {
 		return _item;

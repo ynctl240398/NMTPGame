@@ -104,10 +104,6 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	_position.y += _velocity.y * dt;
 }
 
-void CPiranhaPlant::Release()
-{
-}
-
 void CPiranhaPlant::OnNoCollision(DWORD dt)
 {
 }

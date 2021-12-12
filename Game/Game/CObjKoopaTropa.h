@@ -8,8 +8,7 @@
 
 class CObjKoopaTropa :public CGameObject
 {
-	float _ay;
-	float _ax;
+
 	bool _isNoCollisionWithPlatform;
 public:
 	CObjKoopaTropa(float x, float y);
@@ -25,8 +24,6 @@ public:
 	bool IsNoCollisionWithPlatform() { return _isNoCollisionWithPlatform; }
 
 	void SetIsNoCollisionWithPlatform(bool value) { _isNoCollisionWithPlatform = value; }
-
-	void Release() override {};
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);

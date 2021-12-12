@@ -12,8 +12,7 @@
 
 class CKoopaTropa : public CGameObject
 {
-	float _ax;
-	float _ay;
+
 	ULONGLONG _liveStart;
 
 	int _GetAnimationId();
@@ -30,8 +29,6 @@ public:
 	{
 		return (_state != STATE_KOOPA_TROPA_DIE);
 	}
-
-	void Release() override;
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);

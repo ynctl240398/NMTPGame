@@ -5,7 +5,7 @@
 
 CBrickQuestion::CBrickQuestion(float x, float y, string typeItem) {
 	_position = { x,y };
-	_startY = y;
+	_startPostion = _position;
 	_state = STATE_BRICK_QUESTION_RUN;
 	_maxVy = MAX_JUMP;
 	_ay = 0;
@@ -26,8 +26,8 @@ void CBrickQuestion::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 	float dy = _velocity.y * dt / 4;
 
-	if (_position.y + dy >= _startY) {
-		_position.y = _startY;
+	if (_position.y + dy >= _startPostion.y) {
+		_position = _startPostion;
 		_ay = 0;
 	}
 	else
@@ -48,10 +48,6 @@ void CBrickQuestion::Render() {
 	_item->Render();
 	animations->Get(aniId)->Render(_position.x, _position.y, _scale);
 	RenderBoundingBox();
-}
-
-void CBrickQuestion::Release() {
-
 }
 
 void CBrickQuestion::GetBoundingBox(float& left, float& top, float& right, float& bottom) {

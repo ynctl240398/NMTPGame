@@ -35,8 +35,6 @@ public:
 	void AddCameraBound(LPRECTCUSTOM);
 
 	void Update(DWORD, vector<CGameObject*>* = nullptr) override;
-
-	void Release() override;
 };
 
 typedef CCam* LPCAM;
