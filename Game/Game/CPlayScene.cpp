@@ -1,11 +1,11 @@
 #include "CPlayScene.h"
 #include "CUtil.h"
+#include "DefineScenePlay.h"
 #include "CDebug.h"
 #include "CSprite.h"
 #include "CAnimation.h"
 #include "CPlatform.h"
 #include "CMario.h"
-#include "DefineScenePlay.h"
 #include "CPortal.h"
 #include "CBrick.h"
 #include "CBrickQuestion.h"
@@ -16,26 +16,27 @@
 #include "CKoopaTropa.h"
 #include "CVenusFireTrap.h"
 #include "CPiranhaPlant.h"
+#include "CBrickP.h"
 
 using namespace std;
 
-#define SCENE_SECTION_UNKNOWN -1
-#define SCENE_SECTION_ASSETS	1
-#define SCENE_SECTION_OBJECTS	2
+#define SCENE_SECTION_UNKNOWN		-1
+#define SCENE_SECTION_ASSETS		1
+#define SCENE_SECTION_OBJECTS		2
 
-#define ASSETS_SECTION_UNKNOWN -1
-#define ASSETS_SECTION_SPRITES 1
-#define ASSETS_SECTION_ANIMATIONS 2
-#define ASSETS_SECTION_FRAME 3
-#define ASSETS_SECTION_ID 4
+#define ASSETS_SECTION_UNKNOWN		-1
+#define ASSETS_SECTION_SPRITES		1
+#define ASSETS_SECTION_ANIMATIONS	2
+#define ASSETS_SECTION_FRAME		3
+#define ASSETS_SECTION_ID			4
 
-#define MAX_SCENE_LINE 1024
+#define MAX_SCENE_LINE				1024
 
-#define LENGTH_SPRITES 5
-#define LENGTH_ANI 2
-#define LENGTH_ANIS 1
+#define LENGTH_SPRITES				5
+#define LENGTH_FRAME				2
+#define LENGTH_ANIS					1
 
-#define DEFAULT_TIME 100
+#define DEFAULT_TIME				100
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 	CScene(id, filePath)
@@ -63,7 +64,7 @@ void CPlayScene::_ParseSectionSprites(string line) {
 
 void CPlayScene::_ParseSectionFrames(string line) {
 	vector<string> tokens = split(line);
-	if (tokens.size() < LENGTH_ANI) return; // skip invalid lines
+	if (tokens.size() < LENGTH_FRAME) return; // skip invalid lines
 
 	int id = _currentIdSpriteAni + atoi(tokens[0].c_str());
 	int time = atoi(tokens[1].c_str());
@@ -113,8 +114,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		player->SetStartPosition(x, y);
 		//DebugOut(L"[INFO] Player object has been created!\n");
 		break;
-	case OBJECT_TYPE_GOOMBA: 
-		obj = new CGoomba(x, y); 
+	case OBJECT_TYPE_GOOMBA:
+		obj = new CGoomba(x, y);
 		break;
 	case OBJECT_TYPE_PARA_GOOMBA:
 		obj = new CParaGoomba(x, y);
@@ -125,12 +126,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CKoopaParaTropa(x, y, state);
 		break;
 	}
-	case OBJECT_TYPE_BRICK: 
+	case OBJECT_TYPE_BRICK:
 	{
 		int w = atoi(tokens[3].c_str());
 		int h = atoi(tokens[4].c_str());
 		obj = new CBrick(x, y, w, h);
-		break; 
+		break;
 	}
 	case OBJECT_TYPE_ITEM:
 	{
@@ -151,7 +152,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CBrickQuestion(x, y, typeItem);
 		break;
 	}
-	case OBJECT_TYPE_COIN: 
+	case OBJECT_TYPE_COIN:
 		//obj = new CCoin(x, y);
 		break;
 	case OBJECT_TYPE_PORTAL:
@@ -174,7 +175,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		CCam::GetInstance()->Load(path.c_str());
 		_cam = CCam::GetInstance();
 		break;
-	case OBJECT_TYPE_KOOPAS: 
+	case OBJECT_TYPE_KOOPAS:
 	{
 		int state = atoi(tokens[3].c_str());
 		obj = new CKoopaTropa(x, y, state);
@@ -194,6 +195,20 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float offSetY = (float)atof(tokens[4].c_str());
 		y += PIRANHA_PLANT_BBOX_HIEGHT / 2 - DIF;
 		obj = new CPiranhaPlant(x, y, type, offSetY);
+		break;
+	}
+	case OBJECT_TYPE_BRICK_P:
+	{
+		bool isCanBreak = true;
+		int state = STATE_BRICK_P_BRICK;
+		if (tokens.size() == 4) {
+			isCanBreak = false;
+		}
+		else if (tokens.size() == 5) {
+			isCanBreak = (bool)atoi(tokens[4].c_str());
+			state = atoi(tokens[4].c_str());
+		}
+		obj = new CBrickP(x, y, isCanBreak, state);
 		break;
 	}
 	default:
@@ -261,7 +276,7 @@ void CPlayScene::_LoadAssets(LPCWSTR assetFile) {
 		case ASSETS_SECTION_ANIMATIONS:
 			_ParseSectionAnimation(line);
 			break;
-		case ASSETS_SECTION_ID: 
+		case ASSETS_SECTION_ID:
 		{
 			vector<string> tokens = split(line);
 			_currentIdSpriteAni = atoi(tokens[0].c_str());
@@ -315,7 +330,7 @@ void CPlayScene::Update(DWORD dt)
 		CMario* mario = dynamic_cast<CMario*>(player);
 		if (mario->GetLive() > 0) {
 			player->Update(dt);
-		} 
+		}
 		return;
 	}
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
@@ -329,7 +344,7 @@ void CPlayScene::Update(DWORD dt)
 			if (dynamic_cast<CBrickQuestion*>(objects[i])) {
 				CBrickQuestion* brickQuestion = dynamic_cast<CBrickQuestion*>(objects[i]);
 				CItem* item = brickQuestion->GetItem();
-				if (item->GetType() == TYPE_ITEM_MUSHROOM_GREEN || item->GetType() == TYPE_ITEM_MUSHROOM_RED) {
+				if (item != NULL && (item->GetType() == TYPE_ITEM_MUSHROOM_GREEN || item->GetType() == TYPE_ITEM_MUSHROOM_RED)) {
 					coObjects.push_back(item);
 				}
 			}
@@ -339,6 +354,29 @@ void CPlayScene::Update(DWORD dt)
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		objects[i]->Update(dt, &coObjects);
+	}
+
+	for (size_t i = 0; i < objects.size(); i++)
+	{
+		if (dynamic_cast<CBrickP*>(objects[i])) {
+			CBrickP* brickPi = dynamic_cast<CBrickP*>(objects[i]);
+			if (brickPi->GetState() == STATE_BRICK_P_BRICK_UP || brickPi->GetState() == STATE_BRICK_P_PUSHED) {
+				for (size_t j = 0; j < objects.size(); j++) {
+					if (dynamic_cast<CBrickP*>(objects[j])) {
+						CBrickP* brickPj = dynamic_cast<CBrickP*>(objects[j]);
+						if (brickPj->GetState() == STATE_BRICK_P_IDLE) {
+							if (!brickPj->GetShowP()) brickPj->SetShowP(true);
+							break;
+						}
+						else if (brickPj->GetState() == STATE_BRICK_P_BRICK) {
+							if (brickPi->GetState() == STATE_BRICK_P_PUSHED) {
+								brickPj->SetState(STATE_BRICK_P_COIN);
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)

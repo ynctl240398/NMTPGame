@@ -112,16 +112,16 @@ int CItem::_GetAnimationId() {
 	}
 
 	if (_type == TYPE_ITEM_COIN) {
-		aniId = ID_ITEM_COIN_ANI;
+		aniId = ID_ANI_ITEM_COIN;
 	}
 	else if (_type == TYPE_ITEM_COIN_BRICK) {
-		aniId = ID_ITEM_COIN_BRICK_ANI;
+		aniId = ID_ANI_ITEM_COIN_BRICK;
 	}
 	else if (_type == TYPE_ITEM_MUSHROOM_GREEN) {
-		aniId = ID_ITEM_MUSHROOM_GREEN_ANI;
+		aniId = ID_ANI_ITEM_MUSHROOM_GREEN;
 	}
 	else if (_type == TYPE_ITEM_MUSHROOM_RED) {
-		aniId = ID_ITEM_MUSHROOM_RED_ANI;
+		aniId = ID_ANI_ITEM_MUSHROOM_RED;
 	}
 	else aniId = -1;
 

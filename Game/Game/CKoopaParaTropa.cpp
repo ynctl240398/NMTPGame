@@ -6,6 +6,7 @@
 #include "CBrickQuestion.h"
 #include "CGoomba.h"
 #include "CItem.h"
+#include "CBrickP.h"
 
 #define ID_ANI_KOOPA_PARA_TROPA_WALK 6000
 #define ID_ANI_KOOPA_PARA_TROPA_SHELD 6001
@@ -20,14 +21,14 @@
 #define KOOPA_PARA_TROPA_BBOX_HEIGHT 26
 
 #define KOOPA_PARA_TROPA_SHELD_BBOX_WIDTH 16
-#define KOOPA_PARA_TROPA_SHELD_BBOX_HEIGHT 16
+#define KOOPA_PARA_TROPA_SHELD_BBOX_HEIGHT 14
 
 #define KOOPA_PARA_TROPA_GRAVITY 0.002f
-#define KOOPA_PARA_TROPA_WALK_SPEED 0.05f
+#define KOOPA_PARA_TROPA_WALK_SPEED 0.04f
 #define KOOPA_PARA_TROPA_SHELD_SPEED 0.2f
 
 
-#define TIME_TO_LIVE 5000
+#define TIME_TO_LIVE 10000
 #define TIME_TO_SHELD_LIVE 3000
 
 CKoopaParaTropa::CKoopaParaTropa(float x, float y, int state){
@@ -110,10 +111,10 @@ void CKoopaParaTropa::_SetPositionXObj(float x)
 	else py = _obj->GetPosition().y;
 
 	if (_scale.x < 0) { //right
-		px = x + KOOPA_PARA_TROPA_BBOX_WIDTH / 2 + OBJ_BBOX_WIDTH / 2;
+		px = x + KOOPA_PARA_TROPA_BBOX_WIDTH / 2;
 	}
 	else {
-		px = x - KOOPA_PARA_TROPA_BBOX_WIDTH / 2 - OBJ_BBOX_WIDTH / 2;
+		px = x - KOOPA_PARA_TROPA_BBOX_WIDTH / 2;
 	}
 	_obj->SetPosition({ px, py });
 }
@@ -143,6 +144,13 @@ void CKoopaParaTropa::OnCollisionWith(LPCOLLISIONEVENT e) {
 			CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
 			goomba->SetState(STATE_GOOMBA_DIE);
 		}
+		if (dynamic_cast<CBrickP*>(e->obj)) {
+			CBrickP* brickP = dynamic_cast<CBrickP*>(e->obj);
+			if (brickP->GetState() == STATE_BRICK_P_BRICK && e->obj->IsBlocking() && e->nx != 0)
+			{
+				brickP->SetState(STATE_BRICK_P_BRICK_BREAK);
+			}
+		}
 	}
 
 	if (e->ny != 0)
@@ -151,7 +159,7 @@ void CKoopaParaTropa::OnCollisionWith(LPCOLLISIONEVENT e) {
 	}
 	else if (e->nx != 0)
 	{
-		if (dynamic_cast<CBrick*>(e->obj) || dynamic_cast<CBrickQuestion*>(e->obj)) {
+		if (dynamic_cast<CBrick*>(e->obj) || dynamic_cast<CBrickQuestion*>(e->obj) || dynamic_cast<CBrickP*>(e->obj)) {
 			if (dynamic_cast<CBrickQuestion*>(e->obj)) {
 				if (_state == STATE_KOOPA_PARA_TROPA_SHELD_RUN) {
 					CBrickQuestion* brickQuestion = dynamic_cast<CBrickQuestion*>(e->obj);
@@ -166,6 +174,7 @@ void CKoopaParaTropa::OnCollisionWith(LPCOLLISIONEVENT e) {
 			}
 			else {
 				_velocity.x = -_velocity.x;
+				_scale.x = -_scale.x;
 			}
 		}
 	}

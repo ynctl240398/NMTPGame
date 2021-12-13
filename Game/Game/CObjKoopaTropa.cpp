@@ -1,5 +1,6 @@
 #include "CObjKoopaTropa.h"
 #include "CBrick.h"
+#include "CBrickP.h"
 
 //obj
 
@@ -20,7 +21,7 @@ void CObjKoopaTropa::OnNoCollision(DWORD dt) {
 void CObjKoopaTropa::OnCollisionWith(LPCOLLISIONEVENT e) 
 {
 	
-	if (dynamic_cast<CBrick*>(e->obj)) {
+	if (dynamic_cast<CBrick*>(e->obj) || dynamic_cast<CBrickP*>(e->obj)) {
 		if (e->ny != 0)
 		{
 			_velocity.y = 0;

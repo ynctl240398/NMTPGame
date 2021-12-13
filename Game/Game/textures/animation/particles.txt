@@ -3,3 +3,14 @@
 
 [SPRITE]
 #id	l	t	w	h
+
+#brick_broken
+0	0	0	9	9
+
+#id_sprite	time(ms)
+
+#piranha_plant_red
+[FRAME]
+0	100
+[ANIMATION]
+0

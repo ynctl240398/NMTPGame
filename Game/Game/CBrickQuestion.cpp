@@ -61,9 +61,9 @@ void CBrickQuestion::SetState(int state) {
 int CBrickQuestion::_GetAnimationId() {
 	int aniId = -1;
 	if (_state == STATE_BRICK_QUESTION_RUN) {
-		aniId = ID_BRICK_QUESTION_ANI_RUN;
+		aniId = ID_ANI_BRICK_QUESTION_RUN;
 	}
-	else aniId = ID_BRICK_QUESTION_ANI_IDLE;
+	else aniId = ID_ANI_BRICK_QUESTION_IDLE;
 	return aniId;
 }
 

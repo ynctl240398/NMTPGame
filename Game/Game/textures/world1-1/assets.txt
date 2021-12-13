@@ -10,6 +10,8 @@
 300	textures\animation\venus_fire_trap.txt
 300	textures\animation\piranha_plant.txt
 400	textures\animation\firer.txt
+500	textures\animation\particles.txt
+000	textures\animation\brick_p.txt
 
 [OBJECTS]
 #bg
@@ -33,7 +35,7 @@
 5	2144	368	48	48
 
 #mario
-0	0	350
+0	2000	350
 
 #brick
 1	0	416	624	16
@@ -115,6 +117,7 @@
 
 #koopa_para_tropa
 11	530	350	6901
+11	2096	350	6901
 
 #para_goomba
 12	944	374
@@ -131,3 +134,25 @@
 
 #piranha_plant
 14	1800	352	9101	24
+
+#brick_p
+15	1984	368
+15	2000	368
+15	2016	368
+15	2032	368	1
+15	2032	352	1	11901
+15	1968	384
+15	1984	384
+15	2000	384
+15	2016	384
+15	2032	384
+15	1952	400
+15	1968	400
+15	1984	400
+15	2000	400
+15	2016	400
+15	2032	400
+15	2048	400
+15	2096	384
+15	2096	400
+15	2112	400

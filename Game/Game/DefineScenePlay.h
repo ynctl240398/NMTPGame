@@ -1,4 +1,5 @@
 #pragma once
+
 #define OBJECT_TYPE_MARIO				0
 #define OBJECT_TYPE_BRICK				1
 #define OBJECT_TYPE_GOOMBA				2

@@ -19,7 +19,7 @@
 #define MARIO_SIT_HEIGHT_ADJUST ((MARIO_BIG_BBOX_HEIGHT - MARIO_BIG_SITTING_BBOX_HEIGHT) / 2)
 
 #define MARIO_SMALL_BBOX_WIDTH					16
-#define MARIO_SMALL_BBOX_HEIGHT					16
+#define MARIO_SMALL_BBOX_HEIGHT					15
 
 #define ZONE 5
 #define MARIO_JUMP_DEFLECT_SPEED				0.5f
@@ -39,15 +39,15 @@
 #define STATE_MARIO_KICK						1909
 
 //syntax x
-#define ID_MARIO_ANI_IDLE						0
-#define ID_MARIO_ANI_WALK						1
-#define ID_MARIO_ANI_JUMP_WALK					2
-#define ID_MARIO_ANI_RUN						3
-#define ID_MARIO_ANI_SIT						4
-#define ID_MARIO_ANI_BRACE						5
-#define ID_MARIO_ANI_DIE						6
-#define ID_MARIO_ANI_JUMP_RUN					7
-#define ID_MARIO_ANI_KICK						8
+#define ID_ANI_MARIO_IDLE						0
+#define ID_ANI_MARIO_WALK						1
+#define ID_ANI_MARIO_JUMP_WALK					2
+#define ID_ANI_MARIO_RUN						3
+#define ID_ANI_MARIO_SIT						4
+#define ID_ANI_MARIO_BRACE						5
+#define ID_ANI_MARIO_DIE						6
+#define ID_ANI_MARIO_JUMP_RUN					7
+#define ID_ANI_MARIO_KICK						8
 
 //small syntax 1 + 0xx
 //big syntax 1 + 1xx

@@ -18,9 +18,6 @@
 #p_pushed
 7	180	34	16	16
 
-#brick_question
-8	153	102	16	16
-
 #id_sprite	time(ms)
 #brick
 [FRAME]
@@ -44,9 +41,3 @@
 7	0
 [ANIMATION]
 2
-
-#brick_question
-[FRAME]
-8	0
-[ANIMATION]
-3

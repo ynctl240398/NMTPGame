@@ -9,8 +9,8 @@
 
 #define GOOMBA_BBOX_HEIGHT_DIE 8
 
-#define ID_GOOMBA_ANI_WALK 4000
-#define ID_GOOMBA_ANI_DIE 4001
+#define ID_ANI_GOOMBA_WALK 4000
+#define ID_ANI_GOOMBA_DIE 4001
 
 #define GOOMBA_DIE_TIMEOUT 500
 
@@ -29,9 +29,9 @@ CGoomba::CGoomba(float x, float y) {
 int CGoomba::_GetAnimationId() {
 	int aniId = -1;
 	if (_state == STATE_GOOMBA_WALK) {
-		aniId = ID_GOOMBA_ANI_WALK;
+		aniId = ID_ANI_GOOMBA_WALK;
 	}
-	else if (_state == STATE_GOOMBA_DIE) aniId = ID_GOOMBA_ANI_DIE;
+	else if (_state == STATE_GOOMBA_DIE) aniId = ID_ANI_GOOMBA_DIE;
 	return aniId;
 }
 

@@ -11,6 +11,7 @@
 #include "CKoopaTropa.h"
 #include "CVenusFireTrap.h"
 #include "CPiranhaPlant.h"
+#include "CBrickP.h"
 
 #define MIN_X 0
 #define MAX_Y 400
@@ -43,7 +44,7 @@ CMario::CMario() {
 void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
 	if (dynamic_cast<CBrick*>(e->obj))
 		_OnCollisionWithBrick(e);
-	else if (dynamic_cast<CBrickQuestion*>(e->obj))
+	else if (dynamic_cast<CBrickQuestion*>(e->obj) || dynamic_cast<CBrickP*>(e->obj))
 		_OnCollisionWithBrickQuestion(e);
 	else if (dynamic_cast<CItem*>(e->obj)) 
 		_OnCollisionWithItem(e);
@@ -93,24 +94,58 @@ void CMario::_OnCollisionWithBrick(LPCOLLISIONEVENT e) {
 }
 
 void CMario::_OnCollisionWithBrickQuestion(LPCOLLISIONEVENT e) {
-	CBrickQuestion* brick = dynamic_cast<CBrickQuestion*>(e->obj);
+	if (dynamic_cast<CBrickQuestion*>(e->obj)) {
 
-	if (e->ny != 0 && e->obj->IsBlocking())
-	{
-		_velocity.y = 0;
-		if (e->ny < 0) {
-			_isOnPlatform = true;
-		}
-		else if (brick->GetState() == STATE_BRICK_QUESTION_RUN && e->obj->IsBlocking())
+
+		CBrickQuestion* brick = dynamic_cast<CBrickQuestion*>(e->obj);
+
+		if (e->ny != 0 && e->obj->IsBlocking())
 		{
-			brick->SetState(STATE_BRICK_QUESTION_IDLE);
+			_velocity.y = 0;
+			if (e->ny < 0) {
+				_isOnPlatform = true;
+			}
+			else if (brick->GetState() == STATE_BRICK_QUESTION_RUN && e->obj->IsBlocking())
+			{
+				brick->SetState(STATE_BRICK_QUESTION_IDLE);
+			}
 		}
+		else
+			if (e->nx != 0 && e->obj->IsBlocking())
+			{
+				_velocity.x = 0;
+			}
 	}
-	else
-		if (e->nx != 0 && e->obj->IsBlocking())
-		{
-			_velocity.x = 0;
+	else {
+		CBrickP* brickP = dynamic_cast<CBrickP*>(e->obj);
+
+		if (brickP->GetState() == STATE_BRICK_P_COIN) {
+			_coin++;
+			brickP->Delete();
+			return;
 		}
+
+		if (e->ny != 0 && e->obj->IsBlocking())
+		{
+			_velocity.y = 0;
+			if (e->ny < 0) {
+				if (brickP->GetState() == STATE_BRICK_P_IDLE && e->obj->IsBlocking()) {
+					brickP->SetState(STATE_BRICK_P_PUSHED);
+					_velocity.y = -MARIO_JUMP_DEFLECT_SPEED;
+				}
+				else _isOnPlatform = true;
+			}
+			else if (brickP->GetState() == STATE_BRICK_P_BRICK && e->obj->IsBlocking())
+			{
+				brickP->SetState(STATE_BRICK_P_BRICK_BREAK);
+			}
+		}
+		else
+			if (e->nx != 0 && e->obj->IsBlocking())
+			{
+				_velocity.x = 0;
+			}
+	}
 }
 
 
@@ -530,54 +565,54 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
 int CMario::_GetAnimationId() {
 	int aniId = -1;
 	if (_state == STATE_MARIO_DIE) {
-		aniId = ID_MARIO_ANI_DIE;
+		aniId = ID_ANI_MARIO_DIE;
 	}
 	else {
 		if (!_isOnPlatform)
 		{
 			if (abs(_ax) == MARIO_ACCEL_RUN_X)
 			{
-				aniId = ID_MARIO_ANI_JUMP_RUN;
+				aniId = ID_ANI_MARIO_JUMP_RUN;
 			}
 			else
 			{
-				aniId = ID_MARIO_ANI_JUMP_WALK;
+				aniId = ID_ANI_MARIO_JUMP_WALK;
 			}
 		}
 		else
 			if (_isSitting)
 			{
-				aniId = ID_MARIO_ANI_SIT;
+				aniId = ID_ANI_MARIO_SIT;
 			}
 			else
 				if (_velocity.x == 0)
 				{
 					if (_state == STATE_MARIO_KICK) {
-						aniId = ID_MARIO_ANI_KICK;
+						aniId = ID_ANI_MARIO_KICK;
 					}
 					else
-						aniId = ID_MARIO_ANI_IDLE;
+						aniId = ID_ANI_MARIO_IDLE;
 				}
 				else if (_velocity.x > 0)
 				{
 					if (_ax < 0)
-						aniId = ID_MARIO_ANI_BRACE;
+						aniId = ID_ANI_MARIO_BRACE;
 					else if (_ax == MARIO_ACCEL_RUN_X)
-						aniId = ID_MARIO_ANI_RUN;
+						aniId = ID_ANI_MARIO_RUN;
 					else if (_ax == MARIO_ACCEL_WALK_X)
-						aniId = ID_MARIO_ANI_WALK;
+						aniId = ID_ANI_MARIO_WALK;
 				}
 				else
 				{
 					if (_ax > 0)
-						aniId = ID_MARIO_ANI_BRACE;
+						aniId = ID_ANI_MARIO_BRACE;
 					else if (_ax == -MARIO_ACCEL_RUN_X)
-						aniId = ID_MARIO_ANI_RUN;
+						aniId = ID_ANI_MARIO_RUN;
 					else if (_ax == -MARIO_ACCEL_WALK_X)
-						aniId = ID_MARIO_ANI_WALK;
+						aniId = ID_ANI_MARIO_WALK;
 				}
 
-		if (aniId == -1) aniId = ID_MARIO_ANI_IDLE;
+		if (aniId == -1) aniId = ID_ANI_MARIO_IDLE;
 	}
 
 	aniId += (_level % 100) * 100;
