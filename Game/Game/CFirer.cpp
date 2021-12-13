@@ -69,7 +69,7 @@ void CFirer::OnNoCollision(DWORD dt)
 
 void CFirer::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (dynamic_cast<CMario*>(e->obj)) {
+	if (dynamic_cast<CMario*>(e->obj) && e->obj->IsBlocking()) {
 		CMario* mario = dynamic_cast<CMario*>(e->obj);
 		int levelMario = mario->GetLevel();
 		if (levelMario > LEVEL_SMALL)

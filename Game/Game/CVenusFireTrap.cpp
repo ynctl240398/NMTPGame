@@ -133,6 +133,10 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				_firer = NULL;
 			}
 			else if (GetTickCount64() - _startTime >= TIME_TO_FIRE / 2 && _firer == NULL) {
+				if (mario->GetPosition().y < _position.y) {
+					SetState(STATE_VENUS_FIRE_TRAP_UP_FIRER);
+				}
+				else SetState(STATE_VENUS_FIRE_TRAP_DOWN_FIRER);
 				_firer = new CFirer(_position.x, _position.y - DIF);
 				_firer->SetState(STATE_FIRER_FLY);
 			}
