@@ -89,15 +89,8 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
 }
 
 void CGoomba::Render() {
-	CAnimations* animations = CAnimations::GetInstance();
-	int aniId = _GetAnimationId();
-	LPANIMATION animation = animations->Get(aniId);
-	if (animation == NULL) {
-		return;
-	}
-
-	animations->Get(aniId)->Render(_position.x, _position.y, _scale);
-	RenderBoundingBox();
+	_aniId = _GetAnimationId();
+	CGameObject::Render();
 }
 
 void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {

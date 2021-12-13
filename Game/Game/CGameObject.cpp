@@ -1,6 +1,7 @@
 #include "CGameObject.h"
 #include "CGame.h"
 #include "CCam.h"
+#include "CAnimation.h"
 
 CGameObject::CGameObject() {
 	_isActive = true;
@@ -12,6 +13,7 @@ CGameObject::CGameObject() {
 	_handleNoCollisionX = false;
 	_handleNoCollisionY = false;
 	_startState = -1;
+	_aniId = -1;
 }
 
 CGameObject::~CGameObject() {}
@@ -119,4 +121,13 @@ void CGameObject::Update(DWORD dt, std::vector<CGameObject*>* collidableObjects)
 	}
 }
 
-void CGameObject::Render() {}
+void CGameObject::Render() {
+	CAnimations* animations = CAnimations::GetInstance();
+	LPANIMATION animation = animations->Get(_aniId);
+	if (animation == NULL) {
+		return;
+	}
+
+	animations->Get(_aniId)->Render(_position.x, _position.y, _scale);
+	RenderBoundingBox();
+}

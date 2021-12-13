@@ -52,15 +52,8 @@ void CVenusFireTrap::Render()
 		_firer->Render();
 	}
 
-	CAnimations* animations = CAnimations::GetInstance();
-	int aniId = _GetAnimationId();
-	LPANIMATION animation = animations->Get(aniId);
-	if (animation == NULL) {
-		return;
-	}
-
-	animations->Get(aniId)->Render(_position.x, _position.y, _scale);
-	RenderBoundingBox();
+	_aniId = _GetAnimationId();
+	CGameObject::Render();
 }
 
 int CVenusFireTrap::_GetAnimationId()
@@ -137,6 +130,7 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		else if (_state == STATE_VENUS_FIRE_TRAP_UP_FIRER || _state == STATE_VENUS_FIRE_TRAP_DOWN_FIRER) {
 			if (_startTime == 0) {
 				_startTime = GetTickCount64();
+				_firer = NULL;
 			}
 			else if (GetTickCount64() - _startTime >= TIME_TO_FIRE / 2 && _firer == NULL) {
 				_firer = new CFirer(_position.x, _position.y - DIF);

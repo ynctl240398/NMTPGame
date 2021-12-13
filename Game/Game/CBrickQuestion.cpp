@@ -38,16 +38,9 @@ void CBrickQuestion::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 }
 
 void CBrickQuestion::Render() {
-	CAnimations* animations = CAnimations::GetInstance();
-	int aniId = _GetAnimationId();
-	LPANIMATION animation = animations->Get(aniId);
-	if (animation == NULL) {
-		return;
-	}
-
 	_item->Render();
-	animations->Get(aniId)->Render(_position.x, _position.y, _scale);
-	RenderBoundingBox();
+	_aniId = _GetAnimationId();
+	CGameObject::Render();
 }
 
 void CBrickQuestion::GetBoundingBox(float& left, float& top, float& right, float& bottom) {

@@ -129,17 +129,8 @@ int CItem::_GetAnimationId() {
 }
 
 void CItem::Render() {
-	CAnimations* animations = CAnimations::GetInstance();
-	int aniId = _GetAnimationId();
-
-	LPANIMATION animation = animations->Get(aniId);
-
-	if (animation == NULL) {
-		return;
-	}
-
-	animations->Get(aniId)->Render(_position.x, _position.y, _scale);
-	RenderBoundingBox();
+	_aniId = _GetAnimationId();
+	CGameObject::Render();
 }
 
 void CItem::GetBoundingBox(float& left, float& top, float& right, float& bottom) {

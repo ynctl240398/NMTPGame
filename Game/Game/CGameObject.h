@@ -60,6 +60,7 @@ protected:
 
 	int _state;
 	int _startState;
+	int _aniId;
 
 	bool _isDeleted;
 
