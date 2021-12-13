@@ -14,6 +14,8 @@ CGameObject::CGameObject() {
 	_handleNoCollisionY = false;
 	_startState = -1;
 	_aniId = -1;
+	_ax = 0;
+	_ay = 0;
 }
 
 CGameObject::~CGameObject() {}

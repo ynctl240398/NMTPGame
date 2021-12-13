@@ -1,74 +1,77 @@
+[ID_SPRITE_ANI]
+8000
+
 [SPRITE]
 #id	l	t	w	h
 
 #fire_up_red
-8000	170	33	16	32
-8001	187	33	16	32
+0	170	33	16	32
+1	187	33	16	32
 
 #fire_down_red
-8002	136	33	16	32
-8003	153	33	16	32
+2	136	33	16	32
+3	153	33	16	32
 
 #fire_up_green
-8004	170	0	16	32
-8005	187	0	16	32
+4	170	0	16	32
+5	187	0	16	32
 
 #fire_down_green
-8006	136	0	16	32
-8007	153	0	16	32
+6	136	0	16	32
+7	153	0	16	32
 
 #id_sprite	time(ms)
 
 #fire_red_up
 [FRAME]
-8000	100
-8001	100
+0	100
+1	100
 [ANIMATION]
-8000
+0
 
 #fire_red_up_firer
 [FRAME]
-8000	100
+0	100
 [ANIMATION]
-8001
+1
 
 
 #fire_red_down
 [FRAME]
-8002	100
-8003	100
+2	100
+3	100
 [ANIMATION]
-8002
+2
 
 #fire_red_down_firer
 [FRAME]
-8002	100
+2	100
 [ANIMATION]
-8003
+3
 
 #fire_green_up
 [FRAME]
-8004	100
-8005	100
+4	100
+5	100
 [ANIMATION]
-8004
+4
 
 #fire_green_up_firer
 [FRAME]
-8004	100
+4	100
 [ANIMATION]
-8005
+5
 
 
 #fire_green_down
 [FRAME]
-8006	100
-8007	100
+6	100
+7	100
 [ANIMATION]
-8006
+6
 
 #fire_green_down_firer
 [FRAME]
-8006	100
+6	100
 [ANIMATION]
-8007
+7

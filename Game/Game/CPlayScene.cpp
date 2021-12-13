@@ -27,6 +27,7 @@ using namespace std;
 #define ASSETS_SECTION_SPRITES 1
 #define ASSETS_SECTION_ANIMATIONS 2
 #define ASSETS_SECTION_FRAME 3
+#define ASSETS_SECTION_ID 4
 
 #define MAX_SCENE_LINE 1024
 
@@ -41,6 +42,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 {
 	_ani = new CAnimation(DEFAULT_TIME);
 	_currentIdTex = -1;
+	_currentIdSpriteAni = -1;
 	player = NULL;
 	_bg = NULL;
 	_cam = NULL;
@@ -50,7 +52,7 @@ void CPlayScene::_ParseSectionSprites(string line) {
 	vector<string> tokens = split(line);
 	if (tokens.size() < LENGTH_SPRITES) return; // skip invalid lines
 
-	int id = atoi(tokens[0].c_str());
+	int id = _currentIdSpriteAni + atoi(tokens[0].c_str());
 	int l = atoi(tokens[1].c_str());
 	int t = atoi(tokens[2].c_str());
 	int r = l + atoi(tokens[3].c_str());
@@ -63,7 +65,7 @@ void CPlayScene::_ParseSectionFrames(string line) {
 	vector<string> tokens = split(line);
 	if (tokens.size() < LENGTH_ANI) return; // skip invalid lines
 
-	int id = atoi(tokens[0].c_str());
+	int id = _currentIdSpriteAni + atoi(tokens[0].c_str());
 	int time = atoi(tokens[1].c_str());
 
 	_ani->Add(id, time);
@@ -73,7 +75,7 @@ void CPlayScene::_ParseSectionAnimation(string line) {
 	vector<string> tokens = split(line);
 	if (tokens.size() < LENGTH_ANIS) return; // skip invalid lines
 
-	int id = atoi(tokens[0].c_str());
+	int id = _currentIdSpriteAni + atoi(tokens[0].c_str());
 
 	CAnimations::GetInstance()->Add(id, _ani);
 
@@ -243,6 +245,10 @@ void CPlayScene::_LoadAssets(LPCWSTR assetFile) {
 			section = ASSETS_SECTION_ANIMATIONS;
 			continue;
 		}
+		if (line == "[ID_SPRITE_ANI]") {
+			section = ASSETS_SECTION_ID;
+			continue;
+		}
 
 		switch (section)
 		{
@@ -255,6 +261,12 @@ void CPlayScene::_LoadAssets(LPCWSTR assetFile) {
 		case ASSETS_SECTION_ANIMATIONS:
 			_ParseSectionAnimation(line);
 			break;
+		case ASSETS_SECTION_ID: 
+		{
+			vector<string> tokens = split(line);
+			_currentIdSpriteAni = atoi(tokens[0].c_str());
+			break;
+		}
 		default:
 			break;
 		}

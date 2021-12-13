@@ -11,6 +11,7 @@ class CPlayScene : public CScene
 {
 protected:
 	int _currentIdTex;
+	int _currentIdSpriteAni;
 	// A play scene has to have player, right?  -> yes :))
 	LPGAMEOBJECT player;
 

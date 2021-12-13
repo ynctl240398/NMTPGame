@@ -1,0 +1,5 @@
+[ID_SPRITE_ANI]
+12000
+
+[SPRITE]
+#id	l	t	w	h

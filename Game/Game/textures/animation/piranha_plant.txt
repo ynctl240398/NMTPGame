@@ -1,26 +1,29 @@
+[ID_SPRITE_ANI]
+9000
+
 [SPRITE]
 #id	l	t	w	h
 
 #piranha_plant_red
-9000	102	33	16	32
-9001	119	33	16	32
+0	102	33	16	32
+1	119	33	16	32
 
 #piranha_plant_green
-9002	102	0	16	32
-9003	119	0	16	32
+2	102	0	16	32
+3	119	0	16	32
 
 #id_sprite	time(ms)
 
 #piranha_plant_red
 [FRAME]
-9000	100
-9001	100
+0	100
+1	100
 [ANIMATION]
-9000
+0
 
 #piranha_plant_green
 [FRAME]
-9002	100
-9003	100
+2	100
+3	100
 [ANIMATION]
-9001
+1
