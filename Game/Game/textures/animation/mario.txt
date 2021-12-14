@@ -58,6 +58,44 @@
 #kick
 110	284	21	24	32
 
+################SUPPER#################
+#idle
+200	0	83	24	32
+
+#walk
+201	26	83	24	32
+202	52	83	24	32
+
+#jump
+203	104	83	24	32
+
+#brace
+204	338	83	16	32
+
+#run
+205	182	83	24	32
+206	208	83	24	32
+207	234	83	24	32
+
+#sit
+208	78	97	23	18
+
+#jump-run
+209	260	83	24	32
+210	286	83	24	32
+211	312	83	24	32
+
+#kick
+212	79	116	24	32
+
+#fly
+213	130	83	24	32
+214	156	83	24	32
+
+#attack
+215	374	83	24	32
+216	400	83	24	32
+
 #id_sprite	time(ms)
 ################SMALL#################
 #idle
@@ -73,7 +111,7 @@
 [ANIMATION]
 001
 
-#jump
+#jump-walk
 [FRAME]
 003	0
 [ANIMATION]
@@ -154,10 +192,78 @@
 [FRAME]
 109	0
 [ANIMATION]
-106
+107
 
-#jump-run
+#kick
 [FRAME]
 110	0
 [ANIMATION]
-107
+108
+
+################SUPPER#################
+#idle
+[FRAME]
+200	0
+[ANIMATION]
+200
+
+#walk
+[FRAME]
+201	100
+202	100
+[ANIMATION]
+201
+
+#jump-walk
+[FRAME]
+203	0
+[ANIMATION]
+202
+
+#sit
+[FRAME]
+208	100
+[ANIMATION]
+204
+
+#run
+[FRAME]
+205	100
+206	100
+207	100
+[ANIMATION]
+203
+
+#brace
+[FRAME]
+204	0
+[ANIMATION]
+205
+
+#jump-run
+[FRAME]
+209	100
+210	100
+211	100
+[ANIMATION]
+207
+
+#kick
+[FRAME]
+212	0
+[ANIMATION]
+208
+
+#fly
+[FRAME]
+213	100
+214	100
+[ANIMATION]
+209
+
+#attack
+[FRAME]
+216	500
+215	500
+[ANIMATION]
+210

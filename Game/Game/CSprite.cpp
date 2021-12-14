@@ -32,17 +32,17 @@ CSprite::CSprite(int id, int left, int top, int right, int bottom, LPTEXTURE tex
 
 void CSprite::_ScaleSprite(D3DXVECTOR2 scale, unsigned int alpha) {
 
-	_sprite.TexCoord.x = left / static_cast<float>(texture->getWidth());
-	_sprite.TexCoord.y = top / static_cast<float>(texture->getHeight());
+	_sprite.TexCoord.x = left / (float)(texture->getWidth());
+	_sprite.TexCoord.y = top / (float)(texture->getHeight());
 
 	int spriteWidth = right - left;
 	int spriteHeight = bottom - top;
-	_sprite.TexSize.x = spriteWidth / static_cast<float>(texture->getWidth());
-	_sprite.TexSize.y = spriteHeight / static_cast<float>(texture->getHeight());
+	_sprite.TexSize.x = spriteWidth / (float)(texture->getWidth());
+	_sprite.TexSize.y = spriteHeight / (float)(texture->getHeight());
 	_sprite.ColorModulate = { 1.0f, 1.0f, 1.0f, alpha / 255.0f };
 	_sprite.TextureIndex = 0;
 
-	D3DXMatrixScaling(&_scaleMatrix, static_cast<float>(spriteWidth) * scale.x, static_cast<float>(spriteHeight) * scale.y, 1.0f);
+	D3DXMatrixScaling(&_scaleMatrix, (float)(spriteWidth) * scale.x, (float)(spriteHeight) * scale.y, 1.0f);
 }
 
 void CSprite::Draw(float x, float y, D3DXVECTOR2 scale, unsigned int alpha)
