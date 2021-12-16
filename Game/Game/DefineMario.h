@@ -34,6 +34,8 @@
 
 #define MARIO_UNTOUCHABLE_TIME					2500
 
+#define ATTACK_TIME								300
+
 //state syntax 1 + 9xx
 #define STATE_MARIO_IDLE						1900
 #define STATE_MARIO_WALK						1901

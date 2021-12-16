@@ -16,6 +16,7 @@ CGameObject::CGameObject() {
 	_aniId = -1;
 	_ax = 0;
 	_ay = 0;
+	_alpha = ALPHA_DEFAULT;
 }
 
 CGameObject::~CGameObject() {}
@@ -130,6 +131,6 @@ void CGameObject::Render() {
 		return;
 	}
 
-	animations->Get(_aniId)->Render(_position.x, _position.y, _scale);
+	animations->Get(_aniId)->Render(_position.x, _position.y, _scale, _alpha);
 	RenderBoundingBox();
 }

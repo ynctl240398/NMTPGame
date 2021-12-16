@@ -8,7 +8,8 @@
 
 #include "CCollision.h"
 
-#define BBOX_ALPHA 0.25f		// Bounding box transparency
+#define BBOX_ALPHA		0.25f		// Bounding box transparency
+#define ALPHA_DEFAULT	255
 
 using namespace std;
 
@@ -63,6 +64,7 @@ protected:
 	int _aniId;
 
 	bool _isDeleted;
+	int _alpha;
 
 public:
 

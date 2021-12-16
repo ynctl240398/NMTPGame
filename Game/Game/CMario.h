@@ -27,10 +27,11 @@ private:
 	int _direction;
 	int _coin;
 	int _live;
+	int _isRedureAlpha;
 
 	void _HandleKeyDown(int);
 	void _HandleKeyUp(int);
-	
+	void _HandleAlpha();
 	void _HandleKeyState(BYTE* states);
 
 	void _Walk();

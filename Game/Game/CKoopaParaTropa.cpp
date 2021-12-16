@@ -169,7 +169,7 @@ void CKoopaParaTropa::OnCollisionWith(LPCOLLISIONEVENT e) {
 					}
 				}
 			}
-			else if (dynamic_cast<CBrick*>(e->obj) && dynamic_cast<CBrick*>(e->obj)->IsBig()) {
+			if (dynamic_cast<CBrick*>(e->obj) && dynamic_cast<CBrick*>(e->obj)->IsBig()) {
 				_handleNoCollisionX = true;
 			}
 			else {

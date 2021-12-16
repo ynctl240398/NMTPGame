@@ -23,7 +23,7 @@ CMario* CMario::__instance = NULL;
 CMario::CMario() {
 	_isSitting = false;
 	_position = { 0,0 };
-	_state = STATE_MARIO_ATTACK;
+	_state = STATE_MARIO_IDLE;
 	_level = LEVEL_SUPER;
 	_direction = DIRECTION_RIGHT;
 	_scale = { 1.0f * _direction,1.0f };
@@ -38,6 +38,7 @@ CMario::CMario() {
 	_dt = 0;
 	_startPostion = _position;
 	_coin = 0;
+	_isRedureAlpha = false;
 	_live = START_LIVE;
 }
 
@@ -57,7 +58,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
 	else if (dynamic_cast<CParaGoomba*>(e->obj))
 		_OnCollisionWithParaGoomba(e);
 	else if (dynamic_cast<CVenusFireTrap*>(e->obj) || dynamic_cast<CPiranhaPlant*>(e->obj))
-		if (_untouchable == 0) _OnCollisionWithEnemy(e);
+		_OnCollisionWithEnemy(e);
 }
 
 void CMario::_OnCollisionWithBrick(LPCOLLISIONEVENT e) {
@@ -174,10 +175,7 @@ void CMario::_OnCollisionWithGoomba(LPCOLLISIONEVENT e) {
 		_velocity.y = -MARIO_JUMP_DEFLECT_SPEED;
 	}
 	else {
-		if (_untouchable == 0)
-		{
-			_OnCollisionWithEnemy(e);
-		}
+		_OnCollisionWithEnemy(e);
 	}
 }
 
@@ -200,18 +198,16 @@ void CMario::_OnCollisionWithKoopaParaTropa(LPCOLLISIONEVENT e) {
 		}
 	}
 	else {
-		if (_untouchable == 0) {
-			if (koopaParaTropa->GetState() == STATE_KOOPA_PARA_TROPA_WALK
-				|| koopaParaTropa->GetState() == STATE_KOOPA_PARA_TROPA_FLY
-				|| koopaParaTropa->GetState() == STATE_KOOPA_PARA_TROPA_SHELD_RUN) {
-				_OnCollisionWithEnemy(e);
-			}
-			else {
-				if (koopaParaTropa->GetState() == STATE_KOOPA_PARA_TROPA_SHELD) {
-					koopaParaTropa->SetScale({ _scale.x, koopaParaTropa->GetScale().y });
-					koopaParaTropa->SetState(STATE_KOOPA_PARA_TROPA_SHELD_RUN);
-					SetState(STATE_MARIO_KICK);
-				}
+		if (koopaParaTropa->GetState() == STATE_KOOPA_PARA_TROPA_WALK
+			|| koopaParaTropa->GetState() == STATE_KOOPA_PARA_TROPA_FLY
+			|| koopaParaTropa->GetState() == STATE_KOOPA_PARA_TROPA_SHELD_RUN) {
+			_OnCollisionWithEnemy(e);
+		}
+		else {
+			if (koopaParaTropa->GetState() == STATE_KOOPA_PARA_TROPA_SHELD) {
+				koopaParaTropa->SetScale({ _scale.x, koopaParaTropa->GetScale().y });
+				koopaParaTropa->SetState(STATE_KOOPA_PARA_TROPA_SHELD_RUN);
+				SetState(STATE_MARIO_KICK);
 			}
 		}
 	}
@@ -240,17 +236,15 @@ void CMario::_OnCollisionWithKoopaTropa(LPCOLLISIONEVENT e) {
 		}
 	}
 	else {
-		if (_untouchable == 0) {
-			if (koopaTropa->GetState() == STATE_KOOPA_TROPA_WALK
-				|| koopaTropa->GetState() == STATE_KOOPA_TROPA_FLY
-				|| koopaTropa->GetState() == STATE_KOOPA_TROPA_SHELD_RUN) {
-				_OnCollisionWithEnemy(e);
-			}
-			else {
-				if (koopaTropa->GetState() == STATE_KOOPA_TROPA_SHELD) {
-					koopaTropa->SetScale({ _scale.x, koopaTropa->GetScale().y });
-					koopaTropa->SetState(STATE_KOOPA_TROPA_SHELD_RUN);
-				}
+		if (koopaTropa->GetState() == STATE_KOOPA_TROPA_WALK
+			|| koopaTropa->GetState() == STATE_KOOPA_TROPA_FLY
+			|| koopaTropa->GetState() == STATE_KOOPA_TROPA_SHELD_RUN) {
+			_OnCollisionWithEnemy(e);
+		}
+		else {
+			if (koopaTropa->GetState() == STATE_KOOPA_TROPA_SHELD) {
+				koopaTropa->SetScale({ _scale.x, koopaTropa->GetScale().y });
+				koopaTropa->SetState(STATE_KOOPA_TROPA_SHELD_RUN);
 			}
 		}
 	}
@@ -270,13 +264,15 @@ void CMario::_OnCollisionWithParaGoomba(LPCOLLISIONEVENT e) {
 		}
 	}
 	else {
-		if (_untouchable == 0) {
-			_OnCollisionWithEnemy(e);
-		}
+		_OnCollisionWithEnemy(e);
 	}
 }
 
 void CMario::_OnCollisionWithEnemy(LPCOLLISIONEVENT e) {
+	if (_untouchable == 1) {
+		_handleNoCollisionX = true;
+		return;
+	}
 	if (_level > LEVEL_SMALL)
 	{
 		SetLevel(--_level);
@@ -339,8 +335,10 @@ void CMario::_HandleKeyDown(int keyCode) {
 		break;
 	case DIK_S:
 		SetState(STATE_MARIO_JUMP);
-	case DIK_A:
-		SetState(STATE_MARIO_ATTACK);
+	case DIK_D:
+		if (_level > LEVEL_BIG) {
+			SetState(STATE_MARIO_ATTACK);
+		}
 		break;
 	case DIK_0:
 		SetState(STATE_MARIO_DIE);
@@ -429,8 +427,25 @@ void CMario::SetState(int state) {
 	CGameObject::SetState(state);
 }
 
+void CMario::_HandleAlpha() {
+	if (_untouchable == 1) {
+		if (_alpha == ALPHA_DEFAULT) {
+			_isRedureAlpha = true;
+		}
+		else if (_alpha == 125) {
+			_isRedureAlpha = false;
+		}
+		_alpha += _isRedureAlpha ? -10 : 10;
+	}
+	else {
+		_alpha = 255;
+		_isRedureAlpha = false;
+	}
+}
+
 void CMario::Render() {
 	_aniId = _GetAnimationId();
+	_HandleAlpha();
 	CGameObject::Render();
 }
 
@@ -470,7 +485,8 @@ void CMario::_Jump() {
 }
 
 void CMario::_ReleaseJump() {
-	if (_velocity.y < 0) _velocity.y += MARIO_JUMP_SPEED_Y / 2;
+	if (_velocity.y < 0) 
+		_velocity.y += MARIO_JUMP_SPEED_Y / 2;
 }
 
 void CMario::_Attack() {
