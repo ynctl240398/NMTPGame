@@ -37,6 +37,7 @@ void CItem::OnCollisionWith(LPCOLLISIONEVENT e) {
 				_velocity.x = -_velocity.x;
 			}
 		}
+		else _handleNoCollisionX = true;
 	}
 }
 

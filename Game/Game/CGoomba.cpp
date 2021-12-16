@@ -5,7 +5,7 @@
 #include "CBrickQuestion.h"
 
 #define GOOMBA_WIDTH 16
-#define GOOMBA_HEIGHT 16
+#define GOOMBA_HEIGHT 15
 
 #define GOOMBA_BBOX_HEIGHT_DIE 8
 

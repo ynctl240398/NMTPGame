@@ -204,8 +204,11 @@ void CMario::_OnCollisionWithKoopaParaTropa(LPCOLLISIONEVENT e) {
 			_OnCollisionWithEnemy(e);
 		}
 		else {
-			if (koopaParaTropa->GetState() == STATE_KOOPA_PARA_TROPA_SHELD) {
-				koopaParaTropa->SetScale({ _scale.x, koopaParaTropa->GetScale().y });
+			if (koopaParaTropa->GetState() == STATE_KOOPA_PARA_TROPA_SHELD || koopaParaTropa->GetState() == STATE_KOOPA_PARA_TROPA_SHELD_LIVE) {
+				if (_position.x < koopaParaTropa->GetPosition().x) {
+					koopaParaTropa->SetScale({ -koopaParaTropa->GetScale().x, koopaParaTropa->GetScale().y });
+				}
+				else koopaParaTropa->SetScale({ koopaParaTropa->GetScale().x, koopaParaTropa->GetScale().y });
 				koopaParaTropa->SetState(STATE_KOOPA_PARA_TROPA_SHELD_RUN);
 				SetState(STATE_MARIO_KICK);
 			}

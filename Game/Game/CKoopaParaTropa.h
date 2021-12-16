@@ -16,6 +16,8 @@ class CKoopaParaTropa : public CGameObject
 {
 
 	ULONGLONG _liveStart;
+	ULONGLONG _liveSheldStart;
+	ULONGLONG _liveSheldWalkStart;
 
 	CObjKoopaTropa* _obj;
 

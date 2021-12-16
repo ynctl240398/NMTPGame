@@ -29,13 +29,17 @@
 
 
 #define TIME_TO_LIVE 10000
-#define TIME_TO_SHELD_LIVE 3000
+#define TIME_TO_SHELD_LIVE 5000
+#define TIME_TO_SHELD_LIVE_WALK 2000
 
 CKoopaParaTropa::CKoopaParaTropa(float x, float y, int state){
 	_position = { x,y };
 	_startPostion = _position;
 	_startState = state;
 	SetState(STATE_KOOPA_PARA_TROPA_IDLE);
+	_liveStart = 0;
+	_liveSheldStart = 0;
+	_liveSheldWalkStart = 0;
 }
 
 int CKoopaParaTropa::_GetAnimationId() {
@@ -49,10 +53,11 @@ int CKoopaParaTropa::_GetAnimationId() {
 		aniId = ID_ANI_KOOPA_PARA_TROPA_SHELD;
 		break;
 	case STATE_KOOPA_PARA_TROPA_SHELD_RUN:
+		
 		aniId = ID_ANI_KOOPA_PARA_TROPA_SHELD_RUN;
 		break;
 	case STATE_KOOPA_PARA_TROPA_SHELD_LIVE:
-		aniId = ID_ANI_KOOPA_PARA_TROPA_SHELD_RUN;
+		aniId = ID_ANI_KOOPA_PARA_TROPA_SHELD_LIVE;
 		break;
 	case STATE_KOOPA_PARA_TROPA_FLY:
 		aniId = ID_ANI_KOOPA_PARA_TROPA_FLY;
@@ -72,12 +77,17 @@ void CKoopaParaTropa::SetState(int state) {
 		_velocity.x = -KOOPA_PARA_TROPA_WALK_SPEED * _scale.x;
 		break;
 	case STATE_KOOPA_PARA_TROPA_SHELD:
-		_velocity.x = 0;
+		_ax = 0;
+		_liveSheldStart = GetTickCount64();
+		_velocity = { 0,0 };
 		break;
 	case STATE_KOOPA_PARA_TROPA_SHELD_RUN:
+		_liveSheldStart = 0;
 		_velocity.x = -KOOPA_PARA_TROPA_SHELD_SPEED * _scale.x;
 		break;
 	case STATE_KOOPA_PARA_TROPA_SHELD_LIVE:
+		_liveSheldWalkStart = GetTickCount64();
+		_liveSheldStart = 0;
 		break;
 	case STATE_KOOPA_PARA_TROPA_FLY:
 		_ay = KOOPA_PARA_TROPA_GRAVITY;
@@ -177,6 +187,7 @@ void CKoopaParaTropa::OnCollisionWith(LPCOLLISIONEVENT e) {
 				_scale.x = -_scale.x;
 			}
 		}
+		else _handleNoCollisionX = true;
 	}
 }
 
@@ -215,6 +226,15 @@ void CKoopaParaTropa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	if (_state == STATE_KOOPA_PARA_TROPA_WALK) {
 		_obj->Update(dt, coObjects);
 		_SetPositionXObj(_position.x);
+	}
+
+	if (_state == STATE_KOOPA_PARA_TROPA_SHELD && _liveSheldStart != 0 && GetTickCount64() - _liveSheldStart > TIME_TO_SHELD_LIVE) {
+		SetState(STATE_KOOPA_PARA_TROPA_SHELD_LIVE);
+	}
+
+	if (_state == STATE_KOOPA_PARA_TROPA_SHELD_LIVE && _liveSheldWalkStart != 0 && GetTickCount64() - _liveSheldWalkStart > TIME_TO_SHELD_LIVE_WALK) {
+		_position.y = _position.y - KOOPA_PARA_TROPA_HEIGHT / 2;
+		SetState(STATE_KOOPA_PARA_TROPA_WALK);
 	}
 }
 
