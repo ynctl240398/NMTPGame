@@ -6,6 +6,7 @@
 #include "CAnimation.h"
 #include "CSprite.h"
 #include "DefineMario.h"
+#include "CTail.h"
 
 using namespace std;
 
@@ -17,9 +18,12 @@ private:
 	
 	int _untouchable;
 	ULONGLONG _untouchable_start;
+	ULONGLONG _startAttack;
 	BOOLEAN _isOnPlatform;
 
 	DWORD _dt;
+
+	CTail* _tail;
 
 	static CMario* __instance;
 
@@ -57,6 +61,8 @@ private:
 	void _OnCollisionWithKoopaTropa(LPCOLLISIONEVENT e);
 	void _OnCollisionWithParaGoomba(LPCOLLISIONEVENT e);
 	void _OnCollisionWithEnemy(LPCOLLISIONEVENT e);
+
+	void _HandleTail(DWORD, vector<LPGAMEOBJECT>* coObjects);
 public:
 	CMario();
 
@@ -101,5 +107,7 @@ public:
 	}
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
+
+	int GetDirection() { return _direction; }
 };
 

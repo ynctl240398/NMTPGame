@@ -4,18 +4,20 @@
 #include "CBrick.h"
 #include "CBrickQuestion.h"
 
-#define GOOMBA_WIDTH 16
-#define GOOMBA_HEIGHT 15
+#define GOOMBA_WIDTH			16
+#define GOOMBA_HEIGHT			15
 
-#define GOOMBA_BBOX_HEIGHT_DIE 8
+#define GOOMBA_BBOX_HEIGHT_DIE	8
 
-#define ID_ANI_GOOMBA_WALK 4000
-#define ID_ANI_GOOMBA_DIE 4001
+#define ID_ANI_GOOMBA_WALK		4000
+#define ID_ANI_GOOMBA_DIE		4001
+#define ID_ANI_GOOMBA_DIE_JUMP	4002
 
-#define GOOMBA_DIE_TIMEOUT 500
+#define GOOMBA_DIE_TIMEOUT		500
 
-#define GOOMBA_GRAVITY 0.002f
-#define GOOMBA_WALK_SPEED 0.05f
+#define GOOMBA_GRAVITY			0.002f
+#define GOOMBA_WALK_SPEED		0.05f
+#define GOOMBA_JUMP_DIE			0.5f
 
 CGoomba::CGoomba(float x, float y) {
 	_position = { x,y };
@@ -30,6 +32,9 @@ int CGoomba::_GetAnimationId() {
 	int aniId = -1;
 	if (_state == STATE_GOOMBA_WALK) {
 		aniId = ID_ANI_GOOMBA_WALK;
+	}
+	else if (_state == STATE_GOOMBA_DIE_JUMP) {
+		aniId = ID_ANI_GOOMBA_DIE_JUMP;
 	}
 	else if (_state == STATE_GOOMBA_DIE) aniId = ID_ANI_GOOMBA_DIE;
 	return aniId;
@@ -49,6 +54,11 @@ void CGoomba::SetState(int state) {
 		_velocity.x = -GOOMBA_WALK_SPEED;
 		break;
 	case STATE_GOOMBA_IDLE:
+		break;
+	case STATE_GOOMBA_DIE_JUMP:
+		_velocity.y = -GOOMBA_JUMP_DIE;
+		_scale.y = -1.0f;
+		_velocity.x = -_velocity.x;
 		break;
 	}
 	CGameObject::SetState(state);
@@ -101,8 +111,19 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	float leftWindow = CCam::GetInstance()->GetPosition().x;
 	float rightWindow = CGame::GetInstance()->GetWindowWidth() + leftWindow;
 
+
 	if (_state == STATE_GOOMBA_IDLE && leftWindow <= _position.x && rightWindow >= _position.x) {
 		SetState(STATE_GOOMBA_WALK);
+	}
+
+	if (_state == STATE_GOOMBA_DIE_JUMP) 
+	{
+		float topWindow = CCam::GetInstance()->GetPosition().y;
+		float bottomWindow = CGame::GetInstance()->GetWindowHeight() + topWindow;
+		if (_position.y < topWindow || _position.y > bottomWindow + GOOMBA_HEIGHT) {
+			_isDeleted = true;
+			return;
+		}
 	}
 
 	if ((_state == STATE_GOOMBA_DIE) && (GetTickCount64() - _dieStart > GOOMBA_DIE_TIMEOUT))

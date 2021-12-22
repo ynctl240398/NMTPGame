@@ -19,8 +19,14 @@
 [ANIMATION]
 0
 
-#run
+#die
 [FRAME]
 2	100
 [ANIMATION]
 1
+
+#die_jump
+[FRAME]
+0	0
+[ANIMATION]
+2

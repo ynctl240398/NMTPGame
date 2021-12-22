@@ -59,6 +59,10 @@ void CPlayScene::_ParseSectionSprites(string line) {
 	int r = l + atoi(tokens[3].c_str());
 	int b = t + atoi(tokens[4].c_str());
 
+	if (_currentIdTex == ID_IMG_MARIO && id >= 1200 && id < 2000) {
+		_currentIdTex++;
+	}
+
 	CSprites::GetInstance()->Add(id, l, t, r, b, CTextures::GetInstance()->Get(_currentIdTex));
 }
 

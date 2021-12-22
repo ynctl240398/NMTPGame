@@ -5,6 +5,7 @@ start	1
 -100	textures\bbox.png
 000	textures\tileset.png
 100	textures\mario.png
+101	textures\mario-super.png
 200	textures\items.png
 300	textures\enemies.png
 400	textures\projectiles.png

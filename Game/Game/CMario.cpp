@@ -24,7 +24,7 @@ CMario::CMario() {
 	_isSitting = false;
 	_position = { 0,0 };
 	_state = STATE_MARIO_IDLE;
-	_level = LEVEL_SUPER;
+	SetLevel(LEVEL_SMALL);
 	_direction = DIRECTION_RIGHT;
 	_scale = { 1.0f * _direction,1.0f };
 	_velocity = { 0,0 };
@@ -40,6 +40,8 @@ CMario::CMario() {
 	_coin = 0;
 	_isRedureAlpha = false;
 	_live = START_LIVE;
+	_tail = NULL;
+	_startAttack = 0;
 }
 
 void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
@@ -288,6 +290,17 @@ void CMario::_OnCollisionWithEnemy(LPCOLLISIONEVENT e) {
 	}
 }
 
+void CMario::_HandleTail(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	if (_tail != NULL) {
+		if (_startAttack != 0 && GetTickCount64() - _startAttack >= ATTACK_TIME / 4 && GetTickCount64() - _startAttack <= (ATTACK_TIME - ATTACK_TIME / 4)) {
+			_tail->SetShow(true);
+		}
+		else _tail->SetShow(false);
+		_tail->Update(dt, coObjects);
+	}
+}
+
 void CMario::OnNoCollision(DWORD dt) {
 	_position.x += (_velocity.x * dt);
 	_position.y += (_velocity.y * dt) / 2.25f;
@@ -301,7 +314,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	if (abs(_velocity.x) > abs(_maxVx)) _velocity.x = _maxVx;
 
 	// reset untouchable timer if untouchable time has passed
-	if (GetTickCount64() - _untouchable_start > MARIO_UNTOUCHABLE_TIME)
+	if (_untouchable_start != 0 && GetTickCount64() - _untouchable_start > MARIO_UNTOUCHABLE_TIME)
 	{
 		_untouchable_start = 0;
 		_untouchable = 0;
@@ -309,9 +322,15 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 	_isOnPlatform = false;
 
-	_UpdateCamPosition();
-	CGameObject::Update(dt, coObjects);
+	if (_startAttack != 0 && GetTickCount64() - _startAttack > ATTACK_TIME) {
+		_startAttack = 0;
+		SetState(STATE_MARIO_IDLE);
+	}
 
+
+	CGameObject::Update(dt, coObjects);
+	_UpdateCamPosition();
+	_HandleTail(dt, coObjects);
 }
 
 void CMario::_HandleKeyDown(int keyCode) {
@@ -338,6 +357,7 @@ void CMario::_HandleKeyDown(int keyCode) {
 		break;
 	case DIK_S:
 		SetState(STATE_MARIO_JUMP);
+		break;
 	case DIK_D:
 		if (_level > LEVEL_BIG) {
 			SetState(STATE_MARIO_ATTACK);
@@ -424,6 +444,9 @@ void CMario::SetState(int state) {
 	case STATE_MARIO_RUN:
 		this->_Run();
 		break;
+	case STATE_MARIO_ATTACK:
+		this->_Attack();
+		break;
 	default:
 		break;
 	}
@@ -449,6 +472,9 @@ void CMario::_HandleAlpha() {
 void CMario::Render() {
 	_aniId = _GetAnimationId();
 	_HandleAlpha();
+	if (_tail != NULL) {
+		_tail->Render();
+	}
 	CGameObject::Render();
 }
 
@@ -493,7 +519,9 @@ void CMario::_ReleaseJump() {
 }
 
 void CMario::_Attack() {
-
+	if (_startAttack == 0) {
+		_startAttack = GetTickCount64();
+	}
 }
 
 void CMario::_Sit() {
@@ -614,7 +642,7 @@ int CMario::_GetAnimationId() {
 		aniId = ID_ANI_MARIO_DIE;
 	}
 	else {
-		if (_state == STATE_MARIO_ATTACK) {
+		if (_startAttack != 0) {
 			aniId = ID_ANI_MARIO_ATTACK;
 		}
 		else
@@ -674,5 +702,8 @@ void CMario::SetLevel(int level) {
 	_level = level;
 	if (level > LEVEL_SMALL) {
 		_velocity.y = -MARIO_JUMP_DEFLECT_SPEED;
+	}
+	if (level == LEVEL_SUPER) {
+		_tail = new CTail(_position.x, _position.y);
 	}
 }

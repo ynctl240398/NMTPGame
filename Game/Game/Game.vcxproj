@@ -167,6 +167,7 @@
     <ClCompile Include="CPlayScene.cpp" />
     <ClCompile Include="CPortal.cpp" />
     <ClCompile Include="CSprite.cpp" />
+    <ClCompile Include="CTail.cpp" />
     <ClCompile Include="CTexture.cpp" />
     <ClCompile Include="CUtil.cpp" />
     <ClCompile Include="CVenusFireTrap.cpp" />
@@ -204,6 +205,7 @@
     <ClInclude Include="CPortal.h" />
     <ClInclude Include="CScene.h" />
     <ClInclude Include="CSprite.h" />
+    <ClInclude Include="CTail.h" />
     <ClInclude Include="CTexture.h" />
     <ClInclude Include="CUtil.h" />
     <ClInclude Include="CVenusFireTrap.h" />

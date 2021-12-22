@@ -108,6 +108,9 @@
     <ClCompile Include="CBrickP.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CTail.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -210,6 +213,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CBrickP.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CTail.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

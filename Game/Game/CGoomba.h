@@ -2,9 +2,10 @@
 
 #include "CGameObject.h"
 
-#define STATE_GOOMBA_IDLE 4900
-#define STATE_GOOMBA_WALK 4901
-#define STATE_GOOMBA_DIE 4902
+#define STATE_GOOMBA_IDLE		4900
+#define STATE_GOOMBA_WALK		4901
+#define STATE_GOOMBA_DIE		4902
+#define STATE_GOOMBA_DIE_JUMP	4903
 
 class CGoomba : public CGameObject
 {
@@ -22,7 +23,7 @@ public:
 
 	int IsCollidable()
 	{
-		return (_state != STATE_GOOMBA_DIE);
+		return (_state != STATE_GOOMBA_DIE && _state != STATE_GOOMBA_DIE_JUMP);
 	}
 
 	void OnNoCollision(DWORD dt);
