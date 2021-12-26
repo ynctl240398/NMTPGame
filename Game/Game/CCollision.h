@@ -1,8 +1,7 @@
 #pragma once
 
-#include <Windows.h>
-#include <vector>
-#include <algorithm>
+#include "CUtil.h"
+#include "CDebug.h"
 
 using namespace std;
 
@@ -17,15 +16,16 @@ struct CCollisionEvent
 	LPGAMEOBJECT src_obj;		// source object : the object from which to calculate collision
 	LPGAMEOBJECT obj;			// the target object
 
-	float t, nx, ny;
+	float t, nx, ny, tl;
 
 	float dx, dy;				// *RELATIVE* movement distance between this object and obj
 	bool isDeleted;
 
-	CCollisionEvent(float t, float nx, float ny, float dx = 0, float dy = 0,
+	CCollisionEvent(float t, float tl, float nx, float ny, float dx = 0, float dy = 0,
 		LPGAMEOBJECT obj = NULL, LPGAMEOBJECT src_obj = NULL)
 	{
 		this->t = t;
+		this->tl = tl;
 		this->nx = nx;
 		this->ny = ny;
 		this->dx = dx;
@@ -35,7 +35,7 @@ struct CCollisionEvent
 		this->isDeleted = false;
 	}
 
-	int WasCollided() { return t >= 0.0f && t <= 1.0f; }
+	int WasCollided() { return t >= 0.0f && t <= 1.0f && tl > 0; }
 
 	static bool compare(const LPCOLLISIONEVENT& a, LPCOLLISIONEVENT& b)
 	{
@@ -60,7 +60,8 @@ public:
 		float sb,
 		float& t,
 		float& nx,
-		float& ny);
+		float& ny,
+		float& tl);
 
 	LPCOLLISIONEVENT SweptAABB(
 		LPGAMEOBJECT objSrc,
@@ -72,14 +73,7 @@ public:
 		vector<LPGAMEOBJECT>* objDests,
 		vector<LPCOLLISIONEVENT>& coEvents);
 
-	void Filter(
-		LPGAMEOBJECT objSrc,
-		vector<LPCOLLISIONEVENT>& coEvents,
-		LPCOLLISIONEVENT& colX,
-		LPCOLLISIONEVENT& colY,
-		int filterBlock,
-		int filterX,
-		int filterY);
+	D3DXVECTOR2 GetClampDistance(DWORD dt, LPGAMEOBJECT objSrc, vector<LPCOLLISIONEVENT> coEvents, D3DXVECTOR2& jet);
 
 	void Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 

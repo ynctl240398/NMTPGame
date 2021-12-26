@@ -9,7 +9,7 @@
 #define MARIO_JUMP_SPEED_Y						0.8f
 #define MARIO_JUMP_RUN_SPEED_Y					0.9f
 
-#define MARIO_GRAVITY							0.002f
+//#define MARIO_GRAVITY							0.002f
 
 #define MARIO_BIG_BBOX_WIDTH					16
 #define MARIO_BIG_BBOX_HEIGHT					28
@@ -78,3 +78,29 @@
 //direction
 #define DIRECTION_LEFT							1
 #define DIRECTION_RIGHT							-1
+
+
+enum class MarioWalkState
+{
+	Idle,
+	Walk,
+	Run,
+	Sit
+};
+
+enum class MarioJumpState
+{
+	Idle,
+	Jump,
+	HighJump,
+	Fly,
+	Float,
+	Fall
+};
+
+enum class MarioState
+{
+	Small,
+	Big,
+	Raccoon
+};

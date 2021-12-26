@@ -5,29 +5,21 @@
 class CPlatform : public CGameObject
 {
 protected:
-	int length;				// Unit: cell 
-	float cellWidth;
-	float cellHeight;
-	int spriteIdBegin, spriteIdMiddle, spriteIdEnd;
+	int _width;
+	int _height;
 
 public:
-	CPlatform(float x, float y,
-		float cell_width, float cell_height, int length,
-		int sprite_id_begin, int sprite_id_middle, int sprite_id_end) :CGameObject()
+	CPlatform(float x, float y, int w, int h) :CGameObject()
 	{
-		this->_position = { x,y };
-		this->length = length;
-		this->cellWidth = cell_width;
-		this->cellHeight = cell_height;
-		this->spriteIdBegin = sprite_id_begin;
-		this->spriteIdMiddle = sprite_id_middle;
-		this->spriteIdEnd = sprite_id_end;
+		_position = { x + (w / 2) - DIF, y + h / 2 - DIF };
+		_width = w;
+		_height = h;
 	}
 
 	void Render();
 	void Update(DWORD dt) {}
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
-	void RenderBoundingBox();
+	virtual int IsBlocking(LPCOLLISIONEVENT e);
 	void Release();
 	void Load(LPCWSTR);
 };

@@ -21,10 +21,10 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (!_isShow) return;
 
 	CMario* mario = CMario::GetInstance();
-	if (mario->GetDirection() == DIRECTION_LEFT) {
+	/*if (mario->GetDirection() == DIRECTION_LEFT) {
 		_position.x = mario->GetPosition().x + mario->GetVelocity().x * dt - MARIO_SUPPER_BBOX_WIDTH / 2;
 	}
-	else _position.x = mario->GetPosition().x + mario->GetVelocity().x * dt + MARIO_SUPPER_BBOX_WIDTH / 2;
+	else _position.x = mario->GetPosition().x + mario->GetVelocity().x * dt + MARIO_SUPPER_BBOX_WIDTH / 2;*/
 	_position.y = mario->GetPosition().y + mario->GetVelocity().y * dt + MARIO_TAIL_BBOX_HEIGHT;
 	CGameObject::Update(dt, coObjects);
 }

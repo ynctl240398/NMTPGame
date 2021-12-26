@@ -69,20 +69,20 @@ void CFirer::OnNoCollision(DWORD dt)
 
 void CFirer::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (dynamic_cast<CMario*>(e->obj) && e->obj->IsBlocking()) {
-		CMario* mario = dynamic_cast<CMario*>(e->obj);
-		int levelMario = mario->GetLevel();
-		if (levelMario > LEVEL_SMALL)
-		{
-			mario->SetLevel(--levelMario);
-			mario->StartUntouchable();
-		}
-		else
-		{
-			DebugOut(L">>> Mario DIE >>> \n");
-			mario->SetState(STATE_MARIO_DIE);
-		}
-	}
+	//if (dynamic_cast<CMario*>(e->obj) && e->obj->IsBlocking(e)) {
+	//	CMario* mario = dynamic_cast<CMario*>(e->obj);
+	//	int levelMario = mario->GetLevel();
+	//	if (levelMario > LEVEL_SMALL)
+	//	{
+	//		mario->SetLevel(--levelMario);
+	//		mario->StartUntouchable();
+	//	}
+	//	else
+	//	{
+	//		DebugOut(L">>> Mario DIE >>> \n");
+	//		mario->SetState(STATE_MARIO_DIE);
+	//	}
+	//}
 	_handleNoCollisionX = true;
 	_handleNoCollisionY = true;
 }

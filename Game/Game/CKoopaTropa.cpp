@@ -103,7 +103,7 @@ void CKoopaTropa::OnNoCollision(DWORD dt)
 }
 
 void CKoopaTropa::OnCollisionWith(LPCOLLISIONEVENT e) {
-	if (!e->obj->IsBlocking()) return;
+	if (!e->obj->IsBlocking(e)) return;
 
 	if (dynamic_cast<CItem*>(e->obj)) {
 		_handleNoCollisionX = true;
@@ -139,20 +139,15 @@ void CKoopaTropa::OnCollisionWith(LPCOLLISIONEVENT e) {
 			}
 			if (dynamic_cast<CBrickQuestion*>(e->obj)) {
 				CBrickQuestion* brickQuestion = dynamic_cast<CBrickQuestion*>(e->obj);
-				if (brickQuestion->GetState() == STATE_BRICK_QUESTION_RUN && e->obj->IsBlocking())
+				if (brickQuestion->GetState() == STATE_BRICK_QUESTION_RUN && e->obj->IsBlocking(e))
 				{
 					brickQuestion->SetState(STATE_BRICK_QUESTION_IDLE);
 				}
 			}
 		}
 		if (dynamic_cast<CBrick*>(e->obj) || dynamic_cast<CBrickQuestion*>(e->obj)) {
-			if (dynamic_cast<CBrick*>(e->obj) && dynamic_cast<CBrick*>(e->obj)->IsBig()) {
-				_handleNoCollisionX = true;
-			}
-			else {
-				_velocity.x = -_velocity.x;
-				_scale.x = -_scale.x;
-			}
+			_velocity.x = -_velocity.x;
+			_scale.x = -_scale.x;
 		}
 	}
 }

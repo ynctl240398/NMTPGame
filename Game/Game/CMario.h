@@ -1,113 +1,66 @@
 #pragma once
-
+#include "CUtil.h"
 #include "CGameObject.h"
 #include "CTexture.h"
 #include "CUtil.h"
 #include "CAnimation.h"
 #include "CSprite.h"
 #include "DefineMario.h"
-#include "CTail.h"
 
 using namespace std;
+
+class BaseMario;
 
 class CMario : public CGameObject
 {
 private:
-	BOOLEAN _isSitting;
-	float _maxVx;
-	
-	int _untouchable;
-	ULONGLONG _untouchable_start;
-	ULONGLONG _startAttack;
-	BOOLEAN _isOnPlatform;
-
-	DWORD _dt;
-
-	CTail* _tail;
-
 	static CMario* __instance;
 
-	int _level;
-	int _direction;
-	int _coin;
-	int _live;
-	int _isRedureAlpha;
+	BaseMario* stateMachine;
 
-	void _HandleKeyDown(int);
-	void _HandleKeyUp(int);
-	void _HandleAlpha();
-	void _HandleKeyState(BYTE* states);
+	bool onGround = true;
 
-	void _Walk();
-	void _Run();
-	void _Jump();
-	void _ReleaseJump();
-	void _Attack();
-	void _Sit();
-	void _ReleaseSit();
-	void _Idle();
-	void _Die();
-	void _HanldeDie();
+	void _UpdateState();
 
-	int _GetAnimationId();
+	void _CheatPointUpdate();
 
-	void _UpdateCamPosition();
-
-	void _OnCollisionWithBrick(LPCOLLISIONEVENT e);
-	void _OnCollisionWithBrickQuestion(LPCOLLISIONEVENT e);
-	void _OnCollisionWithItem(LPCOLLISIONEVENT e);
-	void _OnCollisionWithGoomba(LPCOLLISIONEVENT e);
-	void _OnCollisionWithKoopaParaTropa(LPCOLLISIONEVENT e);
-	void _OnCollisionWithKoopaTropa(LPCOLLISIONEVENT e);
-	void _OnCollisionWithParaGoomba(LPCOLLISIONEVENT e);
-	void _OnCollisionWithEnemy(LPCOLLISIONEVENT e);
-
-	void _HandleTail(DWORD, vector<LPGAMEOBJECT>* coObjects);
 public:
+	float _jumpStartHeight = 0;
+
+	float _drag = 0;
+
+	int _direction = 1;
+
+	float powerMeter = 0;
+
+	D3DXVECTOR2 accelerate;
+
+	bool controllable = true;
+
+	bool sliding = false;
+
+	int skid = 0;
+
+	MarioState marioState;
+
+	MarioWalkState walkState;
+
+	MarioJumpState jumpState;
+
+	static CMario* GetInstance();
+
 	CMario();
-
-	void SetState(int);
-	static CMario* GetInstance() { 
-		if (__instance == NULL) {
-			__instance = new CMario;
-		}
-		return __instance; 
-	}
-
-	int GetLevel() { return _level; }
-	void SetLevel(int level);
-	int IsCollidable()
-	{
-		return (_state != STATE_MARIO_DIE);
-	}
-
-	int IsBlocking() { return (_state != STATE_MARIO_DIE && _untouchable == 0); }
-
+	
 	void Update(DWORD, vector<LPGAMEOBJECT>* coObjects) override;
 	void Render() override;
 
-	void OnKeyUp(int);
-	void OnKeyDown(int);
-	void KeyState(BYTE* states);
-
-	void StartUntouchable() { _untouchable = 1; _untouchable_start = GetTickCount64(); }
+	void SetOnGround(bool);
+	bool IsOnGround();
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
-
-	int GetLive() {
-		return _live;
-	}
-
-	void ReStart() {
-		_position = _startPostion;
-		_level = LEVEL_SMALL;
-		_live--;
-		SetState(STATE_MARIO_IDLE);
-	}
+	void OnBlockingOn(bool isHorizontal, float z);
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
-
-	int GetDirection() { return _direction; }
 };
 

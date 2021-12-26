@@ -10,6 +10,8 @@ class CKeyBoardCustom
 private:
 	static CKeyBoardCustom* __instance;
 	static BYTE _keyStates[KEYBOARD_STATE_SIZE];
+	static BYTE _keyPressed[KEYBOARD_STATE_SIZE];
+	static BYTE _keyRelease[KEYBOARD_STATE_SIZE];
 
 	DIDEVICEOBJECTDATA _keyEvents[KEYBOARD_BUFFER_SIZE];
 
@@ -20,7 +22,15 @@ private:
 	~CKeyBoardCustom();
 public:
 	static CKeyBoardCustom* GetInstance();
+
+	//True if key is pressing
 	static bool IsKeyDown(int);
+
+	//True if key is pressed in current frame
+	static bool IsKeyPressed(int);
+
+	//True if key is release in current frame
+	static bool IsKeyReleased(int);
 
 	bool InitKeyboard(HWND);
 	void ProcessKeyboardInputs();

@@ -140,6 +140,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BaseMario.cpp" />
+    <ClCompile Include="BigMario.cpp" />
     <ClCompile Include="CAnimation.cpp" />
     <ClCompile Include="CBackGround.cpp" />
     <ClCompile Include="CBrick.cpp" />
@@ -158,7 +160,6 @@
     <ClCompile Include="CKeyBoard.cpp" />
     <ClCompile Include="CKoopaParaTropa.cpp" />
     <ClCompile Include="CKoopaTropa.cpp" />
-    <ClCompile Include="CMario.cpp" />
     <ClCompile Include="CObjKoopaTropa.cpp" />
     <ClCompile Include="CParaGoomba.cpp" />
     <ClCompile Include="CPipeLine.cpp" />
@@ -169,14 +170,20 @@
     <ClCompile Include="CSprite.cpp" />
     <ClCompile Include="CTail.cpp" />
     <ClCompile Include="CTexture.cpp" />
+    <ClCompile Include="CTimer.cpp" />
     <ClCompile Include="CUtil.cpp" />
     <ClCompile Include="CVenusFireTrap.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="RaccoonMario.cpp" />
+    <ClCompile Include="SmallMario.cpp" />
+    <ClCompile Include="CMario.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BaseMario.h" />
+    <ClInclude Include="BigMario.h" />
     <ClInclude Include="CAnimation.h" />
     <ClInclude Include="CBackGround.h" />
     <ClInclude Include="CBrick.h" />
@@ -195,7 +202,6 @@
     <ClInclude Include="CKeyBoard.h" />
     <ClInclude Include="CKoopaParaTropa.h" />
     <ClInclude Include="CKoopaTropa.h" />
-    <ClInclude Include="CMario.h" />
     <ClInclude Include="CObjKoopaTropa.h" />
     <ClInclude Include="CParaGoomba.h" />
     <ClInclude Include="CPipeLine.h" />
@@ -207,10 +213,14 @@
     <ClInclude Include="CSprite.h" />
     <ClInclude Include="CTail.h" />
     <ClInclude Include="CTexture.h" />
+    <ClInclude Include="CTimer.h" />
     <ClInclude Include="CUtil.h" />
     <ClInclude Include="CVenusFireTrap.h" />
     <ClInclude Include="DefineMario.h" />
     <ClInclude Include="DefineScenePlay.h" />
+    <ClInclude Include="RaccoonMario.h" />
+    <ClInclude Include="SmallMario.h" />
+    <ClInclude Include="CMario.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

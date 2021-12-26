@@ -9,12 +9,8 @@ class CBrick : public CGameObject
 private:
 	int _width;
 	int _height;
-
-	bool _isBig;
 public:
-	CBrick(float x, float y, int w, int h, bool isBig = false);
-
-	bool IsBig() { return this->_isBig; }
+	CBrick(float x, float y, int w, int h);
 
 	void Load(LPCWSTR);
 

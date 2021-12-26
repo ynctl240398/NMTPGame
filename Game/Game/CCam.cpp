@@ -1,6 +1,8 @@
 #include "CCam.h"
 #include "CUtil.h"
 #include "CKeyBoard.h"
+#include "CGame.h"
+#include "CMario.h"
 
 #define LENGTH_NUMBER 7
 
@@ -106,19 +108,38 @@ void CCam::AddCameraBound(LPRECTCUSTOM cameraBound) {
 }
 
 void CCam::Update(DWORD dt, vector<CGameObject*>* collidableObjects) {
-	CKeyBoardCustom* _keyboard = CKeyBoardCustom::GetInstance();
-	if (_keyboard->IsKeyDown(DIK_RIGHTARROW)) {
-		_position.x += dt * 0.2f;
+	if (CMario::GetInstance() == nullptr) {
+		return;
 	}
-	else if (_keyboard->IsKeyDown(DIK_LEFTARROW)) {
-		_position.x -= dt * 0.2f;
+
+	int _sceneHeight = 656;
+
+	LPRECTCUSTOM cameraBound = GetCameraBound();
+
+	D3DXVECTOR2 cameraPosition = CMario::GetInstance()->GetPosition();
+	cameraPosition.x -= CGame::GetInstance()->GetWindowWidth() / 2.0f;
+	if (cameraPosition.x < cameraBound->GetLeft()) {
+		cameraPosition.x = cameraBound->GetLeft();
 	}
-	else if (_keyboard->IsKeyDown(DIK_UPARROW)) {
-		_position.y -= dt * 0.2f;
+	else if (cameraPosition.x + CGame::GetInstance()->GetWindowWidth() > cameraBound->GetRight()) {
+		cameraPosition.x = cameraBound->GetRight() - CGame::GetInstance()->GetWindowWidth();
 	}
-	else if (_keyboard->IsKeyDown(DIK_DOWNARROW)) {
-		_position.y += dt * 0.2f;
+
+	cameraPosition.y -= CGame::GetInstance()->GetWindowHeight() / 2.0f;
+	if (GetPosition().y < _sceneHeight * 0.3f) {
+		if (cameraPosition.y < cameraBound->GetTop()) {
+			cameraPosition.y = cameraBound->GetTop();
+		}
+		else if (cameraPosition.y + CGame::GetInstance()->GetWindowHeight() > cameraBound->GetBottom()) {
+			cameraPosition.y = cameraBound->GetBottom() - CGame::GetInstance()->GetWindowHeight();
+		}
 	}
+	else {
+		cameraPosition.y = cameraBound->GetBottom() - CGame::GetInstance()->GetWindowHeight();
+	}
+
+	_position = cameraPosition;
+	_position.x -= 8;
 }
 
 

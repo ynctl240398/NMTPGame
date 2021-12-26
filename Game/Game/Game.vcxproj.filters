@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Mario">
+      <UniqueIdentifier>{9e8c8b53-288f-424a-bcc7-155fc6265349}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Mario\StateMachine">
+      <UniqueIdentifier>{dc0576c4-7d09-4cbe-a3e0-292f6f3d6ec2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -52,9 +58,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CPipeLine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CMario.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CKeyBoard.cpp">
@@ -111,6 +114,24 @@
     <ClCompile Include="CTail.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SmallMario.cpp">
+      <Filter>Mario\StateMachine</Filter>
+    </ClCompile>
+    <ClCompile Include="RaccoonMario.cpp">
+      <Filter>Mario\StateMachine</Filter>
+    </ClCompile>
+    <ClCompile Include="BigMario.cpp">
+      <Filter>Mario\StateMachine</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseMario.cpp">
+      <Filter>Mario\StateMachine</Filter>
+    </ClCompile>
+    <ClCompile Include="CMario.cpp">
+      <Filter>Mario</Filter>
+    </ClCompile>
+    <ClCompile Include="CTimer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -150,9 +171,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CPipeLine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CMario.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DefineMario.h">
@@ -216,6 +234,24 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CTail.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseMario.h">
+      <Filter>Mario\StateMachine</Filter>
+    </ClInclude>
+    <ClInclude Include="BigMario.h">
+      <Filter>Mario\StateMachine</Filter>
+    </ClInclude>
+    <ClInclude Include="RaccoonMario.h">
+      <Filter>Mario\StateMachine</Filter>
+    </ClInclude>
+    <ClInclude Include="SmallMario.h">
+      <Filter>Mario\StateMachine</Filter>
+    </ClInclude>
+    <ClInclude Include="CMario.h">
+      <Filter>Mario</Filter>
+    </ClInclude>
+    <ClInclude Include="CTimer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

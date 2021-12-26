@@ -4,6 +4,8 @@
 CKeyBoardCustom* CKeyBoardCustom::__instance = NULL;
 
 BYTE CKeyBoardCustom::_keyStates[256] = { ' ' };
+BYTE CKeyBoardCustom::_keyPressed[256] = { 0 };
+BYTE CKeyBoardCustom::_keyRelease[256] = { 0 };
 
 CKeyBoardCustom::CKeyBoardCustom() {
 }
@@ -19,6 +21,16 @@ CKeyBoardCustom* CKeyBoardCustom::GetInstance() {
 
 bool CKeyBoardCustom::IsKeyDown(int keyCode) {
 	return (_keyStates[keyCode] & 0x80) > 0;
+}
+
+bool CKeyBoardCustom::IsKeyPressed(int keyCode)
+{
+	return _keyPressed[keyCode] == 1;
+}
+
+bool CKeyBoardCustom::IsKeyReleased(int keyCode)
+{
+	return _keyRelease[keyCode] == 1;
 }
 
 bool CKeyBoardCustom::InitKeyboard(HWND hWND) {
@@ -83,8 +95,8 @@ void CKeyBoardCustom::ProcessKeyboardInputs() {
 		}
 	}
 
-	//_managerInstance->GetCurrentScene()->HandleStates();
-	CMario::GetInstance()->KeyState((BYTE*)&_keyStates);
+
+	//CMario::GetInstance()->KeyState((BYTE*)&_keyStates);
 
 	DWORD elements = KEYBOARD_BUFFER_SIZE;
 
@@ -94,16 +106,23 @@ void CKeyBoardCustom::ProcessKeyboardInputs() {
 		return;
 	}
 
+	for (int i = 0; i < KEYBOARD_STATE_SIZE; i++)
+	{
+		_keyPressed[i] = _keyRelease[i] = 0;
+	}
+
 	for (DWORD i = 0; i < elements; ++i) {
 		int keyCode = _keyEvents[i].dwOfs;
 		int keyState = _keyEvents[i].dwData;
 
 		if ((keyState & 0x80) > 0) {
-			CMario::GetInstance()->OnKeyDown(keyCode);
-			CGame::GetInstance()->GetCurrentScene()->HandleKeyDown(keyCode);
+			//CMario::GetInstance()->OnKeyDown(keyCode);
+			//CGame::GetInstance()->GetCurrentScene()->HandleKeyDown(keyCode);
+			_keyPressed[keyCode] = 1;
 		}
 		else {
-			CMario::GetInstance()->OnKeyUp(keyCode);
+			//CMario::GetInstance()->OnKeyUp(keyCode);
+			_keyRelease[keyCode] = 1;
 		}
 	}
 }

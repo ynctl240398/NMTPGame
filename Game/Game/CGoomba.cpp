@@ -70,7 +70,7 @@ void CGoomba::OnNoCollision(DWORD dt) {
 }
 
 void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
-	if (!e->obj->IsBlocking()) return;
+	if (!e->obj->IsBlocking(e)) return;
 	if (dynamic_cast<CItem*>(e->obj)) {
 		_handleNoCollisionX = true;
 		return;
@@ -88,12 +88,7 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
 			goomba->SetVelocity({ -goomba->GetVelocity().x, goomba->GetVelocity().y });
 		}
 		if (dynamic_cast<CBrick*>(e->obj) || dynamic_cast<CBrickQuestion*>(e->obj)) {
-			if (dynamic_cast<CBrick*>(e->obj) && dynamic_cast<CBrick*>(e->obj)->IsBig()) {
-
-				_handleNoCollisionX = true;
-			}
-			else
-				_velocity.x = -_velocity.x;
+			_velocity.x = -_velocity.x;				
 		}
 	}
 }

@@ -20,7 +20,7 @@ CItem::CItem(float x, float y, string type) {
 }
 
 void CItem::OnCollisionWith(LPCOLLISIONEVENT e) {
-	if (!e->obj->IsBlocking()) return;
+	if (!e->obj->IsBlocking(e)) return;
 
 	if (e->ny != 0)
 	{
@@ -30,12 +30,7 @@ void CItem::OnCollisionWith(LPCOLLISIONEVENT e) {
 	{
 		if (dynamic_cast<CBrick*>(e->obj) || dynamic_cast<CBrickQuestion*>(e->obj)) 
 		{
-			if (dynamic_cast<CBrick*>(e->obj) && dynamic_cast<CBrick*>(e->obj)->IsBig()) {
-				_handleNoCollisionX = true;
-			}
-			else {
-				_velocity.x = -_velocity.x;
-			}
+			_velocity.x = -_velocity.x;
 		}
 		else _handleNoCollisionX = true;
 	}

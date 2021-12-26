@@ -147,7 +147,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		int w = atoi(tokens[3].c_str());
 		int h = atoi(tokens[4].c_str());
-		obj = new CBrick(x, y, w, h, true);
+		obj = new CPlatform(x, y, w, h);
 		break;
 	}
 	case OBJECT_TYPE_BRICK_QUESTION:
@@ -332,9 +332,10 @@ void CPlayScene::Update(DWORD dt)
 {
 	if (player->GetState() == STATE_MARIO_DIE) {
 		CMario* mario = dynamic_cast<CMario*>(player);
-		if (mario->GetLive() > 0) {
+		/*if (mario->GetLive() > 0) {
 			player->Update(dt);
-		}
+		}*/
+		player->Update(dt);
 		return;
 	}
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
@@ -385,6 +386,8 @@ void CPlayScene::Update(DWORD dt)
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return;
+
+	_cam->Update(dt);
 
 	PurgeDeletedObjects();
 }
