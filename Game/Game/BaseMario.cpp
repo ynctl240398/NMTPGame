@@ -31,7 +31,7 @@ void BaseMario::_WalkUpdate(DWORD dt)
 
 		if (mario->GetVelocity().x * keySign < 0) {
 			mario->sliding = 1;
-			mario->accelerate.x = (kb->IsKeyDown(DIK_A) ? MARIO_SKID_ACCELERATION : MARIO_SKID_ACCELERATION * 0.5) * keySign;
+			mario->accelerate.x = (FLOAT)((kb->IsKeyDown(DIK_A) ? MARIO_SKID_ACCELERATION : MARIO_SKID_ACCELERATION * 0.5) * keySign);
 
 			if (!mario->IsOnGround()) {
 				mario->accelerate.x = MARIO_SKID_ACCELERATION * keySign * 2;
@@ -57,7 +57,7 @@ void BaseMario::_WalkUpdate(DWORD dt)
 			mario->sliding = 0;
 		}
 
-		mario->_direction = vx < 0 ? -1 : 1;
+		mario->_direction = vx < 0 ? DIRECTION_RIGHT : DIRECTION_LEFT;
 	}
 	else {
 		mario->sliding = 0;
@@ -314,7 +314,7 @@ void BaseMario::_GetWalkAnimationId(int& aniId)
 		return;
 	}
 
-	if (vx == 0) {
+	if (vx == 0 && mario->walkState != MarioWalkState::Sit) {
 		aniId = ID_ANI_MARIO_IDLE;
 
 		if (mario->hand) {
@@ -333,7 +333,7 @@ void BaseMario::_GetWalkAnimationId(int& aniId)
 		aniId = ID_ANI_MARIO_WALK;
 		break;
 	case MarioWalkState::Sit:
-		aniId = ID_ANI_MARIO_SIT;
+		aniId = mario->marioState == MarioState::Small ? ID_ANI_MARIO_IDLE : ID_ANI_MARIO_SIT;
 		break;
 	default:
 		aniId = ID_ANI_MARIO_IDLE;

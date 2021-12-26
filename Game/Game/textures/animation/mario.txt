@@ -30,6 +30,12 @@
 #small-kick
 009	180	0	16	16
 
+#idle-hold
+010	144	0	16	16
+
+#walk-hold
+011	162	0	16	16
+
 ################BIG#################
 #idle
 100	0	21	16	28
@@ -57,6 +63,13 @@
 
 #kick
 110	284	21	24	32
+
+#idle-hold
+111	230	21	16	28
+
+#walk-hold
+112	248	21	16	28
+113	266	21	16	28
 
 ################SUPPER#################
 #idle
@@ -96,6 +109,13 @@
 215	518	0	36	32
 216	555	0	36	32
 217	592	0	36	32
+
+#idle-hold
+218	666	0	36	32
+
+#walk-hold
+219	703	0	36	32
+220	740	0	36	32
 
 #id_sprite	time(ms)
 ################SMALL#################
@@ -149,6 +169,19 @@
 [ANIMATION]
 008
 
+#idle-hold
+[FRAME]
+010	100
+[ANIMATION]
+011
+
+#walk-hold
+[FRAME]
+010	100
+011	100
+[ANIMATION]
+012
+
 ################BIG#################
 #idle
 [FRAME]
@@ -200,6 +233,19 @@
 110	0
 [ANIMATION]
 108
+
+#idle-hold
+[FRAME]
+111	100
+[ANIMATION]
+111
+
+#walk-hold
+[FRAME]
+112	100
+113	100
+[ANIMATION]
+112
 
 ################SUPPER#################
 #idle
@@ -269,3 +315,16 @@
 217	50
 [ANIMATION]
 210
+
+#idle-hold
+[FRAME]
+218	100
+[ANIMATION]
+211
+
+#walk-hold
+[FRAME]
+219	100
+220	100
+[ANIMATION]
+212

@@ -18,7 +18,7 @@
 #define MARIO_SUPPER_HEIGHT						32
 
 #define MARIO_SUPPER_BBOX_WIDTH					16
-#define MARIO_SUPPER_BBOX_HEIGHT				28
+#define MARIO_SUPPER_BBOX_HEIGHT				30
 
 #define MARIO_BIG_SITTING_BBOX_WIDTH			19
 #define MARIO_BIG_SITTING_BBOX_HEIGHT			18
@@ -28,7 +28,7 @@
 
 #define MARIO_SIT_HEIGHT_ADJUST ((MARIO_BIG_BBOX_HEIGHT - MARIO_BIG_SITTING_BBOX_HEIGHT) / 2)
 
-#define MARIO_SMALL_BBOX_WIDTH					16
+#define MARIO_SMALL_BBOX_WIDTH					14
 #define MARIO_SMALL_BBOX_HEIGHT					15
 
 #define ZONE 5
@@ -51,6 +51,10 @@
 #define STATE_MARIO_KICK						1908
 #define STATE_MARIO_FLY							1909
 #define STATE_MARIO_ATTACK						1910
+#define STATE_MARIO_IDLE_HOLD					1911
+#define STATE_MARIO_WALK_HOLD					1912
+#define STATE_MARIO_FLY_HOLD					1913
+#define STATE_MARIO_TELE						1914
 
 //syntax x
 #define ID_ANI_MARIO_IDLE						0
@@ -64,6 +68,10 @@
 #define ID_ANI_MARIO_KICK						8
 #define ID_ANI_MARIO_FLY						9
 #define ID_ANI_MARIO_ATTACK						10
+#define ID_ANI_MARIO_IDLE_HOLD					11
+#define ID_ANI_MARIO_WALK_HOLD					12
+#define ID_ANI_MARIO_FLY_HOLD					13
+#define ID_ANI_MARIO_TELE						14
 
 //small syntax 1 + 0xx
 //big syntax 1 + 1xx
@@ -76,8 +84,8 @@
 #define LEVEL_FIRER								1813
 
 //direction
-#define DIRECTION_LEFT							1
-#define DIRECTION_RIGHT							-1
+#define DIRECTION_LEFT							1.0f
+#define DIRECTION_RIGHT							-1.0f
 
 
 enum class MarioWalkState
