@@ -18,7 +18,14 @@ protected:
 	virtual void _WalkUpdate(DWORD dt);
 	virtual void _JumpUpdate(DWORD dt);
 	virtual void _SitUpdate(DWORD dt);
+	virtual void _PowerMeterUpdate(DWORD dt);
 	virtual void _PositionUpdate(DWORD dt);
+	virtual void _AttackUpdate(DWORD dt);
+	virtual void _HandleAlpha();
+	virtual void _GetJumpAnimationId(int& id);
+	virtual void _GetWalkAnimationId(int& id);
+	virtual void _GetAttackAnimationId(int& id);
+	virtual int _GetAnimationId();
 
 	int	  PMETER_MAX = 7;
 	float PMETER_UP_STEP = 0.008f;
@@ -44,10 +51,11 @@ protected:
 	float MARIO_SUPER_PUSH_FORCE = 0.632f / 3;
 
 	float MAX_FLY_SPEED = 999.0f / 3;
+
+	int _level = 0;
+
 public:	
 	BaseMario(CMario* mario, MarioState stateId);
-
-	virtual void AnimationInit();
 
 	virtual void Update(DWORD, vector<LPGAMEOBJECT>* coObjects);
 

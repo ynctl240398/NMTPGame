@@ -61,12 +61,12 @@ protected:
 
 	int _state;
 	int _startState;
-	int _aniId;
 
 	bool _isDeleted;
-	int _alpha;
 
 public:
+	int _aniId;
+	int _alpha;
 
 	CGameObject();
 	~CGameObject();

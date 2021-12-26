@@ -54,6 +54,10 @@ void CMario::_CheatPointUpdate()
 	if (kb->IsKeyPressed(DIK_3)) {
 		marioState = MarioState::Raccoon;
 	}
+	if (kb->IsKeyPressed(DIK_E)) {
+		_position.x = 2409.;
+		_position.y = 399;
+	}
 }
 
 CMario* CMario::GetInstance()
@@ -67,6 +71,7 @@ CMario* CMario::GetInstance()
 CMario::CMario()
 {
 	_UpdateState();
+	_kickTimer = new CTimer(true, 150);
 }
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {

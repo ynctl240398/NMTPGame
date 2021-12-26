@@ -3,6 +3,7 @@
 
 SmallMario::SmallMario(CMario* mario) : BaseMario(mario, MarioState::Small)
 {
+	_level = LEVEL_SMALL;
 }
 
 void SmallMario::GetBoundingBox(float& left, float& top, float& right, float& bottom)

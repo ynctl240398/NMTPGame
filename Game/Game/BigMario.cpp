@@ -3,6 +3,7 @@
 
 BigMario::BigMario(CMario* mario) : BaseMario(mario, MarioState::Big)
 {
+	_level = LEVEL_BIG;
 }
 
 void BigMario::GetBoundingBox(float& left, float& top, float& right, float& bottom)

@@ -6,6 +6,7 @@
 #include "CAnimation.h"
 #include "CSprite.h"
 #include "DefineMario.h"
+#include "CTimer.h"
 
 using namespace std;
 
@@ -25,11 +26,18 @@ private:
 	void _CheatPointUpdate();
 
 public:
+	int _coin;
+	int _live;
+	int _isRedureAlpha;
+	bool _untouchable = false;
+
+	bool _die = false;
+
 	float _jumpStartHeight = 0;
 
 	float _drag = 0;
 
-	int _direction = 1;
+	float _direction = 1;
 
 	LPGAMEOBJECT hand = nullptr;
 
@@ -41,13 +49,13 @@ public:
 
 	bool sliding = false;
 
-	int skid = 0;
-
 	MarioState marioState;
 
 	MarioWalkState walkState;
 
 	MarioJumpState jumpState;
+
+	CTimer* _kickTimer;
 
 	static CMario* GetInstance();
 

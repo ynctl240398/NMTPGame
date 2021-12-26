@@ -30,7 +30,7 @@ void BaseMario::_WalkUpdate(DWORD dt)
 		}
 
 		if (mario->GetVelocity().x * keySign < 0) {
-			mario->skid = 1;
+			mario->sliding = 1;
 			mario->accelerate.x = (kb->IsKeyDown(DIK_A) ? MARIO_SKID_ACCELERATION : MARIO_SKID_ACCELERATION * 0.5) * keySign;
 
 			if (!mario->IsOnGround()) {
@@ -53,15 +53,14 @@ void BaseMario::_WalkUpdate(DWORD dt)
 			}
 		}
 
-		//skid end detect
 		if (mario->GetVelocity().x * keySign >= 0) {
-			mario->skid = 0;
+			mario->sliding = 0;
 		}
 
 		mario->_direction = vx < 0 ? -1 : 1;
 	}
 	else {
-		mario->skid = 0;
+		mario->sliding = 0;
 
 		if (abs(vx) > mario->_drag * dt) {
 			int sign = mario->GetVelocity().x < 0 ? -1 : 1;
@@ -81,13 +80,6 @@ void BaseMario::_WalkUpdate(DWORD dt)
 	mario->_drag *= mario->IsOnGround();
 
 	mario->SetVelocity({ vx, vy });
-
-	float maxRun = abs(vx) > MARIO_RUN_SPEED * 0.85f;
-
-	if (maxRun && mario->IsOnGround())
-		mario->powerMeter = max(0.0f, min(mario->powerMeter + PMETER_UP_STEP * dt, PMETER_MAX + 1));
-	else if (mario->powerMeter > 0)
-		mario->powerMeter = max(0.0f, min(mario->powerMeter - PMETER_DOWN_STEP * dt, PMETER_MAX));
 }
 
 void BaseMario::_JumpUpdate(DWORD dt)
@@ -179,6 +171,19 @@ void BaseMario::_SitUpdate(DWORD dt)
 	}
 }
 
+void BaseMario::_PowerMeterUpdate(DWORD dt)
+{
+	float vx, vy;
+	mario->GetVelocity(vx, vy);
+
+	float maxRun = abs(vx) > MARIO_RUN_SPEED * 0.85f;
+
+	if (maxRun && mario->IsOnGround())
+		mario->powerMeter = max(0.0f, min(mario->powerMeter + PMETER_UP_STEP * dt, PMETER_MAX + 1));
+	else if (mario->powerMeter > 0)
+		mario->powerMeter = max(0.0f, min(mario->powerMeter - PMETER_DOWN_STEP * dt, PMETER_MAX));
+}
+
 void BaseMario::_PositionUpdate(DWORD dt)
 {
 	float vx, vy;
@@ -189,15 +194,14 @@ void BaseMario::_PositionUpdate(DWORD dt)
 	mario->SetVelocity({ vx, vy });
 }
 
+void BaseMario::_AttackUpdate(DWORD dt)
+{
+}
+
 BaseMario::BaseMario(CMario* mario, MarioState stateId)
 {
 	this->mario = mario;
 	this->_stateId = stateId;
-}
-
-void BaseMario::AnimationInit()
-{
-
 }
 
 void BaseMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -209,7 +213,9 @@ void BaseMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	_SitUpdate(dt);
 	_WalkUpdate(dt);
+	_PowerMeterUpdate(dt);
 	_JumpUpdate(dt);
+	_AttackUpdate(dt);
 
 	mario->GetBoundingBox(nl, nt, nr, nb);
 	mario->SetPosition({ pos.x, pos.y - (nb - b) });
@@ -226,7 +232,143 @@ void BaseMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void BaseMario::Render()
 {
-	mario->RenderBoundingBox();
+	mario->SetScale({ -mario->_direction, 1.0f });
+	mario->_aniId = _GetAnimationId();
+	_HandleAlpha();
+	mario->CGameObject::Render();
+	mario->RenderBoundingBox();	
+}
+
+void BaseMario::_HandleAlpha()
+{
+	if (mario->_untouchable == 1) {
+		if (mario->_alpha == ALPHA_DEFAULT) {
+			mario->_isRedureAlpha = true;
+		}
+		else if (mario->_alpha == 125) {
+			mario->_isRedureAlpha = false;
+		}
+		mario->_alpha += mario->_isRedureAlpha ? -10 : 10;
+	}
+	else {
+		mario->_alpha = 255;
+		mario->_isRedureAlpha = false;
+	}
+}
+
+void BaseMario::_GetJumpAnimationId(int& aniId)
+{
+	if (mario->IsOnGround()) {
+		return;
+	}
+
+	aniId = ID_ANI_MARIO_IDLE;
+
+	switch (mario->jumpState)
+	{
+	case MarioJumpState::Fly:
+		aniId = ID_ANI_MARIO_JUMP_RUN;
+		break;
+	case MarioJumpState::Float:
+		aniId = ID_ANI_MARIO_JUMP_RUN;
+		break;
+	case MarioJumpState::Fall:
+		aniId = ID_ANI_MARIO_JUMP_WALK;
+		break;
+	case MarioJumpState::Jump:
+		aniId = ID_ANI_MARIO_JUMP_WALK;
+		break;
+	case MarioJumpState::HighJump:
+		aniId = ID_ANI_MARIO_JUMP_WALK;
+		break;
+	default:
+		break;
+	}
+
+	if (mario->hand) {
+		//hold
+
+	}
+}
+
+void BaseMario::_GetWalkAnimationId(int& aniId)
+{
+	if (!mario->IsOnGround()) {
+		return;
+	}
+
+	aniId = ID_ANI_MARIO_IDLE;
+
+	float vx, vy;
+	mario->GetVelocity(vx, vy);
+
+	if (mario->sliding) {
+		if (mario->hand) {
+
+		}
+		else {
+			aniId = ID_ANI_MARIO_BRACE;
+			mario->SetScale({ mario->_direction, 1.0f });
+		}
+
+		return;
+	}
+
+	if (vx == 0) {
+		aniId = ID_ANI_MARIO_IDLE;
+
+		if (mario->hand) {
+			//Hold Idle
+		}
+
+		return;
+	}
+
+	switch (mario->walkState)
+	{
+	case MarioWalkState::Run:
+		aniId = ID_ANI_MARIO_RUN;
+		break;
+	case MarioWalkState::Walk:
+		aniId = ID_ANI_MARIO_WALK;
+		break;
+	case MarioWalkState::Sit:
+		aniId = ID_ANI_MARIO_SIT;
+		break;
+	default:
+		aniId = ID_ANI_MARIO_IDLE;
+		break;
+	}
+
+	if (mario->_kickTimer->IsRunning() && !mario->_kickTimer->IsTimeOver()) {
+		aniId = ID_ANI_MARIO_KICK;
+	}
+
+	if (mario->hand) {
+		//hold
+
+	}
+}
+
+void BaseMario::_GetAttackAnimationId(int& id)
+{
+}
+
+int BaseMario::_GetAnimationId()
+{
+	int aniId = ID_ANI_MARIO_IDLE;
+	if (mario->_die) {
+		aniId = ID_ANI_MARIO_DIE;
+	}
+	else {
+		_GetWalkAnimationId(aniId);		
+		_GetJumpAnimationId(aniId);
+		_GetAttackAnimationId(aniId);
+	}
+
+	aniId += (_level % 100) * 100;
+
+	return aniId;
 }
 
 void BaseMario::OnNoCollision(DWORD dt)
@@ -240,6 +382,9 @@ void BaseMario::OnNoCollision(DWORD dt)
 
 	mario->SetPosition(pos);
 	mario->SetOnGround(false);
+	if (mario->jumpState == MarioJumpState::Idle) {
+		mario->jumpState = MarioJumpState::Fall;
+	}
 }
 
 void BaseMario::OnCollisionWith(LPCOLLISIONEVENT e)
@@ -262,6 +407,7 @@ void BaseMario::OnBlockingOn(bool isHorizontal, float z)
 		}
 		else {
 			mario->jumpState = MarioJumpState::Fall;
+			mario->SetOnGround(false);
 		}
 	}
 
