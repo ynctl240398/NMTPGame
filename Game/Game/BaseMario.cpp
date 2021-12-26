@@ -109,6 +109,10 @@ void BaseMario::_JumpUpdate(DWORD dt)
 			mario->jumpState = MarioJumpState::Jump;
 			mario->SetOnGround(false);
 			mario->_jumpStartHeight = y;
+
+			if (mario->powerMeter >= PMETER_MAX) {
+				mario->jumpState = MarioJumpState::Fly;
+			}
 		}
 	}
 
@@ -119,6 +123,16 @@ void BaseMario::_JumpUpdate(DWORD dt)
 	switch (mario->jumpState)
 	{
 		case MarioJumpState::Fly:
+			height = abs(mario->_jumpStartHeight - y - vy * dt);
+			minJumpHeight = MARIO_MIN_HIGH_JUMP_HEIGHT;
+
+			if (height < minJumpHeight || (height < MARIO_SUPER_JUMP_HEIGHT && kb->IsKeyDown(DIK_S))) {
+				vy = -MARIO_SUPER_PUSH_FORCE - MARIO_GRAVITY * dt;
+			}
+			else {
+				mario->jumpState = MarioJumpState::Float;
+				vy = -MARIO_SUPER_PUSH_FORCE / 2;
+			}
 			break;
 		case MarioJumpState::HighJump:
 			jumpHeight = MARIO_HIGH_JUMP_HEIGHT;
@@ -149,6 +163,20 @@ void BaseMario::_JumpUpdate(DWORD dt)
 
 void BaseMario::_SitUpdate(DWORD dt)
 {
+	if (!mario->controllable) {
+		return;
+	}
+	CKeyBoardCustom* kb = CKeyBoardCustom::GetInstance();
+
+	if (kb->IsKeyDown(DIK_DOWN)) {
+		if (mario->jumpState == MarioJumpState::Idle && !mario->hand) {
+			mario->walkState = MarioWalkState::Sit;
+			mario->_drag = MARIO_CROUCH_DRAG_FORCE;
+		}
+	}
+	if (kb->IsKeyReleased(DIK_DOWN) && mario->walkState == MarioWalkState::Sit) {
+		mario->walkState = MarioWalkState::Idle;
+	}
 }
 
 void BaseMario::_PositionUpdate(DWORD dt)
@@ -174,14 +202,23 @@ void BaseMario::AnimationInit()
 
 void BaseMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	float l, t, r, b;
+	float nl, nt, nr, nb;
+	mario->GetBoundingBox(l, t, r, b);
+	D3DXVECTOR2 pos = mario->GetPosition();
+
 	_SitUpdate(dt);
 	_WalkUpdate(dt);
 	_JumpUpdate(dt);
+
+	mario->GetBoundingBox(nl, nt, nr, nb);
+	mario->SetPosition({ pos.x, pos.y - (nb - b) });
+
 	_PositionUpdate(dt);
 
 	CCollision::GetInstance()->Process(mario, dt, coObjects);
 
-	D3DXVECTOR2 pos = mario->GetPosition();
+	pos = mario->GetPosition();
 	if (pos.x < 0) {
 		mario->SetPosition({ 0, pos.y });
 	}

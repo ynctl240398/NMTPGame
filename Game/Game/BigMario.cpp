@@ -7,9 +7,14 @@ BigMario::BigMario(CMario* mario) : BaseMario(mario, MarioState::Big)
 
 void BigMario::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
+	float width = mario->walkState == MarioWalkState::Sit ? MARIO_BIG_SITTING_BBOX_WIDTH : MARIO_BIG_BBOX_WIDTH;
+	float height = mario->walkState == MarioWalkState::Sit ? MARIO_BIG_SITTING_BBOX_WIDTH : MARIO_BIG_BBOX_HEIGHT;
+
 	mario->GetPosition(left, top);
-	left -= MARIO_BIG_BBOX_WIDTH / 2;
-	top -= MARIO_BIG_BBOX_HEIGHT / 2;
-	right = left + MARIO_BIG_BBOX_WIDTH;
-	bottom = top + MARIO_BIG_BBOX_HEIGHT;
+	left -= width / 2;
+	top -= height / 2;
+	right = left + width;
+	bottom = top + height;
+
+
 }

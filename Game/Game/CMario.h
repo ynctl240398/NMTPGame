@@ -31,6 +31,8 @@ public:
 
 	int _direction = 1;
 
+	LPGAMEOBJECT hand = nullptr;
+
 	float powerMeter = 0;
 
 	D3DXVECTOR2 accelerate;
