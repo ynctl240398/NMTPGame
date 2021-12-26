@@ -146,3 +146,11 @@ void CCam::Update(DWORD dt, vector<CGameObject*>* collidableObjects) {
 void CCam::Render() {
 	
 }
+
+void CCam::LockTop()
+{
+}
+
+void CCam::UnlockTop()
+{
+}

@@ -32,6 +32,9 @@ public:
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
 	void Render() override;
 
+	void LockTop();
+	void UnlockTop();
+
 	void AddCameraBound(LPRECTCUSTOM);
 
 	void Update(DWORD, vector<CGameObject*>* = nullptr) override;
