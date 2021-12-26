@@ -1,12 +1,19 @@
 #pragma once
 #include "CUtil.h"
 
+enum class CTimerState
+{
+	RUNNING,
+	TIMEOVER,
+	STOPPED
+};
+
 class CTimer
 {
 private:
 	bool useGameTime;
 
-	bool started;
+	CTimerState state;
 
 	long timeleft;
 
@@ -21,9 +28,7 @@ public:
 
 	void AddTimeOut(long timeout);
 
-	bool IsTimeOver();
-
-	bool IsRunning();
+	CTimerState GetState();
 
 	void Start();
 

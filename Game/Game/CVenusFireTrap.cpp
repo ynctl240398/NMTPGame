@@ -1,6 +1,7 @@
 #include "CVenusFireTrap.h"
 #include "CAnimation.h"
 #include "CMario.h"
+#include "CTimer.h"
 
 #define ID_ANI_VENUS_FIRE_TRAP_RED_UP			8000
 #define ID_ANI_VENUS_FIRE_TRAP_RED_UP_FIRER		8001
@@ -11,15 +12,11 @@
 #define ID_ANI_VENUS_FIRE_TRAP_GREEN_DOWN		8006
 #define ID_ANI_VENUS_FIRE_TRAP_GREEN_DOWN_FIRER	8007
 
-#define TIME_TO_FIRE							2000 //s
-#define VENUS_SPEED_Y							0.02f
-
 CVenusFireTrap::CVenusFireTrap(float x, float y, int type, float offSetY)
 {
-	_position = { x,y + VENUS_FIRE_TRAP_BBOX_HIEGHT };
+	_position = { x,y + VENUS_FIRE_TRAP_BBOX_HIEGHT + 2};
 	_offSetY = offSetY;
 	_startPostion = _position;
-	_startTime = 0;
 	_type = type;
 	_isUp = true;
 	SetState(STATE_VENUS_FIRE_TRAP_IDLE);
@@ -89,70 +86,92 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	bool _bPos = _position.x >= leftCam && _position.x <= rightCam;
 	bool _bState = _state != STATE_VENUS_FIRE_TRAP_IDLE;
 
+	_startTimer.Update(dt);
+	_fireTimer.Update(dt);
+
 	if (_bPos || _bState) {
 		CMario* mario = CMario::GetInstance();
 		if (mario->GetPosition().x < _position.x) {
 			_scale = { 1.0f,1.0f };
 		}
-		else _scale = { -1.0f,1.0f };
+		else {
+			_scale = { -1.0f,1.0f };
+		}
 
-		if (_state == STATE_VENUS_FIRE_TRAP_IDLE) {
-			if (_startTime == 0) {
-				_startTime = GetTickCount64();
-			}
-			else if (GetTickCount64() - _startTime > TIME_TO_FIRE) {
-				SetState(STATE_VENUS_FIRE_TRAP_UP);
-				_startTime = 0;
-			}
-		}
-		else if (_state == STATE_VENUS_FIRE_TRAP_UP) {
-			if (_isUp) {
-				if (_startPostion.y - _position.y < _offSetY) {
-					_velocity.y = -VENUS_SPEED_Y;
+		switch (_state)
+		{
+			case STATE_VENUS_FIRE_TRAP_IDLE:
+				if (_startTimer.GetState() == CTimerState::STOPPED) {
+					SetState(STATE_VENUS_FIRE_TRAP_UP);
 				}
-				else {
-					_velocity.y = 0;
-					if (mario->GetPosition().y < _position.y) {
-						SetState(STATE_VENUS_FIRE_TRAP_UP_FIRER);
+				if (_startTimer.GetState() == CTimerState::TIMEOVER) {
+					SetState(STATE_VENUS_FIRE_TRAP_UP);
+				}
+				break;
+
+			case STATE_VENUS_FIRE_TRAP_UP:
+				if (_isUp) {
+					if (_startPostion.y - _position.y < _offSetY) {
+						_velocity.y = -VENUS_SPEED_Y;
 					}
-					else SetState(STATE_VENUS_FIRE_TRAP_DOWN_FIRER);
-					_startTime = 0;
-				}
-			}
-			else {
-				if (_startPostion.y >= _position.y) {
-					_velocity.y = VENUS_SPEED_Y;
+					else {
+						_velocity.y = 0;
+						if (mario->GetPosition().y < _position.y) {
+							SetState(STATE_VENUS_FIRE_TRAP_UP_FIRER);
+						}
+						else {
+							SetState(STATE_VENUS_FIRE_TRAP_DOWN_FIRER);
+						}
+
+						_fireTimer.Reset();
+						_fireTimer.Start();
+						_firer = NULL;
+					}
 				}
 				else {
-					_velocity.y = 0;
-					SetState(STATE_VENUS_FIRE_TRAP_IDLE);
-					_isUp = true;
+					if (_startPostion.y >= _position.y) {
+						_velocity.y = VENUS_SPEED_Y;
+					}
+					else {
+						_velocity.y = 0;
+						SetState(STATE_VENUS_FIRE_TRAP_IDLE);
+						_isUp = true;
+
+						_startTimer.Reset();
+						_startTimer.Start();
+					}
 				}
-			}
-		}
-		else if (_state == STATE_VENUS_FIRE_TRAP_UP_FIRER || _state == STATE_VENUS_FIRE_TRAP_DOWN_FIRER) {
-			if (_startTime == 0) {
-				_startTime = GetTickCount64();
-				_firer = NULL;
-			}
-			else if (GetTickCount64() - _startTime >= TIME_TO_FIRE / 2 && _firer == NULL) {
-				if (mario->GetPosition().y < _position.y) {
-					SetState(STATE_VENUS_FIRE_TRAP_UP_FIRER);
+				break;
+
+			case STATE_VENUS_FIRE_TRAP_UP_FIRER:
+			case STATE_VENUS_FIRE_TRAP_DOWN_FIRER:
+				if (_fireTimer.GetState() == CTimerState::TIMEOVER) {
+					if (_firer == NULL) {
+						if (mario->GetPosition().y < _position.y) {
+							SetState(STATE_VENUS_FIRE_TRAP_UP_FIRER);
+						}
+						else 
+							SetState(STATE_VENUS_FIRE_TRAP_DOWN_FIRER);
+
+						_firer = new CFirer(_position.x, _position.y - DIF);
+						_firer->SetState(STATE_FIRER_FLY);
+
+						_fireTimer.Reset();
+						_fireTimer.Start();
+					}
+					else {
+						SetState(STATE_VENUS_FIRE_TRAP_UP);
+						_fireTimer.Reset();
+						_isUp = false;
+					}					
 				}
-				else SetState(STATE_VENUS_FIRE_TRAP_DOWN_FIRER);
-				_firer = new CFirer(_position.x, _position.y - DIF);
-				_firer->SetState(STATE_FIRER_FLY);
-			}
-			else if (GetTickCount64() - _startTime > TIME_TO_FIRE) {
-				SetState(STATE_VENUS_FIRE_TRAP_UP);
-				_startTime = 0;
-				_isUp = false;
-			}
+				break;
 		}
+
+		_position.x += _velocity.x * dt;
+		_position.y += _velocity.y * dt;
 	}
 
-	_position.x += _velocity.x * dt;
-	_position.y += _velocity.y * dt;
 
 	if (_firer != NULL) {
 		vector<LPGAMEOBJECT> objs;

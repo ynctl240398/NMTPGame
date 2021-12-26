@@ -1,5 +1,6 @@
 #pragma once
 #include "CGameObject.h"
+#include "CTimer.h"
 
 #define STATE_PIRANHA_PLANT_IDLE			9900
 #define STATE_PIRANHA_PLANT_UP				9901
@@ -11,9 +12,11 @@
 #define PIRANHA_PLANT_BBOX_WIDTH			16
 #define PIRANHA_PLANT_BBOX_HIEGHT			32
 
+#define TIME_TO_UP						2000
+
 class CPiranhaPlant: public CGameObject
 {
-	ULONGLONG _startTime;
+	CTimer _startTimer{ true, TIME_TO_UP };
 	float _offSetY;
 	bool _isUp;
 	int _type;

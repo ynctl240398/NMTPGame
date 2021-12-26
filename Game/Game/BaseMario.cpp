@@ -286,8 +286,7 @@ void BaseMario::_GetJumpAnimationId(int& aniId)
 	}
 
 	if (mario->hand) {
-		//hold
-
+		aniId = ID_ANI_MARIO_WALK_HOLD;
 	}
 }
 
@@ -304,7 +303,7 @@ void BaseMario::_GetWalkAnimationId(int& aniId)
 
 	if (mario->sliding) {
 		if (mario->hand) {
-
+			aniId = ID_ANI_MARIO_IDLE_HOLD;
 		}
 		else {
 			aniId = ID_ANI_MARIO_BRACE;
@@ -318,7 +317,7 @@ void BaseMario::_GetWalkAnimationId(int& aniId)
 		aniId = ID_ANI_MARIO_IDLE;
 
 		if (mario->hand) {
-			//Hold Idle
+			aniId = ID_ANI_MARIO_IDLE_HOLD;
 		}
 
 		return;
@@ -340,13 +339,12 @@ void BaseMario::_GetWalkAnimationId(int& aniId)
 		break;
 	}
 
-	if (mario->_kickTimer->IsRunning() && !mario->_kickTimer->IsTimeOver()) {
+	if (mario->_kickTimer->GetState() == CTimerState::RUNNING) {
 		aniId = ID_ANI_MARIO_KICK;
 	}
 
 	if (mario->hand) {
-		//hold
-
+		aniId = ID_ANI_MARIO_WALK_HOLD;
 	}
 }
 
@@ -404,6 +402,7 @@ void BaseMario::OnBlockingOn(bool isHorizontal, float z)
 		vy = 0;
 		if (z < 0) {
 			mario->SetOnGround(true);
+			CCam::GetInstance()->LockTop();
 		}
 		else {
 			mario->jumpState = MarioJumpState::Fall;

@@ -1,6 +1,7 @@
 #pragma once
 #include "CGameObject.h"
 #include "CFirer.h"
+#include "CTimer.h"
 
 #define STATE_VENUS_FIRE_TRAP_IDLE			8900
 #define STATE_VENUS_FIRE_TRAP_UP			8901
@@ -15,9 +16,13 @@
 #define VENUS_FIRE_TRAP_BBOX_WIDTH			16
 #define VENUS_FIRE_TRAP_BBOX_HIEGHT			32
 
+#define TIME_TO_FIRE							2000 //s
+#define VENUS_SPEED_Y							0.02f
+
 class CVenusFireTrap : public CGameObject
 {
-	ULONGLONG _startTime;
+	CTimer _startTimer{true, TIME_TO_FIRE };
+	CTimer _fireTimer{true, TIME_TO_FIRE / 2 };
 	float _offSetY;
 	bool _isUp;
 	int _type;

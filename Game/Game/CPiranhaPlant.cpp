@@ -5,7 +5,6 @@
 #define ID_ANI_PIRANHA_PLANT_GREEN_UP	9001
 
 #define PIRANHA_PLANT_SPEED_Y			0.02f
-#define TIME_TO_UP						2000
 
 int CPiranhaPlant::_GetAnimationId()
 {
@@ -18,10 +17,9 @@ int CPiranhaPlant::_GetAnimationId()
 
 CPiranhaPlant::CPiranhaPlant(float x, float y, int type, float offSetY)
 {
-	_position = { x,y + PIRANHA_PLANT_BBOX_HIEGHT };
+	_position = { x,y + PIRANHA_PLANT_BBOX_HIEGHT + 2 };
 	_offSetY = offSetY;
 	_startPostion = _position;
-	_startTime = 0;
 	_type = type;
 	_isUp = true;
 	SetState(STATE_PIRANHA_PLANT_IDLE);
@@ -54,14 +52,14 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	float leftCam = CCam::GetInstance()->GetPosition().x;
 	float rightCam = CGame::GetInstance()->GetBackBufferWidth() + leftCam;
 
+	_startTimer.Update(dt);
+
 	if (_position.x >= leftCam && _position.x <= rightCam) {
 		if (_state == STATE_PIRANHA_PLANT_IDLE) {
-			if (_startTime == 0) {
-				_startTime = GetTickCount64();
-			}
-			else if (GetTickCount64() - _startTime > TIME_TO_UP) {
+			if (_startTimer.GetState() != CTimerState::RUNNING) {
 				SetState(STATE_PIRANHA_PLANT_UP);
-				_startTime = 0;
+				_startTimer.Reset();
+				_startTimer.Start();
 			}
 		}
 		else if (_state == STATE_PIRANHA_PLANT_UP) {
@@ -71,11 +69,7 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 				else {
 					_velocity.y = 0;
-					if (_startTime == 0) {
-						_startTime = GetTickCount64();
-					}
-					else if (GetTickCount64() - _startTime > TIME_TO_UP) {
-						_startTime = 0;
+					if (_startTimer.GetState() == CTimerState::TIMEOVER) {
 						_isUp = false;
 					}
 				}
@@ -88,13 +82,16 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					_velocity.y = 0;
 					SetState(STATE_PIRANHA_PLANT_IDLE);
 					_isUp = true;
+
+					_startTimer.Reset();
+					_startTimer.Start();
 				}
 			}
 		}
-	}
 
-	_position.x += _velocity.x * dt;
-	_position.y += _velocity.y * dt;
+		_position.x += _velocity.x * dt;
+		_position.y += _velocity.y * dt;
+	}
 }
 
 void CPiranhaPlant::OnNoCollision(DWORD dt)

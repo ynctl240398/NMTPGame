@@ -30,7 +30,7 @@ void RaccoonMario::_JumpUpdate(DWORD dt)
 			mario->jumpState = MarioJumpState::Fly;
 			mario->_jumpStartHeight = y;
 
-			//open cam bound
+			CCam::GetInstance()->UnlockTop();
 		}
 	}
 
@@ -73,7 +73,7 @@ void RaccoonMario::_JumpUpdate(DWORD dt)
 		break;
 	case MarioJumpState::Float:
 		vy = min(vy, MARIO_FLOATING_SPEED);
-		if (!_flyTimer.IsRunning() || _flyTimer.IsTimeOver()) {
+		if (_flyTimer.GetState() != CTimerState::RUNNING) {
 			mario->jumpState = MarioJumpState::Fall;
 		}
 	case MarioJumpState::Fall:	
@@ -98,7 +98,12 @@ void RaccoonMario::_PowerMeterUpdate(DWORD dt)
 
 	_pmeterTimer.Update(dt);
 
-	if (!_pmeterTimer.IsRunning()) {
+	if (_pmeterTimer.GetState() != CTimerState::RUNNING) {
+		if (_pmeterTimer.GetState() == CTimerState::TIMEOVER) {
+			mario->powerMeter = 0;
+			_pmeterTimer.Stop();
+		}
+
 		if (maxRun && mario->IsOnGround())
 			mario->powerMeter = max(0.0f, min(mario->powerMeter + PMETER_UP_STEP * dt, PMETER_MAX + 1));
 		else if (mario->powerMeter > 0)
@@ -109,12 +114,6 @@ void RaccoonMario::_PowerMeterUpdate(DWORD dt)
 			_pmeterTimer.Start();
 		}
 	}
-	else {
-		if (_pmeterTimer.IsTimeOver()) {
-			mario->powerMeter = 0;
-			_pmeterTimer.Stop();
-		}
-	}
 }
 
 void RaccoonMario::_AttackUpdate(DWORD dt)
@@ -123,7 +122,7 @@ void RaccoonMario::_AttackUpdate(DWORD dt)
 
 	CKeyBoardCustom* kb = CKeyBoardCustom::GetInstance();
 	if (kb->IsKeyPressed(DIK_D)) {
-		if (!_attackTimer.IsRunning() || _attackTimer.IsTimeOver()) {
+		if (_attackTimer.GetState() != CTimerState::RUNNING) {
 			_attackTimer.Reset();
 			_attackTimer.Start();
 		}
@@ -160,14 +159,13 @@ void RaccoonMario::_GetJumpAnimationId(int& aniId)
 	}
 
 	if (mario->hand) {
-		//hold
-
+		aniId = ID_ANI_MARIO_FLY_HOLD;
 	}
 }
 
 void RaccoonMario::_GetAttackAnimationId(int& aniId)
 {
-	if (_attackTimer.IsRunning() && !_attackTimer.IsTimeOver()) {
+	if (_attackTimer.GetState() == CTimerState::RUNNING) {
 		aniId = ID_ANI_MARIO_ATTACK;
 	}
 }
