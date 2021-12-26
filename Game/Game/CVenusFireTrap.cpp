@@ -86,7 +86,10 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	float leftCam = CCam::GetInstance()->GetPosition().x;
 	float rightCam = CGame::GetInstance()->GetBackBufferWidth() + leftCam;
 
-	if (_position.x >= leftCam && _position.x <= rightCam) {
+	bool _bPos = _position.x >= leftCam && _position.x <= rightCam;
+	bool _bState = _state != STATE_VENUS_FIRE_TRAP_IDLE;
+
+	if (_bPos || _bState) {
 		CMario* mario = CMario::GetInstance();
 		if (mario->GetPosition().x < _position.x) {
 			_scale = { 1.0f,1.0f };
