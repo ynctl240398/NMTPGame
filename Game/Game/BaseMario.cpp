@@ -1,6 +1,7 @@
 #include "BaseMario.h"
 #include "CMario.h"
 #include "CKeyBoard.h"
+#include "CBrickQuestion.h"
 
 void BaseMario::_WalkUpdate(DWORD dt)
 {
@@ -198,6 +199,28 @@ void BaseMario::_AttackUpdate(DWORD dt)
 {
 }
 
+void BaseMario::_OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
+{
+	if (_hasQBrick) return;
+	CBrickQuestion* qBrick = dynamic_cast<CBrickQuestion*>(e->obj);
+	if (!qBrick->IsActivated()) {
+		qBrick->Active();
+		_hasQBrick = true;
+	}
+}
+
+void BaseMario::_OnCollisionWithEnemy(LPCOLLISIONEVENT e)
+{
+}
+
+void BaseMario::_OnCollisionWithItem(LPCOLLISIONEVENT e)
+{
+}
+
+void BaseMario::_OnDamaged(LPCOLLISIONEVENT e, float damage)
+{
+}
+
 BaseMario::BaseMario(CMario* mario, MarioState stateId)
 {
 	this->mario = mario;
@@ -387,6 +410,10 @@ void BaseMario::OnNoCollision(DWORD dt)
 
 void BaseMario::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+	if (dynamic_cast<CBrickQuestion*>(e->obj)) {
+		_OnCollisionWithQuestionBrick(e);
+		return;
+	}
 }
 
 void BaseMario::OnBlockingOn(bool isHorizontal, float z)

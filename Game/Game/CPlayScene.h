@@ -16,6 +16,7 @@ protected:
 	LPGAMEOBJECT player;
 
 	vector<LPGAMEOBJECT> objects;
+	vector<LPGAMEOBJECT> waitingObjects;
 
 	CBackGround* _bg;
 	CCam* _cam;
@@ -38,11 +39,12 @@ public:
 	virtual void Render();
 	virtual void Unload();
 
-	void HandleKeyDown(int keyCode) override;
+	virtual void SpawnObject(CGameObject* obj);
 
 	LPGAMEOBJECT GetPlayer() { return player; }
 
 	void Clear();
+	void AddWaitingObjects();
 	void PurgeDeletedObjects();
 
 	static bool IsGameObjectDeleted(const LPGAMEOBJECT& o);

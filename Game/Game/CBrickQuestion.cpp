@@ -3,42 +3,41 @@
 #include "CItem.h"
 
 
-CBrickQuestion::CBrickQuestion(float x, float y, string typeItem) {
+CBrickQuestion::CBrickQuestion(float x, float y, string typeItem, string skin) {
 	_position = { x,y };
 	_startPostion = _position;
-	_state = STATE_BRICK_QUESTION_RUN;
-	_maxVy = MAX_JUMP;
-	_ay = 0;
+	_active = false;
+	_step = 0;
 	_item = new CItem(x, y, typeItem);
+	
+	if (skin == "question") {
+		_state = STATE_BRICK_QUESTION_RUN;
+	}
+	if (skin == "brick") {
+		_state = STATE_BRICK_BRICK_RUN;
+	}
 }
 
 void CBrickQuestion::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
-	if (_ay != 0) {
-		_velocity.y += _ay * dt;
+	if (_active && _step < 2) {
+		if (_step == 0) {
+			_position.y -= JUMP_SPEED * dt;
+			if (abs(_position.y - _startPostion.y) > 12) {
+				_step = 1;
+			}
+		}
+		if (_step == 1) {
+			_position.y += JUMP_SPEED * dt;
+			if (_position.y >= _startPostion.y) {
+				_position.y = _startPostion.y;
+				_step = 2;
+				_state = STATE_BRICK_QUESTION_IDLE;
+			}
+		}
 	}
-	else {
-		_velocity.y = 0;
-	}
-
-	if (abs(_velocity.y) >= _maxVy) {
-		_ay = JUMP_SPEED;
-	}
-
-	float dy = _velocity.y * dt / 4;
-
-	if (_position.y + dy >= _startPostion.y) {
-		_position = _startPostion;
-		_ay = 0;
-	}
-	else
-		_position.y += dy;
-
-	_item->Update(dt, coObjects);
-	
 }
 
 void CBrickQuestion::Render() {
-	_item->Render();
 	_aniId = _GetAnimationId();
 	CGameObject::Render();
 }
@@ -50,28 +49,32 @@ void CBrickQuestion::GetBoundingBox(float& left, float& top, float& right, float
 	bottom = top + BRICK_HEIGHT;
 }
 
-void CBrickQuestion::SetState(int state) {
-	if (state == STATE_BRICK_QUESTION_IDLE && _state == STATE_BRICK_QUESTION_RUN) {
-		_ay = -JUMP_SPEED;
-		_HandleStateItem();
+void CBrickQuestion::Active()
+{
+	if (!_active) {
+		_active = true;
+		CGame::GetInstance()->GetCurrentScene()->SpawnObject(_item);
 	}
-	CGameObject::SetState(state);
+}
+
+bool CBrickQuestion::IsActivated()
+{
+	return _active;
 }
 
 int CBrickQuestion::_GetAnimationId() {
 	int aniId = -1;
-	if (_state == STATE_BRICK_QUESTION_RUN) {
+	switch (_state)
+	{
+	case STATE_BRICK_QUESTION_IDLE:
+		aniId = ID_ANI_BRICK_QUESTION_IDLE;
+		break;
+	case STATE_BRICK_QUESTION_RUN:
 		aniId = ID_ANI_BRICK_QUESTION_RUN;
+		break;
+	case STATE_BRICK_BRICK_RUN:
+		aniId = ID_ANI_BRICK_BRICK_RUN;
+		break;
 	}
-	else aniId = ID_ANI_BRICK_QUESTION_IDLE;
 	return aniId;
-}
-
-void CBrickQuestion::_HandleStateItem() {
-	if (_item->GetType() == TYPE_ITEM_COIN_BRICK) {
-		_item->SetState(STATE_ITEM_JUMP);
-	}
-	else if (_item->GetType() == TYPE_ITEM_MUSHROOM_GREEN || _item->GetType() == TYPE_ITEM_MUSHROOM_RED) {
-		_item->SetState(STATE_ITEM_UP);
-	}
 }

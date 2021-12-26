@@ -17,6 +17,7 @@
 #include "CVenusFireTrap.h"
 #include "CPiranhaPlant.h"
 #include "CBrickP.h"
+#include "CBrickCoin.h"
 
 using namespace std;
 
@@ -153,12 +154,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_BRICK_QUESTION:
 	{
 		string typeItem = tokens[3].c_str();
-		obj = new CBrickQuestion(x, y, typeItem);
+		string skin = tokens[4].c_str();
+		obj = new CBrickQuestion(x, y, typeItem, skin);
 		break;
 	}
-	case OBJECT_TYPE_COIN:
-		//obj = new CCoin(x, y);
-		break;
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = (float)atof(tokens[3].c_str());
@@ -201,20 +200,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CPiranhaPlant(x, y, type, offSetY);
 		break;
 	}
-	case OBJECT_TYPE_BRICK_P:
-	{
-		bool isCanBreak = true;
-		int state = STATE_BRICK_P_BRICK;
-		if (tokens.size() == 4) {
-			isCanBreak = false;
-		}
-		else if (tokens.size() == 5) {
-			isCanBreak = (bool)atoi(tokens[4].c_str());
-			state = atoi(tokens[4].c_str());
-		}
-		obj = new CBrickP(x, y, isCanBreak, state);
+	case OBJECT_TYPE_BRICK_COIN:
+		obj = new CBrickCoin(x, y, atoi(tokens[3].c_str()));
 		break;
-	}
 	default:
 		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
 		return;
@@ -342,46 +330,11 @@ void CPlayScene::Update(DWORD dt)
 	// TO-DO: This is a "dirty" way, need a more organized way 
 
 	vector<LPGAMEOBJECT> coObjects;
-	for (size_t i = 0; i < objects.size(); i++)
-	{
-		if (!dynamic_cast<CMario*>(objects[i])) {
-			coObjects.push_back(objects[i]);
-			if (dynamic_cast<CBrickQuestion*>(objects[i])) {
-				CBrickQuestion* brickQuestion = dynamic_cast<CBrickQuestion*>(objects[i]);
-				CItem* item = brickQuestion->GetItem();
-				if (item != NULL && (item->GetType() == TYPE_ITEM_MUSHROOM_GREEN || item->GetType() == TYPE_ITEM_MUSHROOM_RED)) {
-					coObjects.push_back(item);
-				}
-			}
-		}
-	}
+	coObjects.insert(coObjects.end(), objects.begin(), objects.end());
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		objects[i]->Update(dt, &coObjects);
-	}
-
-	for (size_t i = 0; i < objects.size(); i++)
-	{
-		if (dynamic_cast<CBrickP*>(objects[i])) {
-			CBrickP* brickPi = dynamic_cast<CBrickP*>(objects[i]);
-			if (brickPi->GetState() == STATE_BRICK_P_BRICK_UP || brickPi->GetState() == STATE_BRICK_P_PUSHED) {
-				for (size_t j = 0; j < objects.size(); j++) {
-					if (dynamic_cast<CBrickP*>(objects[j])) {
-						CBrickP* brickPj = dynamic_cast<CBrickP*>(objects[j]);
-						if (brickPj->GetState() == STATE_BRICK_P_IDLE) {
-							if (!brickPj->GetShowP()) brickPj->SetShowP(true);
-							break;
-						}
-						else if (brickPj->GetState() == STATE_BRICK_P_BRICK) {
-							if (brickPi->GetState() == STATE_BRICK_P_PUSHED) {
-								brickPj->SetState(STATE_BRICK_P_COIN);
-							}
-						}
-					}
-				}
-			}
-		}
 	}
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
@@ -389,6 +342,7 @@ void CPlayScene::Update(DWORD dt)
 
 	_cam->Update(dt);
 
+	AddWaitingObjects();
 	PurgeDeletedObjects();
 }
 
@@ -413,6 +367,12 @@ void CPlayScene::Clear()
 	objects.clear();
 }
 
+void CPlayScene::AddWaitingObjects()
+{
+	objects.insert(objects.end(), waitingObjects.begin(), waitingObjects.end());
+	waitingObjects.clear();
+}
+
 /*
 	Unload scene
 
@@ -428,6 +388,11 @@ void CPlayScene::Unload()
 	player = NULL;
 
 	//DebugOut(L"[INFO] Scene %d unloaded! \n", id);
+}
+
+void CPlayScene::SpawnObject(CGameObject* obj)
+{
+	waitingObjects.push_back(obj);
 }
 
 bool CPlayScene::IsGameObjectDeleted(const LPGAMEOBJECT& o) { return o == NULL; }
@@ -450,19 +415,4 @@ void CPlayScene::PurgeDeletedObjects()
 	objects.erase(
 		std::remove_if(objects.begin(), objects.end(), CPlayScene::IsGameObjectDeleted),
 		objects.end());
-}
-
-void CPlayScene::HandleKeyDown(int keyCode) {
-	LPGAME g = CGame::GetInstance();
-	switch (keyCode)
-	{
-	case DIK_Q:
-		this->Unload();
-		_ani = new CAnimation(DEFAULT_TIME);
-		_currentIdTex = -1;
-		this->Load();
-		break;
-	default:
-		break;
-	}
 }

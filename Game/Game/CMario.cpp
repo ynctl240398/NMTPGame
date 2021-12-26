@@ -78,6 +78,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	_UpdateState();
 	_CheatPointUpdate();
 
+	stateMachine->_hasQBrick = false;
+
 	stateMachine->Update(dt, coObjects);
 }
 

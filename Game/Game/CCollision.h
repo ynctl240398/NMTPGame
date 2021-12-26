@@ -63,6 +63,16 @@ public:
 		float& ny,
 		float& tl);
 
+	static bool IsOverlap(
+		float ml,			// move left 
+		float mt,			// move top
+		float mr,			// move right 
+		float mb,			// move bottom
+		float sl,			// static left
+		float st,
+		float sr,
+		float sb);
+
 	LPCOLLISIONEVENT SweptAABB(
 		LPGAMEOBJECT objSrc,
 		DWORD dt,

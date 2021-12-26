@@ -54,7 +54,15 @@ protected:
 
 	int _level = 0;
 
-public:	
+	void _OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e);
+	void _OnCollisionWithEnemy(LPCOLLISIONEVENT e);
+	void _OnCollisionWithItem(LPCOLLISIONEVENT e);
+	void _OnDamaged(LPCOLLISIONEVENT e, float damage);
+
+public:
+
+	bool _hasQBrick = false;
+
 	BaseMario(CMario* mario, MarioState stateId);
 
 	virtual void Update(DWORD, vector<LPGAMEOBJECT>* coObjects);

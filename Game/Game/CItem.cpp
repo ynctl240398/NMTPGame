@@ -75,6 +75,11 @@ void CItem::SetType(string type) {
 	_type = type;
 }
 
+int CItem::IsBlocking(LPCOLLISIONEVENT e)
+{
+	return 0;
+}
+
 void CItem::SetState(int state) {
 	if (state == STATE_ITEM_JUMP) {
 		_velocity.y = -ITEM_JUMP_SPEED;
@@ -107,10 +112,10 @@ int CItem::_GetAnimationId() {
 		return -1;
 	}
 
-	if (_type == TYPE_ITEM_COIN) {
-		aniId = ID_ANI_ITEM_COIN;
-	}
-	else if (_type == TYPE_ITEM_COIN_BRICK) {
+	//if (_type == TYPE_ITEM_COIN) {
+	//	aniId = ID_ANI_ITEM_COIN;
+	//} else
+	if (_type == TYPE_ITEM_COIN_BRICK) {
 		aniId = ID_ANI_ITEM_COIN_BRICK;
 	}
 	else if (_type == TYPE_ITEM_MUSHROOM_GREEN) {

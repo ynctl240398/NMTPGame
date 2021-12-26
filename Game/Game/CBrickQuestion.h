@@ -11,34 +11,31 @@
 
 #define STATE_BRICK_QUESTION_IDLE 2900
 #define STATE_BRICK_QUESTION_RUN 2901
+#define STATE_BRICK_BRICK_RUN 2902
 
 #define ID_ANI_BRICK_QUESTION_IDLE 2000
 #define ID_ANI_BRICK_QUESTION_RUN 2001
+#define ID_ANI_BRICK_BRICK_RUN 11000
 
-#define JUMP_SPEED 0.015f
-#define MAX_JUMP 0.6f
+#define JUMP_SPEED 0.15f
 
 class CBrickQuestion : public CGameObject
-{
-	float _maxVy;
-	
+{	
 	CItem* _item;
 
+	bool _active;
+	int _step;
+
 	int _GetAnimationId();
-	void _HandleStateItem();
 
 public:
-	CBrickQuestion(float x, float y, string typeItem);
-
-	void SetState(int) override;
-
+	CBrickQuestion(float x, float y, string typeItem, string skin);
 
 	void Render() override;
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) override;
 
-	CItem* GetItem() {
-		return _item;
-	}
+	void Active();
+	bool IsActivated();
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
 };

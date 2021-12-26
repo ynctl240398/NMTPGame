@@ -52,7 +52,7 @@ int CBrickP::_GetAnimationId()
 		aniId = ID_ANI_BRICK_P_BRICK_UP;
 	}
 	else if (_state == STATE_BRICK_P_COIN) {
-		aniId = ID_ANI_BRICK_P_COIN;
+		//aniId = ID_ANI_BRICK_P_COIN;
 	}
 
 	return aniId;

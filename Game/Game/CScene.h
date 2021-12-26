@@ -4,6 +4,8 @@
 
 #include "CCam.h"
 
+class CGameObject;
+
 class CScene
 {
 protected:
@@ -24,6 +26,6 @@ public:
 	virtual void Unload() = 0;
 	virtual void Update(DWORD dt) = 0;
 	virtual void Render() = 0;
-	virtual void HandleKeyDown(int keyCode) = 0;
+	virtual void SpawnObject(CGameObject* obj) = 0;
 };
 typedef CScene* LPSCENE;

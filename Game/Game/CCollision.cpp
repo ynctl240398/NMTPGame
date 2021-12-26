@@ -122,6 +122,11 @@ void CCollision::SweptAABB(
 
 }
 
+bool CCollision::IsOverlap(float ml, float mt, float mr, float mb, float sl, float st, float sr, float sb)
+{
+	return !(mr <= sl || ml >= sr || mt >= sb || mb <= st);
+}
+
 /*
 	Extension of original SweptAABB to deal with two moving objects
 */
