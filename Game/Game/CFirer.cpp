@@ -63,8 +63,8 @@ void CFirer::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CFirer::OnNoCollision(DWORD dt)
 {
-	_position.x += _velocity.x * dt;
-	_position.y += _velocity.y * dt;
+	//_position.x += _velocity.x * dt;
+	//_position.y += _velocity.y * dt;
 }
 
 void CFirer::OnCollisionWith(LPCOLLISIONEVENT e)

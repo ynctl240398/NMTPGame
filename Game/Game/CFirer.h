@@ -23,6 +23,7 @@ public:
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
+	virtual int IsBlocking(LPCOLLISIONEVENT e) { return 0; }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
 };

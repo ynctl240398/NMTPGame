@@ -39,6 +39,10 @@
 
 void CKoopaParaTropa::_Die(LPCOLLISIONEVENT e)
 {
+	if (CMario::GetInstance()->hand == this) {
+		CMario::GetInstance()->hand = NULL;
+	}
+
 	_isDeleted = true;
 
 	CAniObject* aniObj = new CAniObject(_position, 0.02f * e->nx, -0.3f, ID_ANI_KOOPA_PARA_TROPA_SHELD, {1.0f, -1.0f});
@@ -142,7 +146,7 @@ void CKoopaParaTropa::OnCollisionWith(LPCOLLISIONEVENT e) {
 	case STATE_KOOPA_PARA_TROPA_SHELD:
 	case STATE_KOOPA_PARA_TROPA_SHELD_LIVE:
 		if (e->obj == CMario::GetInstance()) {
-			if (!kb->IsKeyDown(DIK_A)) {
+			if (!kb->IsKeyDown(DIK_A) || e->ny > 0) {
 				SetState(STATE_KOOPA_PARA_TROPA_SHELD_RUN);
 				_velocity.x *= CMario::GetInstance()->_direction;
 			}
@@ -154,14 +158,14 @@ void CKoopaParaTropa::OnCollisionWith(LPCOLLISIONEVENT e) {
 
 	CKoopaParaTropa* paraKoopa = dynamic_cast<CKoopaParaTropa*>(e->obj);
 	if (paraKoopa) {
-		if (paraKoopa->GetState() == STATE_KOOPA_PARA_TROPA_SHELD_RUN) {
+		if (paraKoopa->GetState() == STATE_KOOPA_PARA_TROPA_SHELD_RUN || CMario::GetInstance()->hand == paraKoopa) {
 			_Die(e);
 		}
 	}
 
 	CKoopaTropa* koopa = dynamic_cast<CKoopaTropa*>(e->obj);
 	if (koopa) {
-		if (koopa->GetState() == STATE_KOOPA_TROPA_SHELD_RUN) {
+		if (koopa->GetState() == STATE_KOOPA_TROPA_SHELD_RUN || CMario::GetInstance()->hand == koopa) {
 			_Die(e);
 		}
 	}
@@ -220,7 +224,14 @@ void CKoopaParaTropa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		switch (_state)
 		{
 		case STATE_KOOPA_PARA_TROPA_WALK:
-			_obj->Update(dt, coObjects);
+			if (CMario::GetInstance()->hand == this) {
+				CMario::GetInstance()->hand = NULL;
+				SetState(STATE_KOOPA_PARA_TROPA_WALK);
+				_position.y -= 6;
+			}
+			else {
+				_obj->Update(dt, coObjects);
+			}
 			break;
 		case STATE_KOOPA_PARA_TROPA_SHELD_RUN:
 			break;

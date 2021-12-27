@@ -72,7 +72,7 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
 
 	CKoopaParaTropa* paraKoopa = dynamic_cast<CKoopaParaTropa*>(e->obj);
 	if (paraKoopa) {
-		if (paraKoopa->GetState() == STATE_KOOPA_PARA_TROPA_SHELD_RUN) {
+		if (paraKoopa->GetState() == STATE_KOOPA_PARA_TROPA_SHELD_RUN || CMario::GetInstance()->hand == paraKoopa) {
 			_isDeleted = true;
 
 			CAniObject* aniObj = new CAniObject(_position, 0.02f * e->nx, -0.25f, ID_ANI_GOOMBA_DIE_JUMP, { 1, -1 });
@@ -82,7 +82,7 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
 
 	CKoopaTropa* koopa = dynamic_cast<CKoopaTropa*>(e->obj);
 	if (koopa) {
-		if (koopa->GetState() == STATE_KOOPA_TROPA_SHELD_RUN) {
+		if (koopa->GetState() == STATE_KOOPA_TROPA_SHELD_RUN || CMario::GetInstance()->hand == koopa) {
 			_isDeleted = true;
 
 			CAniObject* aniObj = new CAniObject(_position, 0.02f * e->nx, -0.25f, ID_ANI_GOOMBA_DIE_JUMP, { 1, -1 });

@@ -22,8 +22,6 @@ class CKoopaParaTropa : public CGameObject
 
 	bool _flip = false;
 
-	void _Die(LPCOLLISIONEVENT e);
-
 public:
 	CKoopaParaTropa(float x, float y, int state);
 
@@ -36,6 +34,8 @@ public:
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 	void OnBlockingOn(bool isHorizontal, float z) override;
 	int IsBlocking(LPCOLLISIONEVENT e) override;
+
+	void _Die(LPCOLLISIONEVENT e);
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
 };

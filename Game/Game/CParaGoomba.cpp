@@ -137,14 +137,14 @@ void CParaGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
 
 	CKoopaParaTropa* paraKoopa = dynamic_cast<CKoopaParaTropa*>(e->obj);
 	if (paraKoopa) {
-		if (paraKoopa->GetState() == STATE_KOOPA_PARA_TROPA_SHELD_RUN) {
+		if (paraKoopa->GetState() == STATE_KOOPA_PARA_TROPA_SHELD_RUN || CMario::GetInstance()->hand == paraKoopa) {
 			_DieJump(e);
 		}
 	}
 
 	CKoopaTropa* koopa = dynamic_cast<CKoopaTropa*>(e->obj);
 	if (koopa) {
-		if (koopa->GetState() == STATE_KOOPA_TROPA_SHELD_RUN) {
+		if (koopa->GetState() == STATE_KOOPA_TROPA_SHELD_RUN || CMario::GetInstance()->hand == koopa) {
 			_DieJump(e);
 		}
 	}

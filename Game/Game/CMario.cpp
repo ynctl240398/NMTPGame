@@ -69,10 +69,32 @@ void CMario::_CheatPointUpdate()
 
 void CMario::_Die()
 {
+	hand = nullptr;
 	_isActive = false;
 	int _aniId = ID_ANI_MARIO_DIE + (LEVEL_SMALL % 100) * 100;
 	CAniObject* aniObj = new CAniObject(_position, 0, -0.3f, _aniId, { 1, 1 });
 	CGame::GetInstance()->GetCurrentScene()->SpawnAniObject(aniObj);
+}
+
+void CMario::_SheldUpdate(DWORD dt)
+{
+	if (hand == nullptr) return;
+	CKeyBoardCustom* kb = CKeyBoardCustom::GetInstance();
+	if (kb->IsKeyDown(DIK_A)) {
+		D3DXVECTOR2 pos = _position;
+		pos += {12 * _direction, 0};
+		hand->SetVelocity({ 0, -0.0008f * dt });
+		hand->SetPosition(pos);
+	}
+	else {
+		D3DXVECTOR2 pos = _position;
+		pos += {18 * _direction, -2};
+		hand->SetVelocity({ 0, 0 });
+		hand->SetPosition(pos);
+
+		_velocity.x += 0.1 * _direction;
+		hand = nullptr;
+	}
 }
 
 CMario* CMario::GetInstance()
@@ -88,6 +110,7 @@ CMario::CMario()
 	_UpdateState();
 	_kickTimer = new CTimer(true, 150);
 	_isActive = true;
+	hand = nullptr;
 	_untouchableTimer.Stop();
 }
 
@@ -96,6 +119,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 	_UpdateState();
 	_CheatPointUpdate();
+	_SheldUpdate(dt);
 
 	_kickTimer->Update(dt);
 	_untouchableTimer.Update(dt);

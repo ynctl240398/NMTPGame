@@ -464,7 +464,7 @@ void BaseMario::OnCollisionWith(LPCOLLISIONEVENT e)
 			if (koopa->GetState() == STATE_KOOPA_TROPA_SHELD || koopa->GetState() == STATE_KOOPA_TROPA_SHELD_LIVE) {
 				CKeyBoardCustom* kb = CKeyBoardCustom::GetInstance();
 				if (kb->IsKeyDown(DIK_A)) {
-
+					mario->hand = e->obj;
 				}
 				else {
 					if (e->nx != 0) {
@@ -490,7 +490,7 @@ void BaseMario::OnCollisionWith(LPCOLLISIONEVENT e)
 			if (koopa->GetState() == STATE_KOOPA_PARA_TROPA_SHELD || koopa->GetState() == STATE_KOOPA_PARA_TROPA_SHELD_LIVE) {
 				CKeyBoardCustom* kb = CKeyBoardCustom::GetInstance();
 				if (kb->IsKeyDown(DIK_A)) {
-
+					mario->hand = e->obj;
 				}
 				else {
 					if (e->nx != 0) {
