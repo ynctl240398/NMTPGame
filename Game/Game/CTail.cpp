@@ -8,6 +8,7 @@ CTail::CTail()
 	_velocity = { 0, 0 };
 	_liveTimer.Reset();
 	_liveTimer.Start();
+	_state = STATE_MARIO_TAIL;
 }
 
 void CTail::Render()

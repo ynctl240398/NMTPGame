@@ -3,6 +3,7 @@
 #include "CGameObject.h"
 #include "CTimer.h"
 
+#define STATE_MARIO_TAIL			2802
 #define MARIO_TAIL_BBOX_WIDTH		2
 #define MARIO_TAIL_BBOX_HEIGHT		2
 #define MARIO_TAIL_RANGE_FRONT		14.5f

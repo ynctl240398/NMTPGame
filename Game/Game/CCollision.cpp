@@ -1,5 +1,7 @@
 #include "CCollision.h"
 #include "CGameObject.h"
+#include "CMario.h"
+#include "CGoomba.h"
 
 //#define BLOCK_PUSH_FACTOR 0.4f
 
@@ -179,7 +181,7 @@ void CCollision::Scan(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* objDe
 	{
 		LPCOLLISIONEVENT e = SweptAABB(objSrc, dt, objDests->at(i));
 
-		if (e->WasCollided() == 1 && !e->obj->IsDeleted())
+		if (e->WasCollided() == 1)
 			temp.push_back(e);
 		else
 			delete e;
@@ -190,7 +192,7 @@ void CCollision::Scan(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* objDe
 	for (LPCOLLISIONEVENT coll : temp)
 	{
 		for (LPCOLLISIONEVENT result : coEvents) {
-			if (!result->obj->IsBlocking(result) || result->obj->IsDeleted() || objSrc->IsDeleted()) {
+			if (!result->obj->IsBlocking(result)) {
 				continue;
 			}
 
@@ -237,6 +239,10 @@ void CCollision::Scan(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* objDe
 			//no collision
 			if (e->WasCollided() == 0) {
 				coll->t = -100;
+
+				if (database.count(e->obj) > 0) {
+					database[e->obj].erase(objSrc);
+				}
 			}
 			delete e;
 		}
@@ -265,7 +271,7 @@ D3DXVECTOR2 CCollision::GetClampDistance(DWORD dt, LPGAMEOBJECT objSrc, vector<L
 
 	for (LPCOLLISIONEVENT c : coEvents)
 	{
-		if (!c->obj->IsBlocking(c) || c->obj->IsDeleted() || objSrc->IsDeleted()) continue;
+		if (!c->obj->IsBlocking(c)) continue;
 
 		if (c->t < min_tx && c->nx != 0 && c->nx * mdx < 0.0f) {
 			min_tx = c->t;
@@ -296,6 +302,37 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 	if (objSrc->IsCollidable())
 	{
 		Scan(objSrc, dt, coObjects, coEvents);
+
+		for (auto x : database) {
+			if (x.second.count(objSrc) > 0) {
+				LPCOLLISIONEVENT dbItem = x.second[objSrc];
+				bool has = false;
+				for (LPCOLLISIONEVENT e : coEvents) {
+					if (e->obj == dbItem->src_obj) {
+						has = true;
+						break;
+					}
+				}
+				if (!has) {
+					LPCOLLISIONEVENT e = new CCollisionEvent(dbItem->t, dbItem->tl, dbItem->nx * -1, dbItem->ny * -1, dbItem->dx, dbItem->dy, dbItem->src_obj, dbItem->obj);
+					coEvents.push_back(e);
+				}
+			}
+		}
+
+		unordered_map<LPGAMEOBJECT, LPCOLLISIONEVENT> map;
+		for (LPCOLLISIONEVENT e : coEvents) {
+			map[e->obj] = e;
+			if (database.count(e->obj) > 0) {
+				if (database[e->obj].count(objSrc) == 0) {
+					D3DXVECTOR2 sv = objSrc->GetVelocity();
+					D3DXVECTOR2 ev = e->obj->GetVelocity();
+					LPCOLLISIONEVENT e1 = new CCollisionEvent(e->t, e->tl, e->nx * -1, e->ny * -1, e->dx, e->dy, objSrc, e->obj);
+					e->obj->OnCollisionWith(e1);
+				}
+			}
+		}
+		database[objSrc] = map;
 	}
 
 	D3DXVECTOR2 jet{ 0, 0 };
@@ -322,6 +359,15 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 			objSrc->OnCollisionWith(e);
 		}
 	}
+}
 
-	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+void CCollision::Clear()
+{
+	for (auto data : database) {
+		for (auto item : data.second) {
+			delete item.second;
+		}
+		data.second.clear();
+	};
+	database.clear();
 }

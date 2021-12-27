@@ -2,6 +2,8 @@
 #include "CUtil.h"
 #include "CItem.h"
 #include "CTail.h"
+#include "CKoopaParaTropa.h"
+#include "CKoopaTropa.h"
 
 
 CBrickQuestion::CBrickQuestion(float x, float y, string typeItem, string skin) {
@@ -39,7 +41,21 @@ void CBrickQuestion::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 			}
 		}
 	}
-	CCollision::GetInstance()->Process(this, dt, coObjects);
+	vector<LPGAMEOBJECT>* _coObjects = new vector<LPGAMEOBJECT>();
+
+	for (LPGAMEOBJECT o : *coObjects)
+	{
+		switch (o->GetState())
+		{
+		case STATE_MARIO_TAIL:
+		case STATE_KOOPA_PARA_TROPA_SHELD_RUN:
+		case STATE_KOOPA_TROPA_SHELD_RUN:
+			_coObjects->push_back(o);
+			break;
+		}
+	}
+
+	CCollision::GetInstance()->Process(this, dt, _coObjects);
 }
 
 void CBrickQuestion::Render() {
@@ -57,7 +73,17 @@ void CBrickQuestion::GetBoundingBox(float& left, float& top, float& right, float
 void CBrickQuestion::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	if (!_active) {
-		if (dynamic_cast<CTail*>(e->obj)) {
+		if (e->nx != 0) {
+			if (e->obj->GetState() == STATE_KOOPA_PARA_TROPA_SHELD_RUN) {
+				Active();
+			}
+
+			if (e->obj->GetState() == STATE_KOOPA_TROPA_SHELD_RUN) {
+				Active();
+			}
+		}
+
+		if (e->obj->GetState() == STATE_MARIO_TAIL) {
 			Active();
 		}
 	}

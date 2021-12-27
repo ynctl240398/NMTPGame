@@ -3,6 +3,7 @@
 #include "SmallMario.h"
 #include "BigMario.h"
 #include "RaccoonMario.h"
+#include "CAniObject.h"
 
 CMario* CMario::__instance = NULL;
 
@@ -19,6 +20,9 @@ void CMario::_UpdateState()
 		GetBoundingBox(l, t, r, b);
 		update = true;
 	}
+
+	_untouchableTimer.Reset();
+	_untouchableTimer.Start();
 
 	switch (marioState)
 	{
@@ -55,9 +59,20 @@ void CMario::_CheatPointUpdate()
 		marioState = MarioState::Raccoon;
 	}
 	if (kb->IsKeyPressed(DIK_E)) {
-		_position.x = 2409.;
+		_position.x = 2409;
 		_position.y = 399;
 	}
+	if (kb->IsKeyPressed(DIK_END)) {
+		_Die();
+	}
+}
+
+void CMario::_Die()
+{
+	_isActive = false;
+	int _aniId = ID_ANI_MARIO_DIE + (LEVEL_SMALL % 100) * 100;
+	CAniObject* aniObj = new CAniObject(_position, 0, -0.3f, _aniId, { 1, 1 });
+	CGame::GetInstance()->GetCurrentScene()->SpawnAniObject(aniObj);
 }
 
 CMario* CMario::GetInstance()
@@ -72,11 +87,25 @@ CMario::CMario()
 {
 	_UpdateState();
 	_kickTimer = new CTimer(true, 150);
+	_isActive = true;
+	_untouchableTimer.Stop();
 }
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
+	if (!_isActive) return;
+
 	_UpdateState();
 	_CheatPointUpdate();
+
+	_kickTimer->Update(dt);
+	_untouchableTimer.Update(dt);
+
+	if (_untouchableTimer.GetState() != CTimerState::RUNNING) {
+		_untouchable = false;
+	}
+	else {
+		_untouchable = true;
+	}
 
 	stateMachine->_hasQBrick = false;
 
@@ -84,6 +113,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 }
 
 void CMario::Render() {
+	if (!_isActive) return;
+
 	stateMachine->Render();
 }
 

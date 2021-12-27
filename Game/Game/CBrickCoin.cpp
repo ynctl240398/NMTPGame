@@ -3,6 +3,8 @@
 #include "CMario.h"
 #include "CTail.h"
 #include "CAniObject.h"
+#include "CKoopaParaTropa.h"
+#include "CKoopaTropa.h"
 
 int CBrickCoin::_GetAnimationId()
 {
@@ -75,17 +77,24 @@ void CBrickCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CBrickCoin::OnCollisionWith(LPCOLLISIONEVENT e)
 {
     if (_brick) {
-        if (dynamic_cast<CTail*>(e->obj)) {
-            /*CTail* tail = dynamic_cast<CTail*>(e->obj);
-            float vx, vy;
-            tail->GetVelocity(vx, vy);
-            DebugOut(L"Tail: vx: %f\tvy: %f\n", vx, vy);*/
-
+        if (e->obj->GetState() == STATE_MARIO_TAIL) {
             _isDeleted = true;
             _SpawnBreakEffect();
         }
         if (e->ny < 0) {
             if (dynamic_cast<CMario*>(e->obj)) {
+                _isDeleted = true;
+                _SpawnBreakEffect();
+            }
+        }
+
+        if (e->nx != 0) {
+            if (e->obj->GetState() == STATE_KOOPA_PARA_TROPA_SHELD_RUN) {
+                _isDeleted = true;
+                _SpawnBreakEffect();
+            }
+
+            if (e->obj->GetState() == STATE_KOOPA_TROPA_SHELD_RUN) {
                 _isDeleted = true;
                 _SpawnBreakEffect();
             }

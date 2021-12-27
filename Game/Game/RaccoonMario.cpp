@@ -182,6 +182,17 @@ void RaccoonMario::_OnCollisionWithItem(LPCOLLISIONEVENT e)
 	}
 }
 
+void RaccoonMario::_OnDamaged(LPCOLLISIONEVENT e, float damage)
+{
+	if (damage <= 0 || mario->_untouchable) return;
+	if (damage <= 1) {
+		mario->marioState = MarioState::Big;
+	}
+	else {
+		mario->_Die();
+	}
+}
+
 RaccoonMario::RaccoonMario(CMario* mario) : BaseMario(mario, MarioState::Raccoon)
 {
 	_level = LEVEL_SUPER;

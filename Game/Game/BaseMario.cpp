@@ -3,6 +3,13 @@
 #include "CKeyBoard.h"
 #include "CBrickQuestion.h"
 #include "CItem.h"
+#include "CFirer.h"
+#include "CVenusFireTrap.h"
+#include "CPiranhaPlant.h"
+#include "CGoomba.h"
+#include "CParaGoomba.h"
+#include "CKoopaTropa.h"
+#include "CKoopaParaTropa.h"
 
 void BaseMario::_WalkUpdate(DWORD dt)
 {
@@ -212,10 +219,6 @@ void BaseMario::_OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 	}
 }
 
-void BaseMario::_OnCollisionWithEnemy(LPCOLLISIONEVENT e)
-{
-}
-
 void BaseMario::_OnCollisionWithItem(LPCOLLISIONEVENT e)
 {
 }
@@ -412,6 +415,95 @@ void BaseMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (dynamic_cast<CItem*>(e->obj)) {
 		_OnCollisionWithItem(e);
 		return;
+	}	
+
+	if (dynamic_cast<CFirer*>(e->obj)) {
+		_OnDamaged(e, 1.0f);
+		return;
+	}	
+	if (dynamic_cast<CVenusFireTrap*>(e->obj)) {
+		_OnDamaged(e, 1.0f);
+		return;
+	}	
+	if (dynamic_cast<CPiranhaPlant*>(e->obj)) {
+		_OnDamaged(e, 1.0f);
+		return;
+	}
+
+	if (dynamic_cast<CGoomba*>(e->obj)) {
+		if (e->ny < 0) {
+			D3DXVECTOR2 v = mario->GetVelocity();
+			v.y = -0.15f;
+			mario->SetVelocity(v);
+		}
+		else {
+			_OnDamaged(e, 1.0f);
+		}
+		return;
+	}
+	if (dynamic_cast<CParaGoomba*>(e->obj)) {
+		if (e->ny < 0) {
+			D3DXVECTOR2 v = mario->GetVelocity();
+			v.y = -0.15f;
+			mario->SetVelocity(v);
+		}
+		else {
+			_OnDamaged(e, 1.0f);
+		}
+		return;
+	}
+
+	if (dynamic_cast<CKoopaTropa*>(e->obj)) {
+		if (e->ny < 0) {
+			D3DXVECTOR2 v = mario->GetVelocity();
+			v.y = -0.15f;
+			mario->SetVelocity(v);
+		}
+		else {
+			CKoopaTropa* koopa = dynamic_cast<CKoopaTropa*>(e->obj);
+			if (koopa->GetState() == STATE_KOOPA_TROPA_SHELD || koopa->GetState() == STATE_KOOPA_TROPA_SHELD_LIVE) {
+				CKeyBoardCustom* kb = CKeyBoardCustom::GetInstance();
+				if (kb->IsKeyDown(DIK_A)) {
+
+				}
+				else {
+					if (e->nx != 0) {
+						mario->_kickTimer->Reset();
+						mario->_kickTimer->Start();
+					}
+				}
+			}
+			else {
+				_OnDamaged(e, 1.0f);
+			}
+		}
+		return;
+	}
+	if (dynamic_cast<CKoopaParaTropa*>(e->obj)) {
+		if (e->ny < 0) {
+			D3DXVECTOR2 v = mario->GetVelocity();
+			v.y = -0.15f;
+			mario->SetVelocity(v);
+		}
+		else {
+			CKoopaParaTropa* koopa = dynamic_cast<CKoopaParaTropa*>(e->obj);
+			if (koopa->GetState() == STATE_KOOPA_PARA_TROPA_SHELD || koopa->GetState() == STATE_KOOPA_PARA_TROPA_SHELD_LIVE) {
+				CKeyBoardCustom* kb = CKeyBoardCustom::GetInstance();
+				if (kb->IsKeyDown(DIK_A)) {
+
+				}
+				else {
+					if (e->nx != 0) {
+						mario->_kickTimer->Reset();
+						mario->_kickTimer->Start();
+					}
+				}
+			}
+			else {
+				_OnDamaged(e, 1.0f);
+			}
+		}
+		return;
 	}
 }
 
@@ -425,7 +517,7 @@ void BaseMario::OnBlockingOn(bool isHorizontal, float z)
 		vx = 0;
 	}
 	else {
-		vy = 0;
+		vy = 0.00000001;
 		if (z < 0) {
 			mario->SetOnGround(true);
 			CCam::GetInstance()->LockTop();
@@ -437,6 +529,11 @@ void BaseMario::OnBlockingOn(bool isHorizontal, float z)
 	}
 
 	mario->SetVelocity({ vx, vy });
+}
+
+int BaseMario::GetLevel()
+{
+	return _level;
 }
 
 MarioState BaseMario::GetStateID()

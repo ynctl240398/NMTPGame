@@ -6,6 +6,7 @@ class SmallMario :
 {
 protected:
     void _OnCollisionWithItem(LPCOLLISIONEVENT e);
+    void _OnDamaged(LPCOLLISIONEVENT e, float damage) override;
 
 public:
     SmallMario(CMario* mario);

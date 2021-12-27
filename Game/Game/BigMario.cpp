@@ -10,6 +10,17 @@ void BigMario::_OnCollisionWithItem(LPCOLLISIONEVENT e)
 	}
 }
 
+void BigMario::_OnDamaged(LPCOLLISIONEVENT e, float damage)
+{
+	if (damage <= 0 || mario->_untouchable) return;
+	if (damage <= 1) {
+		mario->marioState = MarioState::Small;
+	}
+	else {
+		mario->_Die();
+	}
+}
+
 BigMario::BigMario(CMario* mario) : BaseMario(mario, MarioState::Big)
 {
 	_level = LEVEL_BIG;

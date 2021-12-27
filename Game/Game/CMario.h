@@ -57,6 +57,8 @@ public:
 
 	CTimer* _kickTimer;
 
+	CTimer _untouchableTimer{ true, 3000 };
+
 	static CMario* GetInstance();
 
 	CMario();
@@ -72,6 +74,8 @@ public:
 	void OnBlockingOn(bool isHorizontal, float z);
 
 	int IsBlocking(LPCOLLISIONEVENT e);
+
+	void _Die();
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
 };

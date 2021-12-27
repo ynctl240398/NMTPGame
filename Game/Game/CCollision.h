@@ -2,6 +2,7 @@
 
 #include "CUtil.h"
 #include "CDebug.h"
+#include <unordered_map>
 
 using namespace std;
 
@@ -46,6 +47,7 @@ struct CCollisionEvent
 class CCollision
 {
 	static CCollision* __instance;
+	unordered_map<LPGAMEOBJECT, unordered_map<LPGAMEOBJECT, LPCOLLISIONEVENT>> database;
 public:
 	static void SweptAABB(
 		float ml,			// move left 
@@ -86,6 +88,8 @@ public:
 	D3DXVECTOR2 GetClampDistance(DWORD dt, LPGAMEOBJECT objSrc, vector<LPCOLLISIONEVENT> coEvents, D3DXVECTOR2& jet);
 
 	void Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+
+	void Clear();
 
 	static CCollision* GetInstance();
 };

@@ -317,14 +317,6 @@ void CPlayScene::Load()
 
 void CPlayScene::Update(DWORD dt)
 {
-	if (player->GetState() == STATE_MARIO_DIE) {
-		CMario* mario = dynamic_cast<CMario*>(player);
-		/*if (mario->GetLive() > 0) {
-			player->Update(dt);
-		}*/
-		player->Update(dt);
-		return;
-	}
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
 
@@ -348,6 +340,7 @@ void CPlayScene::Update(DWORD dt)
 
 	AddWaitingObjects();
 	PurgeDeletedObjects();
+	CCollision::GetInstance()->Clear();
 }
 
 void CPlayScene::Render()
@@ -407,36 +400,21 @@ void CPlayScene::SpawnAniObject(CGameObject* obj)
 	animationObjects.push_back(obj);
 }
 
-bool CPlayScene::IsGameObjectDeleted(const LPGAMEOBJECT& o) { return o == NULL; }
+bool CPlayScene::IsGameObjectDeleted(const LPGAMEOBJECT& o) {
+	if (o->IsDeleted()) {
+		delete o;
+		return true;
+	}
+	return false; 
+}
 
 void CPlayScene::PurgeDeletedObjects()
 {
-	vector<LPGAMEOBJECT>::iterator it;
-	for (it = objects.begin(); it != objects.end(); it++)
-	{
-		LPGAMEOBJECT o = *it;
-		if (o->IsDeleted())
-		{
-			delete o;
-			*it = NULL;
-		}
-	}
-
 	// NOTE: remove_if will swap all deleted items to the end of the vector
 	// then simply trim the vector, this is much more efficient than deleting individual items
 	objects.erase(
 		std::remove_if(objects.begin(), objects.end(), CPlayScene::IsGameObjectDeleted),
 		objects.end());
-	
-	for (it = animationObjects.begin(); it != animationObjects.end(); it++)
-	{
-		LPGAMEOBJECT o = *it;
-		if (o->IsDeleted())
-		{
-			delete o;
-			*it = NULL;
-		}
-	}
 
 	// NOTE: remove_if will swap all deleted items to the end of the vector
 	// then simply trim the vector, this is much more efficient than deleting individual items

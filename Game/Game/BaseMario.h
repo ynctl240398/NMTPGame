@@ -55,7 +55,6 @@ protected:
 	int _level = 0;
 
 	virtual void _OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e);
-	virtual void _OnCollisionWithEnemy(LPCOLLISIONEVENT e);
 	virtual void _OnCollisionWithItem(LPCOLLISIONEVENT e);
 	virtual void _OnDamaged(LPCOLLISIONEVENT e, float damage);
 
@@ -76,6 +75,8 @@ public:
 	virtual void OnBlockingOn(bool isHorizontal, float z);
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom) = 0;
+
+	virtual int GetLevel();
 
 	virtual MarioState GetStateID();
 };

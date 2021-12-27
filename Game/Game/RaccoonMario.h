@@ -21,6 +21,7 @@ protected:
     float MARIO_FLOATING_SPEED = 0.02f;
 
     void _OnCollisionWithItem(LPCOLLISIONEVENT e);
+    void _OnDamaged(LPCOLLISIONEVENT e, float damage) override;
 
 public:
     RaccoonMario(CMario* mario);
