@@ -54,10 +54,10 @@ protected:
 
 	int _level = 0;
 
-	void _OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e);
-	void _OnCollisionWithEnemy(LPCOLLISIONEVENT e);
-	void _OnCollisionWithItem(LPCOLLISIONEVENT e);
-	void _OnDamaged(LPCOLLISIONEVENT e, float damage);
+	virtual void _OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e);
+	virtual void _OnCollisionWithEnemy(LPCOLLISIONEVENT e);
+	virtual void _OnCollisionWithItem(LPCOLLISIONEVENT e);
+	virtual void _OnDamaged(LPCOLLISIONEVENT e, float damage);
 
 public:
 

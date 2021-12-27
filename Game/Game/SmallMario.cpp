@@ -1,5 +1,14 @@
 #include "SmallMario.h"
 #include "CMario.h"
+#include "CItem.h"
+
+void SmallMario::_OnCollisionWithItem(LPCOLLISIONEVENT e)
+{
+	CItem* item = dynamic_cast<CItem*>(e->obj);
+	if (item->GetType() == TYPE_ITEM_MUSHROOM_RED) {
+		mario->marioState = MarioState::Big;
+	}
+}
 
 SmallMario::SmallMario(CMario* mario) : BaseMario(mario, MarioState::Small)
 {

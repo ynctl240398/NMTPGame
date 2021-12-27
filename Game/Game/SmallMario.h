@@ -4,6 +4,8 @@
 class SmallMario :
     public BaseMario
 {
+protected:
+    void _OnCollisionWithItem(LPCOLLISIONEVENT e);
 
 public:
     SmallMario(CMario* mario);

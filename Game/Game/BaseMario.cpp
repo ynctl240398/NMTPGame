@@ -2,6 +2,7 @@
 #include "CMario.h"
 #include "CKeyBoard.h"
 #include "CBrickQuestion.h"
+#include "CItem.h"
 
 void BaseMario::_WalkUpdate(DWORD dt)
 {
@@ -407,6 +408,9 @@ void BaseMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (dynamic_cast<CBrickQuestion*>(e->obj)) {
 		_OnCollisionWithQuestionBrick(e);
 		return;
+	}
+	if (dynamic_cast<CItem*>(e->obj)) {
+		_OnCollisionWithItem(e);
 	}
 }
 

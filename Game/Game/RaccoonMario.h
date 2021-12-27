@@ -20,6 +20,8 @@ protected:
     float MARIO_FLYING_UP_FORCE = 0.082f;
     float MARIO_FLOATING_SPEED = 0.02f;
 
+    void _OnCollisionWithItem(LPCOLLISIONEVENT e);
+
 public:
     RaccoonMario(CMario* mario);
 
