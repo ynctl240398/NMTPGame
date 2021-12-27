@@ -9,7 +9,6 @@
 #define STATE_KOOPA_PARA_TROPA_SHELD_RUN 6903
 #define STATE_KOOPA_PARA_TROPA_SHELD_LIVE 6904
 #define STATE_KOOPA_PARA_TROPA_FLY 6905
-#define STATE_KOOPA_PARA_TROPA_DIE 6906
 
 class CObjKoopaTropa;
 
@@ -22,6 +21,8 @@ class CKoopaParaTropa : public CGameObject
 	int _GetAnimationId();
 
 	bool _flip = false;
+
+	void _Die(LPCOLLISIONEVENT e);
 
 public:
 	CKoopaParaTropa(float x, float y, int state);

@@ -6,6 +6,8 @@
 #include "CMario.h"
 #include "CAniObject.h"
 #include "CTail.h"
+#include "CKoopaParaTropa.h"
+#include "CKoopaTropa.h"
 
 #define GOOMBA_WIDTH			16
 #define GOOMBA_HEIGHT			15
@@ -18,7 +20,7 @@
 
 #define GOOMBA_DIE_TIMEOUT		500
 
-#define GOOMBA_GRAVITY			0.002f
+#define GOOMBA_GRAVITY			0.0009f
 #define GOOMBA_WALK_SPEED		0.05f
 #define GOOMBA_JUMP_DIE			0.5f
 
@@ -67,6 +69,26 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
 		CAniObject* aniObj = new CAniObject(_position, 0.02f * e->nx, -0.25f, ID_ANI_GOOMBA_DIE_JUMP, { 1, -1 });
 		CGame::GetInstance()->GetCurrentScene()->SpawnAniObject(aniObj);
 	}
+
+	CKoopaParaTropa* paraKoopa = dynamic_cast<CKoopaParaTropa*>(e->obj);
+	if (paraKoopa) {
+		if (paraKoopa->GetState() == STATE_KOOPA_PARA_TROPA_SHELD_RUN) {
+			_isDeleted = true;
+
+			CAniObject* aniObj = new CAniObject(_position, 0.02f * e->nx, -0.25f, ID_ANI_GOOMBA_DIE_JUMP, { 1, -1 });
+			CGame::GetInstance()->GetCurrentScene()->SpawnAniObject(aniObj);
+		}
+	}
+
+	CKoopaTropa* koopa = dynamic_cast<CKoopaTropa*>(e->obj);
+	if (koopa) {
+		if (koopa->GetState() == STATE_KOOPA_TROPA_SHELD_RUN) {
+			_isDeleted = true;
+
+			CAniObject* aniObj = new CAniObject(_position, 0.02f * e->nx, -0.25f, ID_ANI_GOOMBA_DIE_JUMP, { 1, -1 });
+			CGame::GetInstance()->GetCurrentScene()->SpawnAniObject(aniObj);
+		}
+	}
 }
 
 void CGoomba::OnBlockingOn(bool isHorizontal, float z)
@@ -81,6 +103,11 @@ void CGoomba::OnBlockingOn(bool isHorizontal, float z)
 
 int CGoomba::IsBlocking(LPCOLLISIONEVENT e)
 {
+	if (e->obj == CMario::GetInstance()) {
+		if (e->ny > 0) {
+			return true;
+		}
+	}
 	return dynamic_cast<CGoomba*>(e->obj) == nullptr;
 }
 

@@ -10,9 +10,6 @@ CObjKoopaTropa::CObjKoopaTropa(CKoopaParaTropa* koopa) {
 
 void CObjKoopaTropa::Render() {
 	RenderBoundingBox();
-	RenderBoundingBox();
-	RenderBoundingBox();
-	RenderBoundingBox();
 }
 
 void CObjKoopaTropa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)

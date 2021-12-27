@@ -1,5 +1,8 @@
 #include "CPiranhaPlant.h"
 #include "CAnimation.h"
+#include "CKoopaParaTropa.h"
+#include "CKoopaTropa.h"
+#include "CTail.h"
 
 #define ID_ANI_PIRANHA_PLANT_RED_UP		9000
 #define ID_ANI_PIRANHA_PLANT_GREEN_UP	9001
@@ -89,8 +92,7 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 		}
 
-		_position.x += _velocity.x * dt;
-		_position.y += _velocity.y * dt;
+		CCollision::GetInstance()->Process(this, dt, coObjects);
 	}
 }
 
@@ -100,6 +102,29 @@ void CPiranhaPlant::OnNoCollision(DWORD dt)
 
 void CPiranhaPlant::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+	CKoopaParaTropa* paraKoopa = dynamic_cast<CKoopaParaTropa*>(e->obj);
+	if (paraKoopa) {
+		if (paraKoopa->GetState() == STATE_KOOPA_PARA_TROPA_SHELD_RUN) {
+			_isDeleted = true;
+		}
+	}
+
+	CKoopaTropa* koopa = dynamic_cast<CKoopaTropa*>(e->obj);
+	if (koopa) {
+		if (koopa->GetState() == STATE_KOOPA_TROPA_SHELD_RUN) {
+			_isDeleted = true;
+		}
+	}
+
+	CTail* tail = dynamic_cast<CTail*>(e->obj);
+	if (tail) {
+		_isDeleted = true;
+	}
+}
+
+int CPiranhaPlant::IsBlocking(LPCOLLISIONEVENT e)
+{
+	return 0;
 }
 
 void CPiranhaPlant::GetBoundingBox(float& left, float& top, float& right, float& bottom)

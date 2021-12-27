@@ -2,6 +2,9 @@
 #include "CAnimation.h"
 #include "CMario.h"
 #include "CTimer.h"
+#include "CKoopaParaTropa.h"
+#include "CKoopaTropa.h"
+#include "CTail.h"
 
 #define ID_ANI_VENUS_FIRE_TRAP_RED_UP			8000
 #define ID_ANI_VENUS_FIRE_TRAP_RED_UP_FIRER		8001
@@ -15,6 +18,7 @@
 CVenusFireTrap::CVenusFireTrap(float x, float y, int type, float offSetY)
 {
 	_position = { x,y + VENUS_FIRE_TRAP_BBOX_HIEGHT + 2};
+	_velocity = { 0, 0 };
 	_offSetY = offSetY;
 	_startPostion = _position;
 	_type = type;
@@ -45,10 +49,6 @@ void CVenusFireTrap::SetState(int state)
 
 void CVenusFireTrap::Render()
 {
-	if (_firer != NULL) {
-		_firer->Render();
-	}
-
 	_aniId = _GetAnimationId();
 	CGameObject::Render();
 }
@@ -155,6 +155,7 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 						_firer = new CFirer(_position.x, _position.y - DIF);
 						_firer->SetState(STATE_FIRER_FLY);
+						CGame::GetInstance()->GetCurrentScene()->SpawnObject(_firer);
 
 						_fireTimer.Reset();
 						_fireTimer.Start();
@@ -168,15 +169,7 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				break;
 		}
 
-		_position.x += _velocity.x * dt;
-		_position.y += _velocity.y * dt;
-	}
-
-
-	if (_firer != NULL) {
-		vector<LPGAMEOBJECT> objs;
-		objs.push_back(CMario::GetInstance());
-		_firer->Update(dt, &objs);
+		CCollision::GetInstance()->Process(this, dt, coObjects);
 	}
 }
 
@@ -186,6 +179,29 @@ void CVenusFireTrap::OnNoCollision(DWORD dt)
 
 void CVenusFireTrap::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+	CKoopaParaTropa* paraKoopa = dynamic_cast<CKoopaParaTropa*>(e->obj);
+	if (paraKoopa) {
+		if (paraKoopa->GetState() == STATE_KOOPA_PARA_TROPA_SHELD_RUN) {
+			_isDeleted = true;
+		}
+	}
+
+	CKoopaTropa* koopa = dynamic_cast<CKoopaTropa*>(e->obj);
+	if (koopa) {
+		if (koopa->GetState() == STATE_KOOPA_TROPA_SHELD_RUN) {
+			_isDeleted = true;
+		}
+	}
+
+	CTail* tail = dynamic_cast<CTail*>(e->obj);
+	if (tail) {
+		_isDeleted = true;
+	}
+}
+
+int CVenusFireTrap::IsBlocking(LPCOLLISIONEVENT e)
+{
+	return 0;
 }
 
 void CVenusFireTrap::GetBoundingBox(float& left, float& top, float& right, float& bottom)

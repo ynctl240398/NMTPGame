@@ -46,6 +46,7 @@ public:
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
+	int IsBlocking(LPCOLLISIONEVENT e) override;
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
 };

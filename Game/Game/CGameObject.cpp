@@ -132,5 +132,5 @@ void CGameObject::Render() {
 	}
 
 	animations->Get(_aniId)->Render(_position.x, _position.y, _scale, _alpha);
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }
