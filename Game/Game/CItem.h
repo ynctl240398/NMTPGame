@@ -18,18 +18,23 @@
 #define STATE_ITEM_JUMP 3902
 #define STATE_ITEM_DISAPPEAR 3903
 #define STATE_ITEM_UP 3904
+#define STATE_ITEM_P_PUSHED 3905
 
 #define ID_ANI_ITEM_MUSHROOM_RED 3000
 #define ID_ANI_ITEM_MUSHROOM_GREEN 3001
 #define ID_ANI_ITEM_COIN_BRICK 3003
-#define ID_ANI_ITEM_P 11901
-#define ID_ANI_ITEM_P_PUSHED 11902
+#define ID_ANI_ITEM_P 11001
+#define ID_ANI_ITEM_P_PUSHED 11002
 
 class CItem : public CGameObject
 {
 	string _type;
 
 	int _GetAnimationId();
+
+	int _step;
+
+	vector<LPGAMEOBJECT> _coObjects;
 
 public:
 
@@ -46,14 +51,12 @@ public:
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
+	void OnBlockingOn(bool isHorizontal, float z);
 
 	string GetType() { return this->_type; }
 	void SetType(string type);
 
 	virtual int IsBlocking(LPCOLLISIONEVENT e);
-
-	void SetState(int state);
-
 
 	~CItem();
 };

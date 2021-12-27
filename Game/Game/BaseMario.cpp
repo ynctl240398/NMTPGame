@@ -202,6 +202,8 @@ void BaseMario::_AttackUpdate(DWORD dt)
 void BaseMario::_OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 {
 	if (_hasQBrick) return;
+	if (e->ny <= 0) return;
+
 	CBrickQuestion* qBrick = dynamic_cast<CBrickQuestion*>(e->obj);
 	if (!qBrick->IsActivated()) {
 		qBrick->Active();
