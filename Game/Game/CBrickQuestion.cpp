@@ -1,6 +1,7 @@
 #include "CBrickQuestion.h"
 #include "CUtil.h"
 #include "CItem.h"
+#include "CTail.h"
 
 
 CBrickQuestion::CBrickQuestion(float x, float y, string typeItem, string skin) {
@@ -35,6 +36,7 @@ void CBrickQuestion::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 			}
 		}
 	}
+	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
 void CBrickQuestion::Render() {
@@ -47,6 +49,15 @@ void CBrickQuestion::GetBoundingBox(float& left, float& top, float& right, float
 	top = _position.y - BRICK_HEIGHT / 2;
 	right = left + BRICK_WIDTH;
 	bottom = top + BRICK_HEIGHT;
+}
+
+void CBrickQuestion::OnCollisionWith(LPCOLLISIONEVENT e)
+{
+	if (!_active) {
+		if (dynamic_cast<CTail*>(e->obj)) {
+			Active();
+		}
+	}
 }
 
 void CBrickQuestion::Active()

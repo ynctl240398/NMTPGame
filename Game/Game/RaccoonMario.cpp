@@ -1,6 +1,7 @@
 #include "RaccoonMario.h"
 #include "CMario.h"
 #include "CItem.h"
+#include "CTail.h"
 
 void RaccoonMario::_JumpUpdate(DWORD dt)
 {
@@ -126,6 +127,8 @@ void RaccoonMario::_AttackUpdate(DWORD dt)
 		if (_attackTimer.GetState() != CTimerState::RUNNING) {
 			_attackTimer.Reset();
 			_attackTimer.Start();
+
+			CGame::GetInstance()->GetCurrentScene()->SpawnObject(new CTail());
 		}
 	}
 }

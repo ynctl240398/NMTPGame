@@ -262,7 +262,7 @@ void BaseMario::Render()
 	mario->_aniId = _GetAnimationId();
 	_HandleAlpha();
 	mario->CGameObject::Render();
-	mario->RenderBoundingBox();	
+	//mario->RenderBoundingBox();	
 }
 
 void BaseMario::_HandleAlpha()
@@ -411,6 +411,7 @@ void BaseMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 	if (dynamic_cast<CItem*>(e->obj)) {
 		_OnCollisionWithItem(e);
+		return;
 	}
 }
 

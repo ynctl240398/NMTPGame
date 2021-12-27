@@ -1,22 +1,20 @@
 #pragma once
 
 #include "CGameObject.h"
+#include "CTimer.h"
 
-#define MARIO_TAIL_BBOX_WIDTH		16
-#define MARIO_TAIL_BBOX_HEIGHT		10
+#define MARIO_TAIL_BBOX_WIDTH		2
+#define MARIO_TAIL_BBOX_HEIGHT		2
+#define MARIO_TAIL_RANGE			20.0f
 
 class CTail : public CGameObject
 {
-	bool _isShow;
+	CTimer _liveTimer{ true, 60 };
+
+	int _step;
 
 public:
-	CTail(float x, float y);
-
-	void SetShow(bool value) {
-		_isShow = value;
-	}
-
-	bool GetShow() { return _isShow; }
+	CTail();
 
 	void Render() override;
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) override;
