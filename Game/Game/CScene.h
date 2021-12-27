@@ -27,5 +27,6 @@ public:
 	virtual void Update(DWORD dt) = 0;
 	virtual void Render() = 0;
 	virtual void SpawnObject(CGameObject* obj) = 0;
+	virtual void SpawnAniObject(CGameObject* obj) = 0;
 };
 typedef CScene* LPSCENE;

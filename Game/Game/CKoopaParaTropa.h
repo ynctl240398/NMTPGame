@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CGameObject.h"
-#include "CObjKoopaTropa.h"
+#include "CTimer.h"
 
 #define STATE_KOOPA_PARA_TROPA_IDLE 6900
 #define STATE_KOOPA_PARA_TROPA_WALK 6901
@@ -11,19 +11,18 @@
 #define STATE_KOOPA_PARA_TROPA_FLY 6905
 #define STATE_KOOPA_PARA_TROPA_DIE 6906
 
+class CObjKoopaTropa;
 
 class CKoopaParaTropa : public CGameObject
 {
-
-	ULONGLONG _liveStart;
-	ULONGLONG _liveSheldStart;
-	ULONGLONG _liveSheldWalkStart;
+	CTimer respawnTimer{ true, 5000L };
 
 	CObjKoopaTropa* _obj;
 
 	int _GetAnimationId();
 
-	void _SetPositionXObj(float x);
+	bool _flip = false;
+
 public:
 	CKoopaParaTropa(float x, float y, int state);
 
@@ -32,13 +31,10 @@ public:
 	void Render() override;
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) override;
 
-	int IsCollidable()
-	{
-		return (_state != STATE_KOOPA_PARA_TROPA_DIE);
-	}
-
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
+	void OnBlockingOn(bool isHorizontal, float z) override;
+	int IsBlocking(LPCOLLISIONEVENT e) override;
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
 };

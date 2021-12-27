@@ -92,6 +92,14 @@ void CItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 			else {
 				_position.y = _startPostion.y - h;
 			}
+
+			float ml, mt, mr, mb, sl, st, sr, sb;
+			GetBoundingBox(ml, mt, mr, mb);
+			CMario::GetInstance()->GetBoundingBox(sl, st, sr, sb);
+			if (CCollision::IsOverlap(ml, mt, mr, mb, sl, st, sr, sb)) {
+				LPCOLLISIONEVENT e = new CCollisionEvent(0.01f, 1, 0, -1, 0, 0, this, CMario::GetInstance());
+				OnCollisionWith(e);
+			}
 		}
 	}
 	else if (_type == TYPE_ITEM_COIN_BRICK) {

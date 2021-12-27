@@ -114,3 +114,7 @@ void CMario::OnBlockingOn(bool isHorizontal, float z)
 {
 	stateMachine->OnBlockingOn(isHorizontal, z);
 }
+
+int CMario::IsBlocking(LPCOLLISIONEVENT e) {
+	return 0;
+}

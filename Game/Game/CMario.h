@@ -71,6 +71,8 @@ public:
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 	void OnBlockingOn(bool isHorizontal, float z);
 
+	int IsBlocking(LPCOLLISIONEVENT e);
+
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
 };
 

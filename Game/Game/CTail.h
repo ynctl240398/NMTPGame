@@ -5,7 +5,8 @@
 
 #define MARIO_TAIL_BBOX_WIDTH		2
 #define MARIO_TAIL_BBOX_HEIGHT		2
-#define MARIO_TAIL_RANGE			20.0f
+#define MARIO_TAIL_RANGE_FRONT		14.5f
+#define MARIO_TAIL_RANGE_BACK		12.0f
 
 class CTail : public CGameObject
 {

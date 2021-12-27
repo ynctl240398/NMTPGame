@@ -27,7 +27,7 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	_liveTimer.Update(dt);
 
 	if (_step == 0) {
-		_velocity.x = (MARIO_TAIL_RANGE / dt) * mario->_direction * -1;
+		_velocity.x = min(MARIO_TAIL_RANGE_BACK / dt, 0.467742) * (mario->_direction > 0 ? 1 : -1) * -1;
 		if (_liveTimer.GetState() == CTimerState::TIMEOVER) {
 			_step = 1;
 			_liveTimer.Reset();
@@ -35,7 +35,7 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 	else if (_step == 1) {
-		_velocity.x = (MARIO_TAIL_RANGE / dt) * mario->_direction;
+		_velocity.x = min(MARIO_TAIL_RANGE_FRONT / dt, 0.467742f) * (mario->_direction > 0 ? 1 : -1);
 		if (_liveTimer.GetState() == CTimerState::TIMEOVER) {
 			_step = 2;
 			_liveTimer.Reset();
@@ -45,6 +45,8 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	else {
 		_isDeleted = true;
 	}
+
+	//_position += _velocity * dt;
 }
 
 void CTail::OnNoCollision(DWORD dt)

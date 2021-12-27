@@ -17,6 +17,7 @@ protected:
 
 	vector<LPGAMEOBJECT> objects;
 	vector<LPGAMEOBJECT> waitingObjects;
+	vector<LPGAMEOBJECT> animationObjects;
 
 	CBackGround* _bg;
 	CCam* _cam;
@@ -40,6 +41,8 @@ public:
 	virtual void Unload();
 
 	virtual void SpawnObject(CGameObject* obj);
+
+	virtual void SpawnAniObject(CGameObject* obj);
 
 	LPGAMEOBJECT GetPlayer() { return player; }
 

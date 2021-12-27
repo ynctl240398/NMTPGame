@@ -16,7 +16,6 @@
 #include "CKoopaTropa.h"
 #include "CVenusFireTrap.h"
 #include "CPiranhaPlant.h"
-#include "CBrickP.h"
 #include "CBrickCoin.h"
 
 using namespace std;
@@ -337,6 +336,11 @@ void CPlayScene::Update(DWORD dt)
 		objects[i]->Update(dt, &coObjects);
 	}
 
+	for (size_t i = 0; i < animationObjects.size(); i++)
+	{
+		animationObjects[i]->Update(dt, NULL);
+	}
+
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return;
 
@@ -352,6 +356,9 @@ void CPlayScene::Render()
 	_cam->Render();
 	for (int i = 0; i < (int)objects.size(); i++)
 		objects[i]->Render();
+
+	for (int i = 0; i < (int)animationObjects.size(); i++)
+		animationObjects[i]->Render();
 }
 
 /*
@@ -395,6 +402,11 @@ void CPlayScene::SpawnObject(CGameObject* obj)
 	waitingObjects.push_back(obj);
 }
 
+void CPlayScene::SpawnAniObject(CGameObject* obj)
+{
+	animationObjects.push_back(obj);
+}
+
 bool CPlayScene::IsGameObjectDeleted(const LPGAMEOBJECT& o) { return o == NULL; }
 
 void CPlayScene::PurgeDeletedObjects()
@@ -415,4 +427,20 @@ void CPlayScene::PurgeDeletedObjects()
 	objects.erase(
 		std::remove_if(objects.begin(), objects.end(), CPlayScene::IsGameObjectDeleted),
 		objects.end());
+	
+	for (it = animationObjects.begin(); it != animationObjects.end(); it++)
+	{
+		LPGAMEOBJECT o = *it;
+		if (o->IsDeleted())
+		{
+			delete o;
+			*it = NULL;
+		}
+	}
+
+	// NOTE: remove_if will swap all deleted items to the end of the vector
+	// then simply trim the vector, this is much more efficient than deleting individual items
+	animationObjects.erase(
+		std::remove_if(animationObjects.begin(), animationObjects.end(), CPlayScene::IsGameObjectDeleted),
+		animationObjects.end());
 }

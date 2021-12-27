@@ -1,49 +1,48 @@
 #include "CObjKoopaTropa.h"
 #include "CBrick.h"
-#include "CBrickP.h"
 #include "CPlatform.h"
+#include "CKoopaParaTropa.h"
+#include "CMario.h"
 
-//obj
-
-CObjKoopaTropa::CObjKoopaTropa(float x, float y) {
-	_position = { x,y };
-	_ay = OBJ_GRAVITY;
-	_ax = OBJ_SPEED;
-	_velocity = { 0,0 };
-	_isNoCollisionWithPlatform = false;
-}
-
-
-void CObjKoopaTropa::OnNoCollision(DWORD dt) {
-	_position -= _velocity * dt;
-	_position.y += _velocity.y * dt;
-	_isNoCollisionWithPlatform = true;
-}
-
-void CObjKoopaTropa::OnCollisionWith(LPCOLLISIONEVENT e) 
-{
-
-	if (dynamic_cast<CBrick*>(e->obj) || dynamic_cast<CBrickP*>(e->obj) || dynamic_cast<CPlatform*>(e->obj)) {
-		if (e->ny != 0)
-		{
-			_velocity.y = 0;
-			_isNoCollisionWithPlatform = false;
-		}
-	}
-	else
-		_isNoCollisionWithPlatform = true;
+CObjKoopaTropa::CObjKoopaTropa(CKoopaParaTropa* koopa) {
+	_koopa = koopa;
 }
 
 void CObjKoopaTropa::Render() {
+	RenderBoundingBox();
+	RenderBoundingBox();
+	RenderBoundingBox();
 	RenderBoundingBox();
 }
 
 void CObjKoopaTropa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	//_velocity.x += _ax * dt;
-	_velocity.y += _ay * dt;
+	_koopa->GetPosition(_position.x, _position.y);
+	_position.y += 16;
+	_position.x += _koopa->GetVelocity().x > 0 ? 8 : -8;
 
-	CGameObject::Update(dt, coObjects);
+	float l, t, r, b;
+	float sl, st, sr, sb;
+
+	bool turnBack = true;
+
+	GetBoundingBox(l, t, r, b);
+	for (LPGAMEOBJECT var : *coObjects)
+	{
+		if (var == _koopa || var == CMario::GetInstance()) {
+			continue;
+		}
+		var->GetBoundingBox(sl, st, sr, sb);
+		if (CCollision::IsOverlap(l, t, r, b, sl, st, sr, sb)) {
+			turnBack = false;
+		}
+	}
+
+	if (turnBack) {
+		float vx, vy;
+		_koopa->GetVelocity(vx, vy);
+		_koopa->SetVelocity({ vx * -1, vy });
+	}
 }
 
 

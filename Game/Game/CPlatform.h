@@ -11,6 +11,7 @@ protected:
 public:
 	CPlatform(float x, float y, int w, int h) :CGameObject()
 	{
+		h = 5;
 		_position = { x + (w / 2) - DIF, y + h / 2 - DIF };
 		_width = w;
 		_height = h;

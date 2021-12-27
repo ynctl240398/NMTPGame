@@ -6,7 +6,7 @@
 #include "CBrickQuestion.h"
 #include "CGoomba.h"
 #include "CItem.h"
-#include "CBrickP.h"
+#include "CObjKoopaTropa.h"
 
 #define ID_ANI_KOOPA_PARA_TROPA_WALK 6000
 #define ID_ANI_KOOPA_PARA_TROPA_SHELD 6001
@@ -36,10 +36,8 @@ CKoopaParaTropa::CKoopaParaTropa(float x, float y, int state){
 	_position = { x,y };
 	_startPostion = _position;
 	_startState = state;
+	_obj = new CObjKoopaTropa(this);
 	SetState(STATE_KOOPA_PARA_TROPA_IDLE);
-	_liveStart = 0;
-	_liveSheldStart = 0;
-	_liveSheldWalkStart = 0;
 }
 
 int CKoopaParaTropa::_GetAnimationId() {
@@ -70,63 +68,23 @@ int CKoopaParaTropa::_GetAnimationId() {
 }
 
 void CKoopaParaTropa::SetState(int state) {
+	_ay = KOOPA_PARA_TROPA_GRAVITY;
+	_ax = 0;
 	switch (state)
 	{
 	case STATE_KOOPA_PARA_TROPA_WALK:
-		_ay = KOOPA_PARA_TROPA_GRAVITY;
-		_velocity.x = -KOOPA_PARA_TROPA_WALK_SPEED * _scale.x;
+		_velocity.x = KOOPA_PARA_TROPA_WALK_SPEED;
 		break;
 	case STATE_KOOPA_PARA_TROPA_SHELD:
-		_ax = 0;
-		_liveSheldStart = GetTickCount64();
-		_velocity = { 0,0 };
 		break;
 	case STATE_KOOPA_PARA_TROPA_SHELD_RUN:
-		_liveSheldStart = 0;
-		_velocity.x = -KOOPA_PARA_TROPA_SHELD_SPEED * _scale.x;
 		break;
 	case STATE_KOOPA_PARA_TROPA_SHELD_LIVE:
-		_liveSheldWalkStart = GetTickCount64();
-		_liveSheldStart = 0;
 		break;
-	case STATE_KOOPA_PARA_TROPA_FLY:
-		_ay = KOOPA_PARA_TROPA_GRAVITY;
-		break;
-	case STATE_KOOPA_PARA_TROPA_DIE:
-		_liveStart = GetTickCount64();
-		break;
-	case STATE_KOOPA_PARA_TROPA_IDLE:
-		_liveStart = 0;
-		_position = _startPostion;
-		_ax = 0;
-		_ay = 0;
-		_velocity = { 0,0 };
-		_scale = { -1.0f, 1.0f };
-		_obj = new CObjKoopaTropa(_position.x + KOOPA_PARA_TROPA_BBOX_WIDTH / 2 + OBJ_BBOX_WIDTH / 2, _position.y);
+	default:
 		break;
 	}
 	CGameObject::SetState(state);
-}
-
-void CKoopaParaTropa::_SetPositionXObj(float x)
-{
-	float px, py;
-
-	if (_obj->IsNoCollisionWithPlatform()) {
-		_velocity.x = -_velocity.x;
-		_scale.x = -_scale.x;
-		_obj->SetIsNoCollisionWithPlatform(false);
-		py = _position.y;
-	}
-	else py = _obj->GetPosition().y;
-
-	if (_scale.x < 0) { //right
-		px = x + KOOPA_PARA_TROPA_BBOX_WIDTH / 2;
-	}
-	else {
-		px = x - KOOPA_PARA_TROPA_BBOX_WIDTH / 2;
-	}
-	_obj->SetPosition({ px, py });
 }
 
 void CKoopaParaTropa::OnNoCollision(DWORD dt) 
@@ -134,100 +92,73 @@ void CKoopaParaTropa::OnNoCollision(DWORD dt)
 }
 
 void CKoopaParaTropa::OnCollisionWith(LPCOLLISIONEVENT e) {
-	if (!e->obj->IsBlocking(e)) return;
-
-	if (dynamic_cast<CItem*>(e->obj)) {
-		_handleNoCollisionX = true;
-		return;
+	switch (_state)
+	{
+	case STATE_KOOPA_PARA_TROPA_WALK:
+		break;
+	case STATE_KOOPA_PARA_TROPA_SHELD:
+		break;
+	case STATE_KOOPA_PARA_TROPA_SHELD_RUN:
+		break;
+	case STATE_KOOPA_PARA_TROPA_SHELD_LIVE:
+		break;
+	default:
+		break;
 	}
+}
 
-	if (_state != STATE_KOOPA_PARA_TROPA_SHELD_RUN) {
-		if (dynamic_cast<CKoopaParaTropa*>(e->obj) || dynamic_cast<CGoomba*>(e->obj)) {
-			_handleNoCollisionX = true;
-			return;
-		}
+void CKoopaParaTropa::OnBlockingOn(bool isHorizontal, float z)
+{
+	if (isHorizontal) {
+		_velocity.x *= -1;
 	}
 	else {
-		if (dynamic_cast<CGoomba*>(e->obj)) {
-			CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
-			goomba->SetState(STATE_GOOMBA_DIE);
-		}
-		if (dynamic_cast<CBrickP*>(e->obj)) {
-			CBrickP* brickP = dynamic_cast<CBrickP*>(e->obj);
-			if (brickP->GetState() == STATE_BRICK_P_BRICK && e->obj->IsBlocking(e) && e->nx != 0)
-			{
-				brickP->SetState(STATE_BRICK_P_BRICK_BREAK);
-			}
-		}
-	}
-
-	if (e->ny != 0)
-	{
 		_velocity.y = 0;
 	}
-	else if (e->nx != 0)
-	{
-		if (dynamic_cast<CBrick*>(e->obj) || dynamic_cast<CBrickQuestion*>(e->obj) || dynamic_cast<CBrickP*>(e->obj)) {
-			if (dynamic_cast<CBrickQuestion*>(e->obj)) {
-				if (_state == STATE_KOOPA_PARA_TROPA_SHELD_RUN) {
-					CBrickQuestion* brickQuestion = dynamic_cast<CBrickQuestion*>(e->obj);
-					if (brickQuestion->GetState() == STATE_BRICK_QUESTION_RUN && e->obj->IsBlocking(e))
-					{
-						brickQuestion->SetState(STATE_BRICK_QUESTION_IDLE);
-					}
-				}
-			}
-			_velocity.x = -_velocity.x;
-			_scale.x = -_scale.x;
-		}
-		else _handleNoCollisionX = true;
-	}
+}
+
+int CKoopaParaTropa::IsBlocking(LPCOLLISIONEVENT e)
+{
+	return 0;
 }
 
 void CKoopaParaTropa::Render() {
 	_aniId = _GetAnimationId();
+	_scale.y = _flip ? -1 : 1;
+	_scale.x = _velocity.x > 0 ? -1 : 1;
 	CGameObject::Render();
-	if (_state == STATE_KOOPA_PARA_TROPA_WALK) {
-		_obj->Render();
-	}
+	_obj->Render();
 }
 
 void CKoopaParaTropa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
-
 	_velocity.y += _ay * dt;
 	_velocity.x += _ax * dt;
 
 	float leftCam = CCam::GetInstance()->GetPosition().x;
 	float rightCam = CGame::GetInstance()->GetWindowWidth() + leftCam;
 
-	if (_state == STATE_KOOPA_PARA_TROPA_SHELD_RUN && 
-		(_position.x + KOOPA_PARA_TROPA_SHELD_BBOX_WIDTH < leftCam + KOOPA_PARA_TROPA_WIDTH || _position.x - KOOPA_PARA_TROPA_SHELD_BBOX_WIDTH > rightCam)) {
-		SetState(STATE_KOOPA_PARA_TROPA_DIE);
+	if (_state == STATE_KOOPA_PARA_TROPA_IDLE) {
+		if (_position.x <= rightCam && _position.x >= leftCam) {
+			SetState(STATE_KOOPA_PARA_TROPA_WALK);
+		}
 	}
+	else {
+		switch (_state)
+		{
+		case STATE_KOOPA_PARA_TROPA_WALK:
+			_obj->Update(dt, coObjects);
+			break;
+		case STATE_KOOPA_PARA_TROPA_SHELD:			
+			break;
+		case STATE_KOOPA_PARA_TROPA_SHELD_RUN:
+			break;
+		case STATE_KOOPA_PARA_TROPA_SHELD_LIVE:
+			break;
+		default:
+			break;
+		}
 
-	if (_state == STATE_KOOPA_PARA_TROPA_DIE && _liveStart != 0 && GetTickCount64() - _liveStart > TIME_TO_LIVE) {
-		SetState(STATE_KOOPA_PARA_TROPA_IDLE);
-	}
-
-	if (_state == STATE_KOOPA_PARA_TROPA_IDLE && _position.x >= leftCam && _position.x <= rightCam) {
-		SetState(_startState);
-	}
-
-	CGameObject::Update(dt, coObjects);
-
-	//handle position obj front
-	if (_state == STATE_KOOPA_PARA_TROPA_WALK) {
-		_obj->Update(dt, coObjects);
-		_SetPositionXObj(_position.x);
-	}
-
-	if (_state == STATE_KOOPA_PARA_TROPA_SHELD && _liveSheldStart != 0 && GetTickCount64() - _liveSheldStart > TIME_TO_SHELD_LIVE) {
-		SetState(STATE_KOOPA_PARA_TROPA_SHELD_LIVE);
-	}
-
-	if (_state == STATE_KOOPA_PARA_TROPA_SHELD_LIVE && _liveSheldWalkStart != 0 && GetTickCount64() - _liveSheldWalkStart > TIME_TO_SHELD_LIVE_WALK) {
-		_position.y = _position.y - KOOPA_PARA_TROPA_HEIGHT / 2;
-		SetState(STATE_KOOPA_PARA_TROPA_WALK);
+		CCollision::GetInstance()->Process(this, dt, coObjects);
 	}
 }
 

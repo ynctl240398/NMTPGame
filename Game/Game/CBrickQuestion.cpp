@@ -5,7 +5,10 @@
 
 
 CBrickQuestion::CBrickQuestion(float x, float y, string typeItem, string skin) {
-	_position = { x,y };
+	this->_position = { x, y };
+	this->_velocity = { 0, 0 };
+	this->_ax = 0;
+	this->_ay = 0;
 	_startPostion = _position;
 	_active = false;
 	_step = 0;

@@ -10,6 +10,26 @@
 #define ID_ANI_BRICK_COIN_COIN 3002
 #define ID_ANI_BRICK_COIN_BRICK 11000
 
+
+#define STATE_BRICK_P_BRICK					11900
+#define STATE_BRICK_P_IDLE					11901
+#define STATE_BRICK_P_PUSHED				11902
+#define STATE_BRICK_P_BRICK_UP				11903
+#define STATE_BRICK_P_BRICK_BREAK			11904
+#define STATE_BRICK_P_COIN					11905
+
+#define BRICK_P_BBOX_WIDTH					16
+#define BRICK_P_BBOX_HEIGHT					16
+
+#define BRICK_BROKEN_BBOX_WIDTH				8
+#define BRICK_BROKEN_BBOX_HEIGHT			8
+
+#define BRICK_BROKEN_GRAVITY				0.002f
+#define BRICK_BROKEN_SPEED_X				0.1f
+#define BRICK_BROKEN_JUMP_DEFLECT_SPEED		0.5f
+
+#define ID_ANI_PARTICLES_BRICK_BROKEN_IDLE	12000
+
 class CBrickCoin :
     public CGameObject
 {
@@ -21,6 +41,8 @@ protected:
 	int _GetAnimationId();
 
 	void _TranformUpdate(DWORD dt);
+
+	void _SpawnBreakEffect();
 
 public:
     CBrickCoin(float x, float y, bool brick);

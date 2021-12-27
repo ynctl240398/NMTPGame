@@ -19,12 +19,6 @@
     <Filter Include="Mario\StateMachine">
       <UniqueIdentifier>{dc0576c4-7d09-4cbe-a3e0-292f6f3d6ec2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="BrickCoin">
-      <UniqueIdentifier>{62cc42d1-c286-4138-99a8-e973ffafa16c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="BrickP">
-      <UniqueIdentifier>{08b9577c-6e1f-4f62-bff3-b7dbbfc95a48}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -135,11 +129,11 @@
     <ClCompile Include="CTimer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CBrickP.cpp">
-      <Filter>BrickP</Filter>
-    </ClCompile>
     <ClCompile Include="CBrickCoin.cpp">
-      <Filter>BrickCoin</Filter>
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CAniObject.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -260,11 +254,11 @@
     <ClInclude Include="CTimer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CBrickP.h">
-      <Filter>BrickP</Filter>
-    </ClInclude>
     <ClInclude Include="CBrickCoin.h">
-      <Filter>BrickCoin</Filter>
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CAniObject.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

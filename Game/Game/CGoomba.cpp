@@ -3,6 +3,9 @@
 #include "CItem.h"
 #include "CBrick.h"
 #include "CBrickQuestion.h"
+#include "CMario.h"
+#include "CAniObject.h"
+#include "CTail.h"
 
 #define GOOMBA_WIDTH			16
 #define GOOMBA_HEIGHT			15
@@ -24,44 +27,23 @@ CGoomba::CGoomba(float x, float y) {
 	_velocity = { 0.0f,0.0f };
 	_ay = GOOMBA_GRAVITY;
 	_ax = 0;
-	_dieStart = -1;
 	_state = STATE_GOOMBA_IDLE;
-}
-
-int CGoomba::_GetAnimationId() {
-	int aniId = -1;
-	if (_state == STATE_GOOMBA_WALK) {
-		aniId = ID_ANI_GOOMBA_WALK;
-	}
-	else if (_state == STATE_GOOMBA_DIE_JUMP) {
-		aniId = ID_ANI_GOOMBA_DIE_JUMP;
-	}
-	else if (_state == STATE_GOOMBA_DIE) aniId = ID_ANI_GOOMBA_DIE;
-	return aniId;
 }
 
 void CGoomba::SetState(int state) {
 	switch (state)
 	{
-	case STATE_GOOMBA_DIE:
-		_dieStart = GetTickCount64();
-		_position.y += (GOOMBA_WIDTH - GOOMBA_BBOX_HEIGHT_DIE) / 2;
-		_velocity = { 0.0f,0.0f };
-		_ay = 0;
-		_ax = 0;
-		break;
 	case STATE_GOOMBA_WALK:
 		_velocity.x = -GOOMBA_WALK_SPEED;
 		break;
 	case STATE_GOOMBA_IDLE:
 		break;
-	case STATE_GOOMBA_DIE_JUMP:
-		_velocity.y = -GOOMBA_JUMP_DIE;
-		_scale.y = -1.0f;
-		_velocity.x = -_velocity.x;
-		break;
 	}
 	CGameObject::SetState(state);
+}
+
+int CGoomba::_GetAnimationId() {
+	return ID_ANI_GOOMBA_WALK;
 }
 
 void CGoomba::OnNoCollision(DWORD dt) {
@@ -69,27 +51,37 @@ void CGoomba::OnNoCollision(DWORD dt) {
 }
 
 void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
-	if (!e->obj->IsBlocking(e)) return;
-	if (dynamic_cast<CItem*>(e->obj)) {
-		_handleNoCollisionX = true;
-		return;
-	}
+	if (e->ny > 0) {
+		if (dynamic_cast<CMario*>(e->obj)) {
+			_isDeleted = true;
 
-	if (e->ny != 0)
-	{
+			CAniObject* aniObj = new CAniObject({ _position.x, _position.y + 4}, 0, 0, ID_ANI_GOOMBA_DIE, { 1, 1 }, 700L, 0.0f);
+			CGame::GetInstance()->GetCurrentScene()->SpawnAniObject(aniObj);
+		}
+	}
+	
+	CTail* tail = dynamic_cast<CTail*>(e->obj);
+	if (tail) {
+		_isDeleted = true;
+
+		CAniObject* aniObj = new CAniObject(_position, 0.02f * e->nx, -0.25f, ID_ANI_GOOMBA_DIE_JUMP, { 1, -1 });
+		CGame::GetInstance()->GetCurrentScene()->SpawnAniObject(aniObj);
+	}
+}
+
+void CGoomba::OnBlockingOn(bool isHorizontal, float z)
+{
+	if (isHorizontal) {
+		_velocity.x *= -1;
+	}
+	else {
 		_velocity.y = 0;
 	}
-	else if (e->nx != 0)
-	{
-		if (dynamic_cast<CGoomba*>(e->obj)) {
-			CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
-			_velocity.x = -_velocity.x;
-			goomba->SetVelocity({ -goomba->GetVelocity().x, goomba->GetVelocity().y });
-		}
-		if (dynamic_cast<CBrick*>(e->obj) || dynamic_cast<CBrickQuestion*>(e->obj)) {
-			_velocity.x = -_velocity.x;				
-		}
-	}
+}
+
+int CGoomba::IsBlocking(LPCOLLISIONEVENT e)
+{
+	return dynamic_cast<CGoomba*>(e->obj) == nullptr;
 }
 
 void CGoomba::Render() {
@@ -110,38 +102,12 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		SetState(STATE_GOOMBA_WALK);
 	}
 
-	if (_state == STATE_GOOMBA_DIE_JUMP) 
-	{
-		float topWindow = CCam::GetInstance()->GetPosition().y;
-		float bottomWindow = CGame::GetInstance()->GetWindowHeight() + topWindow;
-		if (_position.y < topWindow || _position.y > bottomWindow + GOOMBA_HEIGHT) {
-			_isDeleted = true;
-			return;
-		}
-	}
-
-	if ((_state == STATE_GOOMBA_DIE) && (GetTickCount64() - _dieStart > GOOMBA_DIE_TIMEOUT))
-	{
-		_isDeleted = true;
-		return;
-	}
-
 	CGameObject::Update(dt, coObjects);
 }
 
 void CGoomba::GetBoundingBox(float& left, float& top, float& right, float& bottom) {
-	if (_state == STATE_GOOMBA_DIE)
-	{
-		left = _position.x - GOOMBA_WIDTH / 2;
-		top = _position.y - GOOMBA_BBOX_HEIGHT_DIE / 2;
-		right = left + GOOMBA_WIDTH;
-		bottom = top + GOOMBA_BBOX_HEIGHT_DIE;
-	}
-	else
-	{
-		left = _position.x - GOOMBA_WIDTH / 2;
-		top = _position.y - GOOMBA_HEIGHT / 2;
-		right = left + GOOMBA_WIDTH;
-		bottom = top + GOOMBA_HEIGHT;
-	}
+	left = _position.x - GOOMBA_WIDTH / 2;
+	top = _position.y - GOOMBA_HEIGHT / 2;
+	right = left + GOOMBA_WIDTH;
+	bottom = top + GOOMBA_HEIGHT;
 }
