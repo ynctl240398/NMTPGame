@@ -5,14 +5,17 @@
 #include "CItem.h"
 #include "CGoomba.h"
 #include "CDebug.h"
+#include "CMario.h"
+#include "CKoopaParaTropa.h"
+#include "CKoopaTropa.h"
+#include "CTail.h"
+#include "CAniObject.h"
 
 #define PARA_GOOMBA_BBOX_WIDTH 20
 #define PARA_GOOMBA_BBOX_HEIGHT 24
 
 #define RED_GOOMBA_BBOX_WIDTH 16
 #define RED_GOOMBA_BBOX_HEIGHT 16
-
-#define RED_GOOMBA_BBOX_HEIGHT_DIE 8
 
 #define ID_PARA_GOOMBA_WALK_ANI 5000
 #define ID_PARA_GOOMBA_FLY_ANI 5001
@@ -21,22 +24,34 @@
 
 #define GOOMBA_DIE_TIMEOUT 500
 
-#define GOOMBA_GRAVITY 0.001f
+#define GOOMBA_GRAVITY 0.0008f
 #define GOOMBA_WALK_SPEED 0.04f
 #define PARA_GOOMBA_WALK_SPEED 0.02f
-#define PARA_GOOMBA_FLY_SPEED 0.4f
-#define PARA_GOOMBA_FLY_SPEED_SHORT 0.15f
+#define PARA_GOOMBA_FLY_SPEED 0.3f
+#define PARA_GOOMBA_FLY_SPEED_SHORT 0.18f
 
-#define MAX_COUNT_JUMP 4
-#define MAX_TIME_WALK 600
+
+void CParaGoomba::_Die(LPCOLLISIONEVENT e)
+{
+	_isDeleted = true;
+
+	CAniObject* aniObj = new CAniObject({ _position.x, _position.y + 4 }, 0, 0, ID_RED_GOOMBA_DIE_ANI, { 1, 1 }, GOOMBA_DIE_TIMEOUT, 0.0f);
+	CGame::GetInstance()->GetCurrentScene()->SpawnAniObject(aniObj);
+}
+
+void CParaGoomba::_DieJump(LPCOLLISIONEVENT e)
+{
+	_isDeleted = true;
+
+	CAniObject* aniObj = new CAniObject(_position, 0.02f * e->nx, -0.25f, _GetAnimationId(), { 1, -1 });
+	CGame::GetInstance()->GetCurrentScene()->SpawnAniObject(aniObj);
+}
 
 CParaGoomba::CParaGoomba(float x, float y) {
 	_position = { x,y };
 	_ax = 0;
 	_ay = GOOMBA_GRAVITY;
 	_countJump = 0;
-	_warkStartTime = 0;
-	_dieStart = -1;
 	_velocity = { 0.0f,0.0f };
 	_state = STATE_PARA_GOOMBA_IDLE;
 }
@@ -45,9 +60,6 @@ int CParaGoomba::_GetAnimationId() {
 	int aniId = -1;
 	switch (_state)
 	{
-	case STATE_RED_GOOMBA_DIE:
-		aniId = ID_RED_GOOMBA_DIE_ANI;
-		break;
 	case STATE_RED_GOOMBA_WALK:
 		aniId = ID_RED_GOOMBA_WALK_ANI;
 		break;
@@ -65,37 +77,34 @@ int CParaGoomba::_GetAnimationId() {
 }
 
 void CParaGoomba::SetState(int state) {
-	_warkStartTime = 0;
+	float l, t, r, b;
+	float nl, nt, nr, nb;
+	GetBoundingBox(l, t, r, b);
+
+	_ay = GOOMBA_GRAVITY;
+
+	float sign = _velocity.x >= 0 ? 1 : -1;
+
 	switch (state)
 	{
-	case STATE_RED_GOOMBA_DIE:
-		_dieStart = GetTickCount64();
-		_position.y += (RED_GOOMBA_BBOX_WIDTH - RED_GOOMBA_BBOX_HEIGHT_DIE) / 2;
-		_velocity = { 0.0f,0.0f };
-		_ay = 0;
-		_ax = 0;
-		break;
-	case STATE_RED_GOOMBA_WALK:
-		_velocity.x = -GOOMBA_WALK_SPEED;
+	case STATE_PARA_GOOMBA_WALK:
+		_velocity = { PARA_GOOMBA_WALK_SPEED, 0 };
 		break;
 	case STATE_PARA_GOOMBA_FLY:
-		_velocity.x = -PARA_GOOMBA_WALK_SPEED;
-		if (_countJump < MAX_COUNT_JUMP) {
-			_velocity.y = -PARA_GOOMBA_FLY_SPEED_SHORT;
-			_countJump++;
-		}
-		else {
-			_velocity.y = -PARA_GOOMBA_FLY_SPEED;
-			_countJump++;
-			
-		}
+		_countJump = 0;
+		_velocity = { PARA_GOOMBA_WALK_SPEED, -PARA_GOOMBA_FLY_SPEED_SHORT };
 		break;
-	case STATE_PARA_GOOMBA_WALK:
-		_warkStartTime = GetTickCount64();
-		_velocity.x = -GOOMBA_WALK_SPEED;
+	case STATE_RED_GOOMBA_WALK:
+		_velocity = { GOOMBA_WALK_SPEED, 0 };
+		break;
+	default:
 		break;
 	}
 	CGameObject::SetState(state);
+
+	GetBoundingBox(nl, nt, nr, nb);
+	_position.y -= (nb - b);
+	_velocity.x *= sign;
 }
 
 void CParaGoomba::OnNoCollision(DWORD dt) {
@@ -104,83 +113,123 @@ void CParaGoomba::OnNoCollision(DWORD dt) {
 	_position.y += _velocity.y * dt / 2;
 }
 
-void CParaGoomba::_HandleJump() {
-	if (_state == STATE_PARA_GOOMBA_FLY || _state == STATE_PARA_GOOMBA_WALK) {
+void CParaGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
+	switch (_state)
+	{
+	case STATE_PARA_GOOMBA_FLY:
+	case STATE_PARA_GOOMBA_WALK:
+		if (e->obj == CMario::GetInstance()) {
+			if (e->ny > 0) {
+				SetState(STATE_RED_GOOMBA_WALK);
+			}
+		}
+		break;
+	case STATE_RED_GOOMBA_WALK:
+		if (e->obj == CMario::GetInstance()) {
+			if (e->ny > 0) {
+				_Die(e);
+			}
+		}
+		break;
+	default:
+		break;
+	}
 
-		if (_countJump > MAX_COUNT_JUMP) {
-			if (_warkStartTime == 0) {
+	CKoopaParaTropa* paraKoopa = dynamic_cast<CKoopaParaTropa*>(e->obj);
+	if (paraKoopa) {
+		if (paraKoopa->GetState() == STATE_KOOPA_PARA_TROPA_SHELD_RUN) {
+			_DieJump(e);
+		}
+	}
+
+	CKoopaTropa* koopa = dynamic_cast<CKoopaTropa*>(e->obj);
+	if (koopa) {
+		if (koopa->GetState() == STATE_KOOPA_TROPA_SHELD_RUN) {
+			_DieJump(e);
+		}
+	}
+
+	if (dynamic_cast<CTail*>(e->obj)) {
+		_DieJump(e);
+	}
+}
+
+void CParaGoomba::OnBlockingOn(bool isHorizontal, float z)
+{
+	if (isHorizontal) {
+		_velocity.x *= -1;
+	}
+	else {
+		if (_state == STATE_PARA_GOOMBA_FLY && z < 0) {
+			_countJump++;
+			if (_countJump == 1) {
+				_velocity.y = -PARA_GOOMBA_FLY_SPEED;
+			}
+			if (_countJump == 2) {
 				SetState(STATE_PARA_GOOMBA_WALK);
 			}
 		}
 		else {
-			SetState(STATE_PARA_GOOMBA_FLY);
+			_velocity.y = 0;
 		}
 	}
 }
 
-void CParaGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
-	if (!e->obj->IsBlocking(e)) return;
-
-	if (dynamic_cast<CItem*>(e->obj)) {
-		_handleNoCollisionX = true;
-		return;
-	}
-
-	
-
-	if (e->ny != 0)
-	{
-		_velocity.y = 0;
-		if (dynamic_cast<CGoomba*>(e->obj)) {
-			_handleNoCollisionY = true;
-		}
-		else if (e->ny < 0) { 
-			_HandleJump();
+int CParaGoomba::IsBlocking(LPCOLLISIONEVENT e)
+{
+	if (e->obj == CMario::GetInstance()) {
+		if (e->ny > 0) {
+			return true;
 		}
 	}
-	else if (e->nx != 0)
-	{
-		if (dynamic_cast<CGoomba*>(e->obj)) {
-			CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
-			_velocity.x = -_velocity.x;
-			goomba->SetVelocity({ -goomba->GetVelocity().x, goomba->GetVelocity().y });
-		}
-		if (dynamic_cast<CBrick*>(e->obj) || dynamic_cast<CBrickQuestion*>(e->obj)) {
-			_velocity.x = -_velocity.x;
-		}
-	}
+	return dynamic_cast<CParaGoomba*>(e->obj) == nullptr;
 }
 
 void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
-	_velocity.x += _ax * dt;
 	_velocity.y += _ay * dt;
+	_velocity.x += _ax * dt;
 
-	if ((_state == STATE_RED_GOOMBA_DIE) && (GetTickCount64() - _dieStart > GOOMBA_DIE_TIMEOUT))
-	{
-		_isDeleted = true;
-		return;
+	float leftCam = CCam::GetInstance()->GetPosition().x;
+	float rightCam = CGame::GetInstance()->GetWindowWidth() + leftCam;
+
+	_walkTimer.Update(dt);
+
+	if (_state == STATE_PARA_GOOMBA_IDLE) {
+		if (_position.x <= rightCam && _position.x >= leftCam) {
+			SetState(STATE_PARA_GOOMBA_WALK);
+		}
 	}
-		
-	_HandleStatePara();
+	else {
+		switch (_state)
+		{
+		case STATE_PARA_GOOMBA_WALK:
+			if (_walkTimer.GetState() == CTimerState::STOPPED) {
+				if ((_position.x - CMario::GetInstance()->GetPosition().x) * _velocity.x >= 0) {
+					_velocity.x *= -1;
+				}
+				_walkTimer.Reset();
+				_walkTimer.Start();
+			}
+			if (_walkTimer.GetState() == CTimerState::TIMEOVER) {
+				SetState(STATE_PARA_GOOMBA_FLY);
+				_walkTimer.Stop();
+			}
+			break;
+		case STATE_PARA_GOOMBA_FLY:
+			if (_countJump == 0) {
+				_velocity.y = max(_velocity.y, -PARA_GOOMBA_FLY_SPEED_SHORT);
+			}
+			if (_countJump == 1) {
+				_velocity.y = max(_velocity.y, -PARA_GOOMBA_FLY_SPEED);
+			}
+			break;
+		case STATE_RED_GOOMBA_WALK:
+			break;
+		default:
+			break;
+		}
 
-	CGameObject::Update(dt, coObjects);
-}
-
-void CParaGoomba::_HandleStatePara() {
-
-	float leftWindow = CCam::GetInstance()->GetPosition().x;
-	float rightWindow = CGame::GetInstance()->GetWindowWidth() + leftWindow;
-
-	if (_state == STATE_PARA_GOOMBA_IDLE && leftWindow <= _position.x && rightWindow >= _position.x) {
-		SetState(STATE_PARA_GOOMBA_FLY);
-	}
-
-	bool checkTime = _warkStartTime != 0 && GetTickCount64() - _warkStartTime >= MAX_TIME_WALK;
-	bool checkState = _state == STATE_PARA_GOOMBA_WALK;
-	if (checkTime && checkState) {
-		_countJump = 0;
-		_warkStartTime = 0;
-		SetState(STATE_PARA_GOOMBA_FLY);
+		CCollision::GetInstance()->Process(this, dt, coObjects);
 	}
 }
 
@@ -201,11 +250,5 @@ void CParaGoomba::GetBoundingBox(float& left, float& top, float& right, float& b
 		top = _position.y - RED_GOOMBA_BBOX_HEIGHT / 2;
 		right = left + RED_GOOMBA_BBOX_WIDTH;
 		bottom = top + RED_GOOMBA_BBOX_HEIGHT;
-	}
-	else {
-		left = _position.x - RED_GOOMBA_BBOX_WIDTH / 2;
-		top = _position.y - RED_GOOMBA_BBOX_HEIGHT_DIE / 2;
-		right = left + RED_GOOMBA_BBOX_WIDTH;
-		bottom = top + RED_GOOMBA_BBOX_HEIGHT_DIE;
 	}
 }

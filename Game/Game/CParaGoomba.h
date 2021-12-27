@@ -1,23 +1,22 @@
 #pragma once
-
 #include "CGameObject.h"
+#include "CTimer.h"
 
 #define STATE_PARA_GOOMBA_IDLE 5900
 #define STATE_PARA_GOOMBA_WALK 5901
 #define STATE_PARA_GOOMBA_FLY 5902
 #define STATE_RED_GOOMBA_WALK 5903
-#define STATE_RED_GOOMBA_DIE 5904
 
 class CParaGoomba : public CGameObject
 {
 	int _GetAnimationId();
 
 	int _countJump;
-	ULONGLONG _warkStartTime;
-	ULONGLONG _dieStart;
 
-	void _HandleJump();
-	void _HandleStatePara();
+	CTimer _walkTimer{ true, 1000 };
+
+	void _Die(LPCOLLISIONEVENT e);
+	void _DieJump(LPCOLLISIONEVENT e);
 
 public:
 	CParaGoomba(float x, float y);
@@ -27,13 +26,10 @@ public:
 	void Render() override;
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) override;
 
-	int IsCollidable()
-	{
-		return (_state != STATE_RED_GOOMBA_DIE);
-	}
-
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
+	void OnBlockingOn(bool isHorizontal, float z) override;
+	int IsBlocking(LPCOLLISIONEVENT e) override;
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
 };
