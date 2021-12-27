@@ -17,6 +17,8 @@
 7	85	17	16	16
 8	102	17	16	16
 9	119	17	16	16
+#leaf
+10	68	0	16	16
 #id_sprite	time(ms)
 #mushroom_red
 [FRAME]
@@ -47,3 +49,8 @@
 9	100
 [ANIMATION]
 3
+#leaf
+[FRAME]
+10	0
+[ANIMATION]
+4
