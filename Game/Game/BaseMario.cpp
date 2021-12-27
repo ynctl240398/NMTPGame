@@ -396,14 +396,6 @@ int BaseMario::_GetAnimationId()
 
 void BaseMario::OnNoCollision(DWORD dt)
 {
-	float vx, vy;
-	mario->GetVelocity(vx, vy);
-	D3DXVECTOR2 pos = mario->GetPosition();
-
-	pos.x += vx * dt;
-	pos.y += vy * dt;
-
-	mario->SetPosition(pos);
 	mario->SetOnGround(false);
 	if (mario->jumpState == MarioJumpState::Idle) {
 		mario->jumpState = MarioJumpState::Fall;

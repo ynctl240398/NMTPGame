@@ -65,8 +65,7 @@ void CGoomba::SetState(int state) {
 }
 
 void CGoomba::OnNoCollision(DWORD dt) {
-	_position.x += _velocity.x * dt;
-	_position.y += _velocity.y * dt;
+	
 }
 
 void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {

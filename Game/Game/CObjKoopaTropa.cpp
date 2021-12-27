@@ -15,6 +15,7 @@ CObjKoopaTropa::CObjKoopaTropa(float x, float y) {
 
 
 void CObjKoopaTropa::OnNoCollision(DWORD dt) {
+	_position -= _velocity * dt;
 	_position.y += _velocity.y * dt;
 	_isNoCollisionWithPlatform = true;
 }

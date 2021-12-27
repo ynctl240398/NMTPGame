@@ -131,8 +131,6 @@ void CKoopaParaTropa::_SetPositionXObj(float x)
 
 void CKoopaParaTropa::OnNoCollision(DWORD dt) 
 {
-	_position.x += _velocity.x * dt;
-	_position.y += _velocity.y * dt;
 }
 
 void CKoopaParaTropa::OnCollisionWith(LPCOLLISIONEVENT e) {

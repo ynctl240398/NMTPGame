@@ -5,7 +5,7 @@
 #include "CMario.h"
 #include "CBrickCoin.h"
 
-#define ITEM_GRAVITY 0.001f
+#define ITEM_GRAVITY 0.0015f
 #define ITEM_RUN_SPEED 0.1f
 #define ITEM_JUMP_SPEED 0.4f
 
@@ -73,7 +73,6 @@ void CItem::OnBlockingOn(bool isHorizontal, float z)
 
 void CItem::OnNoCollision(DWORD dt) 
 {
-	
 }
 
 void CItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
@@ -125,7 +124,7 @@ void CItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 			}
 		}
 		else if (_step == 1) {
-			_velocity.x = CMario::GetInstance()->GetPosition().x < _position.x ? 0.06f : -0.06;
+			_velocity.x = CMario::GetInstance()->GetPosition().x < _position.x ? 0.07f : -0.07;
 			_step = 2;
 		}
 	}

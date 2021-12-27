@@ -298,20 +298,17 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 		Scan(objSrc, dt, coObjects, coEvents);
 	}
 
+	D3DXVECTOR2 jet{ 0, 0 };
+	D3DXVECTOR2 clampedDistance = GetClampDistance(dt, objSrc, coEvents, jet);
+
+	objSrc->SetPosition(objSrc->GetPosition() + clampedDistance);
+
 	if (coEvents.size() == 0)
 	{
 		objSrc->OnNoCollision(dt);
 	}
 	else
 	{
-		D3DXVECTOR2 jet{ 0, 0 };
-		D3DXVECTOR2 clampedDistance = GetClampDistance(dt, objSrc, coEvents, jet);
-
-		float x = objSrc->GetPosition().x + clampedDistance.x;
-		float y = objSrc->GetPosition().y + clampedDistance.y;
-
-		objSrc->SetPosition(D3DXVECTOR2{ x, y });
-
 		if (jet.x != 0) {
 			objSrc->OnBlockingOn(true, jet.x);
 		}

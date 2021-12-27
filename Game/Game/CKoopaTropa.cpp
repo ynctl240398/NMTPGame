@@ -98,6 +98,7 @@ void CKoopaTropa::SetState(int state) {
 
 void CKoopaTropa::OnNoCollision(DWORD dt)
 {
+	_position -= _velocity * dt;
 	_position.x += _velocity.x * dt;
 	_position.y += (_velocity.y * dt) / 2.25f;
 }
