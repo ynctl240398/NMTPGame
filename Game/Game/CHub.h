@@ -12,6 +12,9 @@
 #define ID_ANI_HUB_P_WHITE			13005
 #define ID_ANI_HUB_P_FLICK			13006
 
+#define ARROW_POSITION_Y_LIST {61.5, 69.5, 77.5, 85.5, 93.5, 101.5}
+#define LENGTH_ARROW    6
+
 class CHub
 {
 private:
@@ -20,7 +23,7 @@ private:
 	int _pLevel;
 	bool _maxP;
 
-	float _arrowX[6] = { 1, 2, 3, 4, 5, 6 };
+	float _arrowX[LENGTH_ARROW] = ARROW_POSITION_Y_LIST;
 public:
 	CHub();
 

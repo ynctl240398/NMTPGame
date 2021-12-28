@@ -162,6 +162,7 @@
     <ClCompile Include="CKeyBoard.cpp" />
     <ClCompile Include="CKoopaParaTropa.cpp" />
     <ClCompile Include="CKoopaTropa.cpp" />
+    <ClCompile Include="CObjDeath.cpp" />
     <ClCompile Include="CObjKoopaTropa.cpp" />
     <ClCompile Include="CParaGoomba.cpp" />
     <ClCompile Include="CPipeLine.cpp" />
@@ -208,6 +209,7 @@
     <ClInclude Include="CKeyBoard.h" />
     <ClInclude Include="CKoopaParaTropa.h" />
     <ClInclude Include="CKoopaTropa.h" />
+    <ClInclude Include="CObjDeath.h" />
     <ClInclude Include="CObjKoopaTropa.h" />
     <ClInclude Include="CParaGoomba.h" />
     <ClInclude Include="CPipeLine.h" />

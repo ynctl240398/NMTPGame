@@ -6,10 +6,6 @@ CBrick::CBrick(float x, float y, int w, int h) {
 	_height = h;
 }
 
-void CBrick::Load(LPCWSTR filePath) {
-
-}
-
 void CBrick::Render() {
 	RenderBoundingBox();
 }

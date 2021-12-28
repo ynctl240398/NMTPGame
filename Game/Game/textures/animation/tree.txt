@@ -1,0 +1,36 @@
+[ID_SPRITE_ANI]
+#id
+14000
+
+[SPRITE]
+#id	x	y	w	h
+
+#tree_green_x2
+0	33	16	32	32
+
+#tree_green_x3
+1	0	0	32	48
+
+#tree_black_x2
+2	66	16	32	32
+#tree_green_x2
+[FRAME]
+#id_sprite	time
+0	100
+[ANIMATION]
+#id
+0
+#tree_green_x3
+[FRAME]
+#id_sprite	time
+1	100
+[ANIMATION]
+#id
+1
+#tree_black_x2
+[FRAME]
+#id_sprite	time
+2	100
+[ANIMATION]
+#id
+2

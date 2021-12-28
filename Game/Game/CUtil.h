@@ -15,8 +15,8 @@
 
 #include <dinput.h>
 
-#define BACKGROUND_COLOR D3DXCOLOR(156.0f/255.0f, 252.0f/255.0f, 240.0f/255.0f, 1.0f)
-//#define BACKGROUND_COLOR D3DXCOLOR(255.0f, 255.0f, 255.0f, 0.0f)
+//#define BACKGROUND_COLOR D3DXCOLOR(156.0f/255.0f, 252.0f/255.0f, 240.0f/255.0f, 1.0f)
+#define BACKGROUND_COLOR D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f)
 #define SCREEN_WIDTH 256
 #define SCREEN_HEIGHT 256
 #define MAX_SCENE_LINE 1024
@@ -30,6 +30,7 @@
 #define ID_IMG_PROJECTTILE	400
 #define ID_IMG_PARTICLES	500
 #define ID_IMG_HUB			600
+#define ID_IMG_TREE			700
 
 #define DIF 8
 

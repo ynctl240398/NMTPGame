@@ -16,19 +16,12 @@
 #define P_X 114.5
 #define P_Y 199
 
-
 CHub* CHub::__instance = NULL;
 
 CHub::CHub()
 {
     _pLevel = 0;
     _maxP = false;
-    _arrowX[0] = 61.5;
-    _arrowX[1] = 69.5;
-    _arrowX[2] = 77.5;
-    _arrowX[3] = 85.5;
-    _arrowX[4] = 93.5;
-    _arrowX[5] = 101.5;
 }
 
 void CHub::Update(DWORD dt)

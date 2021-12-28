@@ -75,8 +75,8 @@ public:
 
 	int IsBlocking(LPCOLLISIONEVENT e);
 
-	void _Die();
-	void _SheldUpdate(DWORD dt);
+	void Die();
+	void SheldUpdate(DWORD dt);
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
 };

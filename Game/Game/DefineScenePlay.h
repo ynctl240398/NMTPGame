@@ -15,11 +15,15 @@
 #define OBJECT_TYPE_VENUS_FIRE_TRAP		13
 #define OBJECT_TYPE_PIRANHA_PLANT		14
 #define OBJECT_TYPE_BRICK_P				15
+#define OBJECT_TYPE_TREE				16
+
 #define OBJECT_TYPE_BRICK_COIN			356
 
 #define OBJECT_TYPE_PORTAL				50
 #define OBJECT_TYPE_PORTAL_IN_SMALL		51
 #define OBJECT_TYPE_PORTAL_OUT_SMALL	52
+
+#define OBJECT_TYPE_OBJ_DEATH			-1
 
 //mario				1xxx
 //brick_question	2xxx
@@ -34,3 +38,8 @@
 //brickP			11xxx
 //particles			12xxx
 //hub				13xxx
+//tree				14xxx
+
+#define ID_ANI_TREE_GREEN_X2	14000
+#define ID_ANI_TREE_GREEN_X3	14001
+#define ID_ANI_TREE_BLACK_X2	14002

@@ -19,6 +19,8 @@
 #include "CBrickCoin.h"
 #include "CPortalInSmall.h"
 #include "CPortalOutSmall.h"
+#include "CAniObject.h"
+#include "CObjDeath.h"
 
 using namespace std;
 
@@ -139,6 +141,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CBrick(x, y, w, h);
 		break;
 	}
+	case OBJECT_TYPE_OBJ_DEATH:
+	{
+		int w = atoi(tokens[3].c_str());
+		int h = atoi(tokens[4].c_str());
+		obj = new CObjDeath(x, y, w, h);
+		break;
+	}
 	case OBJECT_TYPE_ITEM:
 	{
 		string itemType = tokens[3];
@@ -221,8 +230,16 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float h = stof(tokens[4].c_str());
 		int direction = atoi(tokens[5].c_str());
 		obj = new CPortalOutSmall(x, y, w, h, direction);
-	}
 		break;
+	}
+	case OBJECT_TYPE_TREE:
+	{
+		int aniId = atoi(tokens[3].c_str());
+		int w = atoi(tokens[4].c_str());
+		int h = atoi(tokens[5].c_str());
+		obj = new CAniObject({ x + w / 2 - DIF,y + h / 2 - DIF }, 0, 0, aniId, { 1,1 }, LONG_MAX, 0.0f, 0, 0);
+		break;
+	}
 	default:
 		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
 		return;

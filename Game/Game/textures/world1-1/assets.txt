@@ -13,6 +13,7 @@
 500	textures\animation\particles.txt
 000	textures\animation\brick_p.txt
 600	textures\animation\hub.txt
+700	textures\animation\tree.txt
 
 [OBJECTS]
 #bg
@@ -178,3 +179,15 @@
 #id	x	y	w	h	direction
 52	2104	472	2	32	1
 52	2328	392	3	32	-1
+
+#tree
+16	352	368	14001	32	48
+16	1792	384	14000	32	32
+16	1856	369	14001	32	48
+16	2256	112	14001	32	48
+16	2320	384	14000	32	32
+16	2320	464	14002	32	32
+16	2096	464	14002	32	32
+
+#obj_death
+-1	0	432	2256	16

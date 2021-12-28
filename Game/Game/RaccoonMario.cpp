@@ -189,7 +189,7 @@ void RaccoonMario::_OnDamaged(LPCOLLISIONEVENT e, float damage)
 		mario->marioState = MarioState::Big;
 	}
 	else {
-		mario->_Die();
+		mario->Die();
 	}
 }
 

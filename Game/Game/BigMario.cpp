@@ -17,7 +17,7 @@ void BigMario::_OnDamaged(LPCOLLISIONEVENT e, float damage)
 		mario->marioState = MarioState::Small;
 	}
 	else {
-		mario->_Die();
+		mario->Die();
 	}
 }
 

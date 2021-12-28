@@ -11,6 +11,7 @@ start	1
 400	textures\projectiles.png
 500	textures\particles.png
 600	textures\hud.png
+700	textures\tree.png
 
 [SCENES]
 0	textures\intro.txt

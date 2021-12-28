@@ -13,7 +13,7 @@ void SmallMario::_OnCollisionWithItem(LPCOLLISIONEVENT e)
 void SmallMario::_OnDamaged(LPCOLLISIONEVENT e, float damage)
 {
 	if (damage <= 0 || mario->_untouchable) return;
-	mario->_Die();
+	mario->Die();
 }
 
 SmallMario::SmallMario(CMario* mario) : BaseMario(mario, MarioState::Small)

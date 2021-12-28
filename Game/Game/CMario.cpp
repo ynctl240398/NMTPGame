@@ -82,11 +82,11 @@ void CMario::_CheatPointUpdate()
 		CCam::GetInstance()->UnlockTop();
 	}
 	if (kb->IsKeyPressed(DIK_END)) {
-		_Die();
+		Die();
 	}
 }
 
-void CMario::_Die()
+void CMario::Die()
 {
 	hand = nullptr;
 	_isActive = false;
@@ -95,7 +95,7 @@ void CMario::_Die()
 	CGame::GetInstance()->GetCurrentScene()->SpawnAniObject(aniObj);
 }
 
-void CMario::_SheldUpdate(DWORD dt)
+void CMario::SheldUpdate(DWORD dt)
 {
 	if (hand == nullptr) return;
 	CKeyBoardCustom* kb = CKeyBoardCustom::GetInstance();
@@ -138,7 +138,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 	_UpdateState();
 	_CheatPointUpdate();
-	_SheldUpdate(dt);
+	SheldUpdate(dt);
 
 	_kickTimer->Update(dt);
 	_untouchableTimer.Update(dt);

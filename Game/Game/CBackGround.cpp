@@ -20,15 +20,29 @@ void CBackGround::_ParseSectionSprites(string line) {
 	int l = atoi(tokens[2].c_str());
 	int t = atoi(tokens[3].c_str());
 
+
 	RECT spriteBound;
 	spriteBound.left = l;
 	spriteBound.top = t;
 	spriteBound.right = l + WIDTH_TITLE_SET;
 	spriteBound.bottom = t + HEIGHT_TITLE_SET;
 
-	D3DXVECTOR2 position = D3DXVECTOR2(x, y);
-
-	this->_sprites.emplace_back(std::make_pair(spriteBound, position));
+	if (tokens.size() == LENGTH_SPRITES) {
+		D3DXVECTOR2 position = D3DXVECTOR2(x, y);
+		this->_sprites.push_back(std::make_pair(spriteBound, position));
+	}
+	else {
+		int w = atoi(tokens[4].c_str());
+		int h = atoi(tokens[5].c_str());
+		int mi = w / WIDTH_TITLE_SET, mj = h / HEIGHT_TITLE_SET;
+		for (size_t i = 0; i <= mi; i++) {
+			for (size_t j = 0; j <= mj; j++)
+			{
+				D3DXVECTOR2 position = D3DXVECTOR2(i * WIDTH_TITLE_SET, j * HEIGHT_TITLE_SET);
+				this->_sprites.push_back(std::make_pair(spriteBound, position));
+			}
+		}
+	}
 }
 
 void CBackGround::_ScaleSprite(const RECT& spriteBound) {

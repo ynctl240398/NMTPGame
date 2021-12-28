@@ -10,6 +10,7 @@
 #include "CParaGoomba.h"
 #include "CKoopaTropa.h"
 #include "CKoopaParaTropa.h"
+#include "CObjDeath.h"
 
 void BaseMario::_WalkUpdate(DWORD dt)
 {
@@ -507,6 +508,10 @@ void BaseMario::OnCollisionWith(LPCOLLISIONEVENT e)
 				_OnDamaged(e, 1.0f);
 			}
 		}
+		return;
+	}
+	if (dynamic_cast<CObjDeath*>(e->obj)) {
+		mario->Die();
 		return;
 	}
 }

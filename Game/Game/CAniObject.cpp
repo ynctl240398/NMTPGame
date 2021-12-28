@@ -1,6 +1,6 @@
 #include "CAniObject.h"
 
-CAniObject::CAniObject(D3DXVECTOR2 position, float vx, float vy, int aniId, D3DXVECTOR2 scale, long timeout, float gravity)
+CAniObject::CAniObject(D3DXVECTOR2 position, float vx, float vy, int aniId, D3DXVECTOR2 scale, long timeout, float gravity, int w, int h)
 {
 	this->_aniId = aniId;
 	this->_scale = scale;
@@ -9,8 +9,8 @@ CAniObject::CAniObject(D3DXVECTOR2 position, float vx, float vy, int aniId, D3DX
 	this->_ax = 0;
 	this->_ay = gravity;
 	this->timer.SetTimeOut(timeout);
-	this->w = 8;
-	this->h = 8;
+	this->w = w;
+	this->h = h;
 
 	this->timer.Reset();
 	this->timer.Start();
