@@ -14,9 +14,9 @@ void CObjDeath::Render() {
 int CObjDeath::IsBlocking(LPCOLLISIONEVENT e)
 {
 	if (e->obj == CMario::GetInstance()) {
-		return true;
+		return 1;
 	}
-	return false;
+	return 0;
 }
 
 void CObjDeath::Update(DWORD dt, vector<CGameObject*>* obj) {

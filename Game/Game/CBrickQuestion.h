@@ -35,8 +35,8 @@ public:
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) override;
 
 	int IsBlocking(LPCOLLISIONEVENT e) {
-		if (dynamic_cast<CItem*>(e->obj)) {
-			CItem* item = dynamic_cast<CItem*>(e->obj);
+		if (dynamic_cast<CItem*>(e->src_obj)) {
+			CItem* item = dynamic_cast<CItem*>(e->src_obj);
 			if (item->GetType() == TYPE_ITEM_LEAF) {
 				return 0;
 			}
@@ -44,6 +44,7 @@ public:
 		return 1;
 	}
 
+	CItem* GetItem() { return _item; }
 	void Active();
 	bool IsActivated();
 
