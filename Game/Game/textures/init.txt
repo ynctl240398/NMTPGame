@@ -10,6 +10,7 @@ start	1
 300	textures\enemies.png
 400	textures\projectiles.png
 500	textures\particles.png
+600	textures\hub.png
 
 [SCENES]
 0	textures\intro.txt

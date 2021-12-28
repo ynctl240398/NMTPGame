@@ -17,6 +17,8 @@
 #include "CVenusFireTrap.h"
 #include "CPiranhaPlant.h"
 #include "CBrickCoin.h"
+#include "CPortalInSmall.h"
+#include "CPortalOutSmall.h"
 
 using namespace std;
 
@@ -159,8 +161,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_PORTAL:
 	{
-		float r = (float)atof(tokens[3].c_str());
-		float b = (float)atof(tokens[4].c_str());
+		float r = stof(tokens[3].c_str());
+		float b = stof(tokens[4].c_str());
 		int scene_id = atoi(tokens[5].c_str());
 		obj = new CPortal(x, y, r, b, scene_id);
 	}
@@ -186,7 +188,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_VENUS_FIRE_TRAP:
 	{
 		int type = atoi(tokens[3].c_str());
-		float offSetY = (float)atof(tokens[4].c_str());
+		float offSetY = stof(tokens[4].c_str());
 		y += VENUS_FIRE_TRAP_BBOX_HIEGHT / 2 - DIF;
 		obj = new CVenusFireTrap(x, y, type, offSetY);
 		break;
@@ -194,13 +196,26 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_PIRANHA_PLANT:
 	{
 		int type = atoi(tokens[3].c_str());
-		float offSetY = (float)atof(tokens[4].c_str());
+		float offSetY = stof(tokens[4].c_str());
 		y += PIRANHA_PLANT_BBOX_HIEGHT / 2 - DIF;
 		obj = new CPiranhaPlant(x, y, type, offSetY);
 		break;
 	}
 	case OBJECT_TYPE_BRICK_COIN:
 		obj = new CBrickCoin(x, y, atoi(tokens[3].c_str()));
+		break;
+	case OBJECT_TYPE_PORTAL_IN_SMALL: 
+	{
+		int direction = atoi(tokens[3].c_str());
+		float cx = stof(tokens[4].c_str());
+		float cy = stof(tokens[5].c_str());
+		obj = new CPortalInSmall(x, y, direction, cx,cy);
+	}
+	case OBJECT_TYPE_PORTAL_OUT_SMALL:
+	{
+		int direction = atoi(tokens[3].c_str());
+		obj = new CPortalOutSmall(x, y, direction);
+	}
 		break;
 	default:
 		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);

@@ -18,6 +18,8 @@
 #define OBJECT_TYPE_BRICK_COIN			356
 
 #define OBJECT_TYPE_PORTAL				50
+#define OBJECT_TYPE_PORTAL_IN_SMALL		51
+#define OBJECT_TYPE_PORTAL_OUT_SMALL	52
 
 //mario				1xxx
 //brick_question	2xxx
@@ -31,3 +33,4 @@
 //firer				10xxx
 //brickP			11xxx
 //particles			12xxx
+//hub				13xxx

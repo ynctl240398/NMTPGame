@@ -157,6 +157,7 @@
     <ClCompile Include="CGameObject.cpp" />
     <ClCompile Include="CGoomba.cpp" />
     <ClCompile Include="CGrid.cpp" />
+    <ClCompile Include="CHub.cpp" />
     <ClCompile Include="CItem.cpp" />
     <ClCompile Include="CKeyBoard.cpp" />
     <ClCompile Include="CKoopaParaTropa.cpp" />
@@ -200,6 +201,7 @@
     <ClInclude Include="CGameObject.h" />
     <ClInclude Include="CGoomba.h" />
     <ClInclude Include="CGrid.h" />
+    <ClInclude Include="CHub.h" />
     <ClInclude Include="CItem.h" />
     <ClInclude Include="CKeyBoard.h" />
     <ClInclude Include="CKoopaParaTropa.h" />

@@ -29,6 +29,7 @@
 #define ID_IMG_ENEMIES		300
 #define ID_IMG_PROJECTTILE	400
 #define ID_IMG_PARTICLES	500
+#define ID_IMG_HUB			600
 
 #define DIF 8
 
