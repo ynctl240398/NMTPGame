@@ -5,9 +5,14 @@
 #include "CMario.h"
 #include "CBrickCoin.h"
 
-#define ITEM_GRAVITY 0.0015f
-#define ITEM_RUN_SPEED 0.1f
-#define ITEM_JUMP_SPEED 0.4f
+#define ITEM_GRAVITY		0.0015f
+#define ITEM_RUN_SPEED		0.07f
+#define ITEM_JUMP_SPEED		0.15f
+#define ITEM_FALL_X			0.000095f
+#define ITEM_FALL_Y			0.025f
+#define ITEM_FALL_X_MAX		0.07f
+#define ITEM_UP_SPEED		0.08f
+#define ITEM_LEAF_JUMP		0.4f
 
 CItem::CItem(float x, float y, string type) {
 	_position = { x,y };
@@ -68,7 +73,7 @@ void CItem::OnBlockingOn(bool isHorizontal, float z)
 		else {
 			_velocity.y = 0;
 		}
-	}		
+	}
 }
 
 void CItem::OnNoCollision(DWORD dt) 
@@ -87,7 +92,7 @@ void CItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	if (_type == TYPE_ITEM_P) {
 		if (_state != STATE_ITEM_P_PUSHED) {
 			if (abs(_position.y - _startPostion.y) < h) {
-				_position.y -= 0.08 * dt;
+				_position.y -= ITEM_UP_SPEED * dt;
 			}
 			else {
 				_position.y = _startPostion.y - h;
@@ -105,7 +110,7 @@ void CItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	else if (_type == TYPE_ITEM_COIN_BRICK) {
 		if (_step == 0) {
 			if (abs(_position.y - _startPostion.y) < 32) {
-				_position.y -= 0.15 * dt;
+				_position.y -= ITEM_JUMP_SPEED * dt;
 			}
 			else {
 				_step = 1;
@@ -113,7 +118,7 @@ void CItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		}
 		else if (_step == 1) {
 			if (_position.y < _startPostion.y - h) {
-				_position.y += 0.15 * dt;
+				_position.y += ITEM_JUMP_SPEED * dt;
 			}
 			else {
 				_step = 2;
@@ -124,7 +129,7 @@ void CItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	else if (_type == TYPE_ITEM_MUSHROOM_GREEN || _type == TYPE_ITEM_MUSHROOM_RED) {
 		if (_step == 0) {
 			if (abs(_position.y - _startPostion.y) < h) {
-				_position.y -= 0.08f * dt;
+				_position.y -= ITEM_UP_SPEED * dt;
 			}
 			else {
 				_step = 1;
@@ -132,8 +137,30 @@ void CItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 			}
 		}
 		else if (_step == 1) {
-			_velocity.x = CMario::GetInstance()->GetPosition().x < _position.x ? 0.07f : -0.07;
+			_velocity.x = CMario::GetInstance()->GetPosition().x < _position.x ? ITEM_RUN_SPEED : ITEM_RUN_SPEED * -1;
 			_step = 2;
+		}
+	}
+	else if (_type == TYPE_ITEM_LEAF) {
+		if (_step == 0) {
+			_velocity.y = -ITEM_LEAF_JUMP;
+			_ay = ITEM_GRAVITY / 1.5;
+			_step = 1;
+		}
+		else if (_step == 1) {
+			if (_velocity.y > 0) {
+				_ax = -ITEM_FALL_X;
+				_velocity.x += _ax * dt;
+				_ay = 0;
+				_velocity.y = ITEM_FALL_Y;
+				_step = 2;
+			}
+		}
+		else if (_step == 2) {
+			if (abs(_velocity.x) > ITEM_FALL_X_MAX) {
+				_velocity.x = 0;
+				_ax = -_ax;
+			}
 		}
 	}
 
@@ -176,6 +203,9 @@ int CItem::_GetAnimationId() {
 	}
 	else if (_type == TYPE_ITEM_MUSHROOM_RED) {
 		aniId = ID_ANI_ITEM_MUSHROOM_RED;
+	}
+	else if (_type == TYPE_ITEM_LEAF) {
+		aniId = ID_ANI_ITEM_LEAF;
 	}
 	else aniId = -1;
 

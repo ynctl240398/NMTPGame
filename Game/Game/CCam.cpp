@@ -158,7 +158,6 @@ void CCam::Update(DWORD dt, vector<CGameObject*>* collidableObjects) {
 
 	_position = cameraPosition;
 	_position.x -= 8;
-	_position.y -= 10;
 }
 
 

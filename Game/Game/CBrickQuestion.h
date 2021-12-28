@@ -34,6 +34,16 @@ public:
 	void Render() override;
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) override;
 
+	int IsBlocking(LPCOLLISIONEVENT e) {
+		if (dynamic_cast<CItem*>(e->obj)) {
+			CItem* item = dynamic_cast<CItem*>(e->obj);
+			if (item->GetType() == TYPE_ITEM_LEAF) {
+				return 0;
+			}
+		}
+		return 1;
+	}
+
 	void Active();
 	bool IsActivated();
 

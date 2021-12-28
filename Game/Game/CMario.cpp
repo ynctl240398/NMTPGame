@@ -71,7 +71,7 @@ void CMario::_CheatPointUpdate()
 	}
 	if (kb->IsKeyPressed(DIK_W)) {
 		_position.x = 1324;
-		_position.y = 122;
+		_position.y = 110;
 		CCam::GetInstance()->ActiveCameraBound(0);
 		CCam::GetInstance()->UnlockTop();
 	}

@@ -5,7 +5,7 @@
 void BigMario::_OnCollisionWithItem(LPCOLLISIONEVENT e)
 {
 	CItem* item = dynamic_cast<CItem*>(e->obj);
-	if (item->GetType() == TYPE_ITEM_MUSHROOM_RED) {
+	if (item->GetType() == TYPE_ITEM_LEAF) {
 		mario->marioState = MarioState::Raccoon;
 	}
 }

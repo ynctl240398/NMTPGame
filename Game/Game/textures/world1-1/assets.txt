@@ -76,12 +76,12 @@
 
 #brick_question
 #type_obj	x	y	type_item	skin
-8	176	352	coin_brick	question
+8	176	352	leaf	question
 8	192	352	coin_brick	question
 8	224	304	coin_brick	question
 8	240	304	mushroom_red	question
 8	416	320	coin_brick	question
-8	656	384	coin_brick	question
+8	656	384	leaf	question
 8	704	352	coin_brick	question
 8	1472	368	coin_brick	question
 8	2032	368	p	brick
