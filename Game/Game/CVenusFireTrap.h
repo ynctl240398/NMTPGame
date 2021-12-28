@@ -17,7 +17,7 @@
 #define VENUS_FIRE_TRAP_BBOX_HIEGHT			32
 
 #define TIME_TO_FIRE							2000 //s
-#define VENUS_SPEED_Y							0.02f
+#define VENUS_SPEED_Y							0.03f
 
 class CVenusFireTrap : public CGameObject
 {
@@ -29,6 +29,8 @@ class CVenusFireTrap : public CGameObject
 	int _GetAnimationId();
 
 	CFirer* _firer;
+
+	int _shootHeadDown;
 
 public:
 	CVenusFireTrap(float x,float y, int type, float offSetY);
@@ -43,6 +45,8 @@ public:
 	{
 		return (_state != STATE_VENUS_FIRE_TRAP_DIE);
 	}
+
+	void CalcFireBallStat(float playerX, float playerY, float& fbVx, float& fbVy, float& fbX, float& fbY);
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);

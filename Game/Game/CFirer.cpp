@@ -5,7 +5,6 @@
 
 #define ID_ANI_FIRER		10000
 
-#define FIRER_FLY_SPEED		0.05f
 #define FIRER_JUMP_SPEED_X	0.02f
 #define FIRER_JUMP_SPEED_Y	0.02f
 

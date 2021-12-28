@@ -6,6 +6,8 @@
 #define STATE_FIRER_JUMP		9901
 #define STATE_FIRER_DISAPPEAR	9902
 
+#define FIRER_FLY_SPEED		0.06f
+
 class CFirer : public CGameObject
 {
 	int _GetAnimationId();

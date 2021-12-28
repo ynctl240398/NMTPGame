@@ -15,6 +15,8 @@
 #define ID_ANI_VENUS_FIRE_TRAP_GREEN_DOWN		8006
 #define ID_ANI_VENUS_FIRE_TRAP_GREEN_DOWN_FIRER	8007
 
+#define OFFSET_X_TO_UP		20
+
 CVenusFireTrap::CVenusFireTrap(float x, float y, int type, float offSetY)
 {
 	_position = { x,y + VENUS_FIRE_TRAP_BBOX_HIEGHT + 2};
@@ -83,14 +85,16 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	float leftCam = CCam::GetInstance()->GetPosition().x;
 	float rightCam = CGame::GetInstance()->GetBackBufferWidth() + leftCam;
 
+	CMario* mario = CMario::GetInstance();
+
 	bool _bPos = _position.x >= leftCam && _position.x <= rightCam;
 	bool _bState = _state != STATE_VENUS_FIRE_TRAP_IDLE;
+	bool _bPosMario = abs(_position.x - mario->GetPosition().x) > OFFSET_X_TO_UP + VENUS_FIRE_TRAP_BBOX_WIDTH;
 
 	_startTimer.Update(dt);
 	_fireTimer.Update(dt);
 
-	if (_bPos || _bState) {
-		CMario* mario = CMario::GetInstance();
+	if ((_bPos && _bPosMario)|| _bState) {
 		if (mario->GetPosition().x < _position.x) {
 			_scale = { 1.0f,1.0f };
 		}
@@ -155,6 +159,9 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 						_firer = new CFirer(_position.x, _position.y - DIF);
 						_firer->SetState(STATE_FIRER_FLY);
+						float vx, vy, x, y;
+						CalcFireBallStat(mario->GetPosition().x, mario->GetPosition().y, vx, vy, x, y);
+						_firer->SetVelocity({ vx,vy });
 						CGame::GetInstance()->GetCurrentScene()->SpawnObject(_firer);
 
 						_fireTimer.Reset();
@@ -171,6 +178,42 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 		CCollision::GetInstance()->Process(this, dt, coObjects);
 	}
+}
+
+void CVenusFireTrap::CalcFireBallStat(float playerX, float playerY, float& fbVx, float& fbVy, float& fbX, float& fbY)
+{
+	float l, t, r, b;
+	GetBoundingBox(l, t, r, b);
+
+	float ballX = l + VENUS_FIRE_TRAP_BBOX_WIDTH / 2;
+	float ballY = t + 15;
+
+	float dxFromPlayer = playerX - ballX;
+	float dyFromPlayer = playerY - ballY;
+
+	float magDistance = sqrt(dxFromPlayer * dxFromPlayer + dyFromPlayer * dyFromPlayer);
+
+	float angle = 0;
+
+	if (abs(dxFromPlayer) > 48 * 6 || (0 < abs(dyFromPlayer) && abs(dyFromPlayer) < 96))
+		angle = (dxFromPlayer > 0 ? 25 : 155) * (dyFromPlayer < 0 ? -1 : 1);
+	else
+		angle = (dxFromPlayer > 0 ? 45 : 135) * (dyFromPlayer < 0 ? -1 : 1);
+
+	if (dyFromPlayer < 0) {
+		_shootHeadDown = 0;
+	}
+	else _shootHeadDown = 1;
+
+	angle = angle * 3.14 / 180.0f;
+
+	float magV = sqrt(cos(angle) * cos(angle) + sin(angle) * sin(angle));
+
+	fbVx = FIRER_FLY_SPEED * cos(angle) / magV;
+	fbVy = FIRER_FLY_SPEED * sin(angle) / magV;
+
+	fbX = ballX;
+	fbY = ballY;
 }
 
 void CVenusFireTrap::OnNoCollision(DWORD dt)

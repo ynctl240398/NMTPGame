@@ -3,11 +3,13 @@
 #include "CKoopaParaTropa.h"
 #include "CKoopaTropa.h"
 #include "CTail.h"
+#include "CMario.h"
 
 #define ID_ANI_PIRANHA_PLANT_RED_UP		9000
 #define ID_ANI_PIRANHA_PLANT_GREEN_UP	9001
 
 #define PIRANHA_PLANT_SPEED_Y			0.02f
+#define OFFSET_X_TO_UP					20
 
 int CPiranhaPlant::_GetAnimationId()
 {
@@ -52,8 +54,11 @@ void CPiranhaPlant::Render()
 
 void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	CMario* mario = CMario::GetInstance();
+
 	float leftCam = CCam::GetInstance()->GetPosition().x;
 	float rightCam = CGame::GetInstance()->GetBackBufferWidth() + leftCam;
+	bool _bPosMario = abs(_position.x - mario->GetPosition().x) > OFFSET_X_TO_UP + PIRANHA_PLANT_BBOX_WIDTH;
 
 	_startTimer.Update(dt);
 
