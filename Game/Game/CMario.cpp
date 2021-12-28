@@ -59,8 +59,18 @@ void CMario::_CheatPointUpdate()
 		marioState = MarioState::Raccoon;
 	}
 	if (kb->IsKeyPressed(DIK_E)) {
-		_position.x = 2409;
-		_position.y = 399;
+		_position.x = 2200;
+		_position.y = 515;
+	}
+	if (kb->IsKeyPressed(DIK_Q)) {
+		_position.x = 0;
+		_position.y = 350;
+		CCam::GetInstance()->LockTop();
+	}
+	if (kb->IsKeyPressed(DIK_W)) {
+		_position.x = 1324;
+		_position.y = 122;
+		CCam::GetInstance()->UnlockTop();
 	}
 	if (kb->IsKeyPressed(DIK_END)) {
 		_Die();

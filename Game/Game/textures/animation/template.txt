@@ -1,0 +1,10 @@
+[ID_SPRITE_ANI]
+#id
+
+[SPRITE]
+#id	x	y	w	h
+
+[FRAME]
+#id_sprite	time
+[ANIMATION]
+#id

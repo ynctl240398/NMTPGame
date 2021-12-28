@@ -10,6 +10,10 @@ private:
 	vector<float> _upVectors;
 	vector<CRect*> _cameraBounds;
 
+	float _screneHeight;
+	float _yLockTop;
+	float _yUnlockTop;
+
 	CCam();
 	~CCam();
 

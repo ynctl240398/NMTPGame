@@ -4,13 +4,16 @@
 #include "CGame.h"
 #include "CMario.h"
 
-#define LENGTH_NUMBER 7
+#define LENGTH_NUMBER	7
 
 CCam* CCam::_cameraInstance = NULL;
 
 CCam::CCam() {
 	_cameraWidth = 0;
 	_cameraHeight = 0;
+	_yLockTop = 0;
+	_screneHeight = 0;
+	_yUnlockTop = 0;
 }
 
 CCam::~CCam() {
@@ -73,6 +76,13 @@ void CCam::Load(LPCWSTR filePath) {
 		float x = stof(tokens[4].c_str());
 		float y = stof(tokens[5].c_str());
 		float upVector = stof(tokens[6].c_str());
+		float unlockTop = stof(tokens[7].c_str());
+		float screneHeight = stof(tokens[8].c_str());
+
+		_yUnlockTop = unlockTop;
+		_screneHeight = screneHeight;
+
+		LockTop();
 
 		CRect* cameraBound = new CRect(l, t, r, b);
 
@@ -112,7 +122,6 @@ void CCam::Update(DWORD dt, vector<CGameObject*>* collidableObjects) {
 		return;
 	}
 
-	int _sceneHeight = 656;
 
 	LPRECTCUSTOM cameraBound = GetCameraBound();
 
@@ -125,21 +134,27 @@ void CCam::Update(DWORD dt, vector<CGameObject*>* collidableObjects) {
 		cameraPosition.x = cameraBound->GetRight() - CGame::GetInstance()->GetWindowWidth();
 	}
 
-	cameraPosition.y -= CGame::GetInstance()->GetWindowHeight() / 2.0f;
-	if (GetPosition().y < _sceneHeight * 0.3f) {
-		if (cameraPosition.y < cameraBound->GetTop()) {
-			cameraPosition.y = cameraBound->GetTop();
+	if (cameraPosition.y <= cameraBound->GetBottom()) {
+		cameraPosition.y -= CGame::GetInstance()->GetWindowHeight() / 2.0f;
+		if (GetPosition().y < _yLockTop) {
+			if (cameraPosition.y < cameraBound->GetTop()) {
+				cameraPosition.y = cameraBound->GetTop();
+			}
+			else if (cameraPosition.y + CGame::GetInstance()->GetWindowHeight() > cameraBound->GetBottom()) {
+				cameraPosition.y = cameraBound->GetBottom() - CGame::GetInstance()->GetWindowHeight();
+			}
 		}
-		else if (cameraPosition.y + CGame::GetInstance()->GetWindowHeight() > cameraBound->GetBottom()) {
+		else {
 			cameraPosition.y = cameraBound->GetBottom() - CGame::GetInstance()->GetWindowHeight();
 		}
 	}
 	else {
-		cameraPosition.y = cameraBound->GetBottom() - CGame::GetInstance()->GetWindowHeight();
+		cameraPosition.y = _screneHeight - CGame::GetInstance()->GetWindowHeight();
 	}
 
 	_position = cameraPosition;
 	_position.x -= 8;
+	_position.y -= 10;
 }
 
 
@@ -149,8 +164,10 @@ void CCam::Render() {
 
 void CCam::LockTop()
 {
+	_yLockTop = _screneHeight * 0.3f;
 }
 
 void CCam::UnlockTop()
 {
+	_yLockTop = _yUnlockTop;
 }
