@@ -72,6 +72,11 @@ void CMario::_CheatPointUpdate()
 		_position.y = 122;
 		CCam::GetInstance()->UnlockTop();
 	}
+	if (kb->IsKeyPressed(DIK_R)) {
+		_position.x = 2268;
+		_position.y = 80;
+		CCam::GetInstance()->UnlockTop();
+	}
 	if (kb->IsKeyPressed(DIK_END)) {
 		_Die();
 	}
@@ -142,6 +147,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	}
 
 	stateMachine->_hasQBrick = false;
+
+	if (_tele) return;
 
 	stateMachine->Update(dt, coObjects);
 }

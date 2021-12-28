@@ -2,9 +2,6 @@
 
 #include "CGameObject.h"
 
-#define PORTAL_WIDTH	8
-#define PORTAL_HEIGHT	32
-
 class CPortalInSmall : public CGameObject
 {
 
@@ -13,13 +10,18 @@ class CPortalInSmall : public CGameObject
 	float _cx;
 	float _cy;
 
-
+	bool _running;
 
 public:
-	CPortalInSmall(float x, float y, int direction, float cx, float cy);
+	float _w;
+	float _h;
+
+	CPortalInSmall(float x, float y, float w, float h, int direction, float cx, float cy);
 
 	void Update(DWORD, vector<CGameObject*>* = nullptr) override;
 	void Render() override;
+
+	virtual int IsBlocking(LPCOLLISIONEVENT e) { return 0; }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
 

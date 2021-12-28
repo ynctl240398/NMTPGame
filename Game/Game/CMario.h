@@ -31,7 +31,7 @@ public:
 	int _isRedureAlpha;
 	bool _untouchable = false;
 
-	bool _die = false;
+	bool _tele = false;
 
 	float _jumpStartHeight = 0;
 

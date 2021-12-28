@@ -169,6 +169,8 @@
     <ClCompile Include="CPlatform.cpp" />
     <ClCompile Include="CPlayScene.cpp" />
     <ClCompile Include="CPortal.cpp" />
+    <ClCompile Include="CPortalInSmall.cpp" />
+    <ClCompile Include="CPortalOutSmall.cpp" />
     <ClCompile Include="CSprite.cpp" />
     <ClCompile Include="CTail.cpp" />
     <ClCompile Include="CTexture.cpp" />
@@ -213,6 +215,8 @@
     <ClInclude Include="CPlatform.h" />
     <ClInclude Include="CPlayScene.h" />
     <ClInclude Include="CPortal.h" />
+    <ClInclude Include="CPortalInSmall.h" />
+    <ClInclude Include="CPortalOutSmall.h" />
     <ClInclude Include="CScene.h" />
     <ClInclude Include="CSprite.h" />
     <ClInclude Include="CTail.h" />

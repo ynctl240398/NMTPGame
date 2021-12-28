@@ -384,13 +384,13 @@ void BaseMario::_GetAttackAnimationId(int& id)
 int BaseMario::_GetAnimationId()
 {
 	int aniId = ID_ANI_MARIO_IDLE;
-	if (mario->_die) {
-		aniId = ID_ANI_MARIO_DIE;
-	}
-	else {
-		_GetWalkAnimationId(aniId);		
-		_GetJumpAnimationId(aniId);
-		_GetAttackAnimationId(aniId);
+
+	_GetWalkAnimationId(aniId);
+	_GetJumpAnimationId(aniId);
+	_GetAttackAnimationId(aniId);
+
+	if (mario->_tele) {
+		aniId = ID_ANI_MARIO_TELE;
 	}
 
 	aniId += (_level % 100) * 100;
@@ -400,6 +400,8 @@ int BaseMario::_GetAnimationId()
 
 void BaseMario::OnNoCollision(DWORD dt)
 {
+	if (mario->_tele) return;
+
 	mario->SetOnGround(false);
 	if (mario->jumpState == MarioJumpState::Idle) {
 		mario->jumpState = MarioJumpState::Fall;
@@ -408,6 +410,8 @@ void BaseMario::OnNoCollision(DWORD dt)
 
 void BaseMario::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+	if (mario->_tele) return;
+
 	if (dynamic_cast<CBrickQuestion*>(e->obj)) {
 		_OnCollisionWithQuestionBrick(e);
 		return;
@@ -509,6 +513,8 @@ void BaseMario::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void BaseMario::OnBlockingOn(bool isHorizontal, float z)
 {
+	if (mario->_tele) return;
+
 	float vx, vy;
 	mario->GetVelocity(vx, vy);
 	D3DXVECTOR2 pos = mario->GetPosition();
