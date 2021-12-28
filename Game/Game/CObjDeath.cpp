@@ -1,4 +1,5 @@
 #include "CObjDeath.h"
+#include "CMario.h"
 
 CObjDeath::CObjDeath(float x, float y, int w, int h) {
 	_position = { x + (w / 2) - DIF, y + h / 2 - DIF };
@@ -8,6 +9,14 @@ CObjDeath::CObjDeath(float x, float y, int w, int h) {
 
 void CObjDeath::Render() {
 	RenderBoundingBox();
+}
+
+int CObjDeath::IsBlocking(LPCOLLISIONEVENT e)
+{
+	if (e->obj == CMario::GetInstance()) {
+		return true;
+	}
+	return false;
 }
 
 void CObjDeath::Update(DWORD dt, vector<CGameObject*>* obj) {
