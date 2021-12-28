@@ -113,6 +113,10 @@ LPRECTCUSTOM CCam::GetCameraBound(int index) const {
 	return _cameraBounds.at(index);
 }
 
+void CCam::ActiveCameraBound(int) const
+{
+}
+
 void CCam::AddCameraBound(LPRECTCUSTOM cameraBound) {
 	_cameraBounds.emplace_back(cameraBound);
 }

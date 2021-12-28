@@ -7,6 +7,7 @@
 #include "CCam.h"
 #include "CUtil.h"
 #include "CMario.h"
+#include "CHub.h"
 
 #define INIT_FILE_PATH L"textures\\init.txt"
 
@@ -14,6 +15,7 @@
 void Update(DWORD dt)
 {
 	CGame::GetInstance()->GetCurrentScene()->Update(dt);
+	CHub::GetInstance()->Update(dt);
 }
 
 void Render()
@@ -47,6 +49,7 @@ void Render()
 		device->OMSetBlendState(blendState, newBlendFactor, 0xffffffff);
 
 		CGame::GetInstance()->GetCurrentScene()->Render();
+		CHub::GetInstance()->Render();
 
 		spriteHandler->End();
 		swapChain->Present(0, 0);

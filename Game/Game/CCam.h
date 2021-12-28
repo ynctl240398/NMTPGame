@@ -32,6 +32,7 @@ public:
 
 	LPRECTCUSTOM GetViewport() const;
 	LPRECTCUSTOM GetCameraBound(int = 0) const;
+	void ActiveCameraBound(int = 0) const;
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
 	void Render() override;

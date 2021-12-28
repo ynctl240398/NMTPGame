@@ -11,7 +11,7 @@ void CAnimation::Add(int spriteId, DWORD time)
 	frames.push_back(frame);
 }
 
-void CAnimation::Render(float x, float y, D3DXVECTOR2 scale, unsigned int alpha)
+void CAnimation::Render(float x, float y, D3DXVECTOR2 scale, unsigned int alpha, bool native)
 {
 
 	ULONGLONG now = GetTickCount64();
@@ -32,7 +32,7 @@ void CAnimation::Render(float x, float y, D3DXVECTOR2 scale, unsigned int alpha)
 		}
 
 	}
-	frames[currentFrame]->GetSprite()->Draw(x, y, scale, alpha);
+	frames[currentFrame]->GetSprite()->Draw(x, y, scale, alpha, native);
 }
 
 CAnimations* CAnimations::__instance = NULL;

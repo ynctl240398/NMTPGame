@@ -61,20 +61,24 @@ void CMario::_CheatPointUpdate()
 	if (kb->IsKeyPressed(DIK_E)) {
 		_position.x = 2200;
 		_position.y = 515;
+		CCam::GetInstance()->ActiveCameraBound(1);
 	}
 	if (kb->IsKeyPressed(DIK_Q)) {
 		_position.x = 0;
 		_position.y = 350;
+		CCam::GetInstance()->ActiveCameraBound(0);
 		CCam::GetInstance()->LockTop();
 	}
 	if (kb->IsKeyPressed(DIK_W)) {
 		_position.x = 1324;
 		_position.y = 122;
+		CCam::GetInstance()->ActiveCameraBound(0);
 		CCam::GetInstance()->UnlockTop();
 	}
 	if (kb->IsKeyPressed(DIK_R)) {
 		_position.x = 2268;
 		_position.y = 80;
+		CCam::GetInstance()->ActiveCameraBound(0);
 		CCam::GetInstance()->UnlockTop();
 	}
 	if (kb->IsKeyPressed(DIK_END)) {

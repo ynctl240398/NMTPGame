@@ -211,7 +211,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int direction = atoi(tokens[5].c_str());
 		float cx = stof(tokens[6].c_str());
 		float cy = stof(tokens[7].c_str());
-		obj = new CPortalInSmall(x, y, w, h, direction, cx, cy);
+		int camId = atoi(tokens[8].c_str());
+		obj = new CPortalInSmall(x, y, w, h, direction, cx, cy, camId);
 		break;
 	}
 	case OBJECT_TYPE_PORTAL_OUT_SMALL:

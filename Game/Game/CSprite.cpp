@@ -45,9 +45,8 @@ void CSprite::_ScaleSprite(D3DXVECTOR2 scale, unsigned int alpha) {
 	D3DXMatrixScaling(&_scaleMatrix, (float)(spriteWidth) * scale.x, (float)(spriteHeight) * scale.y, 1.0f);
 }
 
-void CSprite::Draw(float x, float y, D3DXVECTOR2 scale, unsigned int alpha)
+void CSprite::Draw(float x, float y, D3DXVECTOR2 scale, unsigned int alpha, bool native)
 {
-
 	CGame* g = CGame::GetInstance();
 
 	_ScaleSprite(scale, alpha);
@@ -56,6 +55,11 @@ void CSprite::Draw(float x, float y, D3DXVECTOR2 scale, unsigned int alpha)
 
 	float nx = x - _cameraInstance->GetPosition().x;
 	float ny = (g->GetBackBufferHeight() - y) + _cameraInstance->GetPosition().y;
+
+	if (native) {
+		nx = x;
+		ny = (g->GetBackBufferHeight() - y);
+	}
 
 	D3DXVECTOR2 spritePosition = { floor(nx), floor(ny) };
 

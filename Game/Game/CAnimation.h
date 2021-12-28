@@ -34,7 +34,7 @@ class CAnimation
 public:
 	CAnimation(int defaultTime = 100) { this->defaultTime = defaultTime; lastFrameTime = -1; currentFrame = -1; }
 	void Add(int spriteId, DWORD time = 0);
-	void Render(float x, float y, D3DXVECTOR2 scale = D3DXVECTOR2(1.0f, 1.0f), unsigned int alpha = 255);
+	void Render(float x, float y, D3DXVECTOR2 scale = D3DXVECTOR2(1.0f, 1.0f), unsigned int alpha = 255, bool native = false);
 };
 
 typedef CAnimation* LPANIMATION;

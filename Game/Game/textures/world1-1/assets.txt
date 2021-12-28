@@ -12,6 +12,7 @@
 400	textures\animation\firer.txt
 500	textures\animation\particles.txt
 000	textures\animation\brick_p.txt
+600	textures\animation\hub.txt
 
 [OBJECTS]
 #bg
@@ -169,9 +170,9 @@
 356	2016	368	1
 
 #portal_in_small
-#id	x	y	w	h	direction	cx	cy
-51	2264	118	6	33	1	2108	464
-51	2328	475	5	34	-1	2332	384
+#id	x	y	w	h	direction	cx	cy	camera_bound
+51	2264	118	6	33	1	2108	464	1
+51	2328	475	5	34	-1	2332	384	0
 
 #portal_out_small
 #id	x	y	w	h	direction

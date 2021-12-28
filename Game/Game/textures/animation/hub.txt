@@ -14,13 +14,13 @@
 2	1	185	8	7
 
 #arrow_white
-3	1	175	8	7
+3	1	175	6	8
 
 #p_black
-4	20	185	15	7
+4	19	185	16	8
 
 #p_white
-5	20	175	15	7
+5	19	175	16	8
 
 [FRAME]
 #id_sprite	time
@@ -63,3 +63,11 @@
 [ANIMATION]
 #id
 5
+
+[FRAME]
+#id_sprite	time
+5	100
+4	100
+[ANIMATION]
+#id
+6

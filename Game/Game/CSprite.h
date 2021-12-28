@@ -26,7 +26,7 @@ public:
 
 	RECT GetBoundingBoxSprite() { return{ left, top, right, bottom }; }
 
-	void Draw(float x, float y, D3DXVECTOR2, unsigned int);
+	void Draw(float x, float y, D3DXVECTOR2, unsigned int, bool);
 	void Release();
 };
 

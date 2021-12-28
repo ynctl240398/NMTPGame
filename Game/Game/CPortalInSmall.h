@@ -12,11 +12,13 @@ class CPortalInSmall : public CGameObject
 
 	bool _running;
 
+	int _camBoundId;
+
 public:
 	float _w;
 	float _h;
 
-	CPortalInSmall(float x, float y, float w, float h, int direction, float cx, float cy);
+	CPortalInSmall(float x, float y, float w, float h, int direction, float cx, float cy, int camBoundId);
 
 	void Update(DWORD, vector<CGameObject*>* = nullptr) override;
 	void Render() override;

@@ -2,7 +2,7 @@
 #include "CMario.h"
 #include "CDebug.h"
 
-CPortalInSmall::CPortalInSmall(float x, float y, float w, float h, int direction, float cx, float cy)
+CPortalInSmall::CPortalInSmall(float x, float y, float w, float h, int direction, float cx, float cy, int camBoundId)
 {
 	_position = { x,y };
 	_cy = cy;
@@ -11,6 +11,7 @@ CPortalInSmall::CPortalInSmall(float x, float y, float w, float h, int direction
 	_h = h;
 	_direction = direction;
 	_running = false;
+	_camBoundId = camBoundId;
 }
 
 void CPortalInSmall::Update(DWORD dt, vector<CGameObject*>* coObjects)
@@ -53,6 +54,7 @@ void CPortalInSmall::Update(DWORD dt, vector<CGameObject*>* coObjects)
 			mario->_tele = false;
 			mario->SetPosition({ _cx, _cy });
 			mario->walkState = MarioWalkState::Idle;
+			CCam::GetInstance()->ActiveCameraBound(_camBoundId);
 		}
 	}
 }
