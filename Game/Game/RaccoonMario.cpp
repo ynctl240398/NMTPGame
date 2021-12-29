@@ -123,7 +123,7 @@ void RaccoonMario::_AttackUpdate(DWORD dt)
 	_attackTimer.Update(dt);
 
 	CKeyBoardCustom* kb = CKeyBoardCustom::GetInstance();
-	if (kb->IsKeyPressed(DIK_D)) {
+	if (kb->IsKeyPressed(DIK_A)) {
 		if (_attackTimer.GetState() != CTimerState::RUNNING) {
 			_attackTimer.Reset();
 			_attackTimer.Start();
