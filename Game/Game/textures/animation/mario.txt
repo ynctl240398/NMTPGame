@@ -241,13 +241,13 @@
 
 #jump-run
 [FRAME]
-108	0
+109	0
 [ANIMATION]
 107
 
 #kick
 [FRAME]
-109	0
+110	0
 [ANIMATION]
 108
 
