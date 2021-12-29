@@ -2,7 +2,7 @@
 #include "CAnimation.h"
 #include "CMario.h"
 
-#define BOARD_LEFT 82
+#define BOARD_LEFT 264 / 2
 #define BOARD_TOP 202
 
 #define HUB_WIDTH 256
@@ -13,7 +13,7 @@
 
 #define ARROW_Y 199
 
-#define P_X 114.5
+#define P_X 110.5
 #define P_Y 199
 
 CHub* CHub::__instance = NULL;

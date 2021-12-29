@@ -12,7 +12,7 @@
 #define ID_ANI_HUB_P_WHITE			13005
 #define ID_ANI_HUB_P_FLICK			13006
 
-#define ARROW_POSITION_Y_LIST {61.5, 69.5, 77.5, 85.5, 93.5, 101.5}
+#define ARROW_POSITION_Y_LIST {57.5, 65.5, 73.5, 81.5, 89.5, 97.5}
 #define LENGTH_ARROW    6
 
 class CHub
