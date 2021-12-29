@@ -7,10 +7,66 @@
 #brick_broken
 0	0	0	9	9
 
+#point_100
+1	0	10	14	10
+
+#point_200
+2	14	10	14	10
+
+#point_400
+3	29	10	14	10
+
+#point_800
+4	44	10	14	10
+
+#point_1000
+5	60	10	14	10
+
+#star
+6	0	21	16	16
+7	18	21	16	16
+
 #id_sprite	time(ms)
 
-#piranha_plant_red
+#brick_broken
 [FRAME]
 0	100
 [ANIMATION]
 0
+
+#point_100
+[FRAME]
+1	100
+[ANIMATION]
+1
+
+#point_200
+[FRAME]
+2	100
+[ANIMATION]
+2
+
+#point_400
+[FRAME]
+3	100
+[ANIMATION]
+3
+
+#point_800
+[FRAME]
+4	100
+[ANIMATION]
+4
+
+#point_1000
+[FRAME]
+5	100
+[ANIMATION]
+5
+
+#star
+[FRAME]
+6	100
+7	100
+[ANIMATION]
+6

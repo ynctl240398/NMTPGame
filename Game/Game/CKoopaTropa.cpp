@@ -150,6 +150,7 @@ void CKoopaTropa::OnCollisionWith(LPCOLLISIONEVENT e) {
 		if (e->obj == CMario::GetInstance()) {
 			if (e->ny > 0) {
 				SetState(STATE_KOOPA_TROPA_SHELD);
+				AddPointAni(ID_ANI_POINT_100, _position.x, _position.y);
 			}
 		}
 		break;

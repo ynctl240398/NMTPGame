@@ -121,6 +121,7 @@ void CParaGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
 		if (e->obj == CMario::GetInstance()) {
 			if (e->ny > 0) {
 				SetState(STATE_RED_GOOMBA_WALK);
+				AddPointAni(ID_ANI_POINT_100, _position.x, _position.y);
 			}
 		}
 		break;
@@ -128,6 +129,7 @@ void CParaGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
 		if (e->obj == CMario::GetInstance()) {
 			if (e->ny > 0) {
 				_Die(e);
+				AddPointAni(ID_ANI_POINT_100, _position.x, _position.y);
 			}
 		}
 		break;
@@ -139,6 +141,7 @@ void CParaGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
 	if (paraKoopa) {
 		if (paraKoopa->GetState() == STATE_KOOPA_PARA_TROPA_SHELD_RUN || CMario::GetInstance()->hand == paraKoopa) {
 			_DieJump(e);
+			AddPointAni(ID_ANI_POINT_100, _position.x, _position.y);
 		}
 	}
 
@@ -146,11 +149,14 @@ void CParaGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
 	if (koopa) {
 		if (koopa->GetState() == STATE_KOOPA_TROPA_SHELD_RUN || CMario::GetInstance()->hand == koopa) {
 			_DieJump(e);
+			AddPointAni(ID_ANI_POINT_100, _position.x, _position.y);
 		}
 	}
 
 	if (dynamic_cast<CTail*>(e->obj)) {
 		_DieJump(e);
+		AddPointAni(ID_ANI_POINT_100, _position.x, _position.y);
+		AddAttackEffect(_position.x, _position.y);
 	}
 }
 

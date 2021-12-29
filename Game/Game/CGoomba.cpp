@@ -59,6 +59,7 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
 
 			CAniObject* aniObj = new CAniObject({ _position.x, _position.y + 4}, 0, 0, ID_ANI_GOOMBA_DIE, { 1, 1 }, 700L, 0.0f);
 			CGame::GetInstance()->GetCurrentScene()->SpawnAniObject(aniObj);
+			AddPointAni(ID_ANI_POINT_100, _position.x, _position.y);
 		}
 	}
 	
@@ -68,6 +69,8 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
 
 		CAniObject* aniObj = new CAniObject(_position, 0.02f * e->nx, -0.25f, ID_ANI_GOOMBA_DIE_JUMP, { 1, -1 });
 		CGame::GetInstance()->GetCurrentScene()->SpawnAniObject(aniObj);
+		AddPointAni(ID_ANI_POINT_100, _position.x, _position.y);
+		AddAttackEffect(_position.x, _position.y);
 	}
 
 	CKoopaParaTropa* paraKoopa = dynamic_cast<CKoopaParaTropa*>(e->obj);
@@ -77,6 +80,7 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
 
 			CAniObject* aniObj = new CAniObject(_position, 0.02f * e->nx, -0.25f, ID_ANI_GOOMBA_DIE_JUMP, { 1, -1 });
 			CGame::GetInstance()->GetCurrentScene()->SpawnAniObject(aniObj);
+			AddPointAni(ID_ANI_POINT_100, _position.x, _position.y);
 		}
 	}
 
@@ -87,6 +91,7 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
 
 			CAniObject* aniObj = new CAniObject(_position, 0.02f * e->nx, -0.25f, ID_ANI_GOOMBA_DIE_JUMP, { 1, -1 });
 			CGame::GetInstance()->GetCurrentScene()->SpawnAniObject(aniObj);
+			AddPointAni(ID_ANI_POINT_100, _position.x, _position.y);
 		}
 	}
 }

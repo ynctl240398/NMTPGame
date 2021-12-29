@@ -1,4 +1,7 @@
 #include "CUtil.h"
+#include "CAniObject.h"
+#include "CGame.h"
+
 
 namespace CUtil {
 	ID3D10Device* DirectDevice = NULL;
@@ -38,6 +41,16 @@ wstring ToWSTR(string st)
 
 	// delete wcstring   // << can I ? 
 	return wstr;
+}
+
+void AddPointAni(int aniId, float x, float y) {
+	CAniObject* pointObj = new CAniObject({ x, y - 16 }, 0, -0.02f, aniId, { 1, 1 }, 700L, 0.0f, 0, 0);
+	CGame::GetInstance()->GetCurrentScene()->SpawnAniObject(pointObj);
+}
+
+void AddAttackEffect(float x, float y) {
+	CAniObject* aniObj = new CAniObject({ x - 8, y }, 0, 0, ID_ANI_ATTACK_EFFECT, { 1, 1 }, 200L, 0.0f, 0, 0);
+	CGame::GetInstance()->GetCurrentScene()->SpawnAniObject(aniObj);
 }
 
 vector<string> split(string line, string delimeter)

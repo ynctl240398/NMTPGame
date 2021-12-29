@@ -35,6 +35,13 @@
 #define DIF 8
 
 
+#define ID_ANI_POINT_100		12001
+#define ID_ANI_POINT_200		12002
+#define ID_ANI_POINT_400		12003
+#define ID_ANI_POINT_800		12004
+#define ID_ANI_POINT_1000		12005
+#define ID_ANI_ATTACK_EFFECT	12006
+
 using namespace std;
 
 namespace CUtil {
@@ -50,3 +57,6 @@ namespace CUtil {
 wstring ToWSTR(string st);
 vector<string> split(string line, string delimeter = "\t");
 LPCWSTR ToLPCWSTR(string st);
+
+void  AddPointAni(int aniId, float x, float y);
+void  AddAttackEffect(float x, float y);
