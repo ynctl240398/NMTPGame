@@ -54,6 +54,7 @@ CParaGoomba::CParaGoomba(float x, float y) {
 	_countJump = 0;
 	_velocity = { 0.0f,0.0f };
 	_state = STATE_PARA_GOOMBA_IDLE;
+	_isDoublePoint = true;
 }
 
 int CParaGoomba::_GetAnimationId() {
@@ -129,7 +130,11 @@ void CParaGoomba::OnCollisionWith(LPCOLLISIONEVENT e) {
 		if (e->obj == CMario::GetInstance()) {
 			if (e->ny > 0) {
 				_Die(e);
-				AddPointAni(ID_ANI_POINT_100, _position.x, _position.y);
+				if (_isDoublePoint) {
+					AddPointAni(ID_ANI_POINT_200, _position.x, _position.y);
+				}
+				else
+					AddPointAni(ID_ANI_POINT_100, _position.x, _position.y);
 			}
 		}
 		break;
@@ -230,6 +235,9 @@ void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 			}
 			break;
 		case STATE_RED_GOOMBA_WALK:
+			if (CMario::GetInstance()->IsOnGround()) {
+				_isDoublePoint = false;
+			}
 			break;
 		default:
 			break;

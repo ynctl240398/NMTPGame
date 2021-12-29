@@ -176,10 +176,10 @@ void RaccoonMario::_GetAttackAnimationId(int& aniId)
 
 void RaccoonMario::_OnCollisionWithItem(LPCOLLISIONEVENT e)
 {
-	CItem* item = dynamic_cast<CItem*>(e->obj);
+	/*CItem* item = dynamic_cast<CItem*>(e->obj);
 	if (item->GetType() == TYPE_ITEM_MUSHROOM_RED) {
 		mario->marioState = MarioState::Big;
-	}
+	}*/
 }
 
 void RaccoonMario::_OnDamaged(LPCOLLISIONEVENT e, float damage)

@@ -253,7 +253,7 @@
 
 #idle-hold
 [FRAME]
-110	100
+111	100
 [ANIMATION]
 111
 

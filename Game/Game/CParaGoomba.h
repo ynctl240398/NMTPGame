@@ -12,6 +12,7 @@ class CParaGoomba : public CGameObject
 	int _GetAnimationId();
 
 	int _countJump;
+	bool _isDoublePoint;
 
 	CTimer _walkTimer{ true, 1000 };
 

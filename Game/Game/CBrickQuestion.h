@@ -17,7 +17,7 @@
 #define ID_ANI_BRICK_QUESTION_RUN 2001
 #define ID_ANI_BRICK_BRICK_RUN 11000
 
-#define JUMP_SPEED 0.15f
+#define JUMP_SPEED 0.2f
 
 class CBrickQuestion : public CGameObject
 {	

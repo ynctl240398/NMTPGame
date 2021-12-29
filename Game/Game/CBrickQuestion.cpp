@@ -94,12 +94,12 @@ void CBrickQuestion::Active()
 {
 	if (!_active) {
 		_active = true;
-		/*if (_item->GetType() == TYPE_ITEM_MUSHROOM_RED && CMario::GetInstance()->marioState == MarioState::Big) {
+		if (_item->GetType() == TYPE_ITEM_MUSHROOM_RED && CMario::GetInstance()->marioState == MarioState::Big) {
 			_item->SetType(TYPE_ITEM_LEAF);
 		}
 		else if (_item->GetType() == TYPE_ITEM_LEAF && CMario::GetInstance()->marioState == MarioState::Small) {
 			_item->SetType(TYPE_ITEM_MUSHROOM_RED);
-		}*/
+		}
 		CGame::GetInstance()->GetCurrentScene()->SpawnObject(_item);
 	}
 }
