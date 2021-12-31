@@ -52,10 +52,12 @@ void CItem::OnCollisionWith(LPCOLLISIONEVENT e) {
 	}
 	else {
 		if (e->obj == CMario::GetInstance()) {
-			if (_type == TYPE_ITEM_MUSHROOM_GREEN || _type == TYPE_ITEM_MUSHROOM_RED || _type == TYPE_ITEM_LEAF) {
+			if (_type == TYPE_ITEM_MUSHROOM_RED || _type == TYPE_ITEM_LEAF) {
 				AddPointAni(ID_ANI_POINT_1000, _position.x, _position.y);
 			}
-
+			else if (_type == TYPE_ITEM_MUSHROOM_GREEN) {
+				AddPointAni(ID_ANI_1_UP, _position.x, _position.y);
+			}
 			_isDeleted = true;
 		}
 

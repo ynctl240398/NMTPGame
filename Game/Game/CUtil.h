@@ -41,6 +41,7 @@
 #define ID_ANI_POINT_800		12004
 #define ID_ANI_POINT_1000		12005
 #define ID_ANI_ATTACK_EFFECT	12006
+#define ID_ANI_1_UP				12007
 
 using namespace std;
 

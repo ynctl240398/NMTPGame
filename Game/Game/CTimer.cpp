@@ -4,11 +4,11 @@ CTimer::CTimer(bool useGameTime, long timeout) {
 	this->useGameTime = useGameTime;
 	this->timeleft = this->timeout = timeout;
 	this->state = CTimerState::STOPPED;
-	this->startPoint = GetTickCount64();
+	this->startPoint = (long)GetTickCount64();
 }
 
 void CTimer::SetTimeOut(long timeout) {
-	AddTimeOut(timeout - (long)this->timeout);
+	AddTimeOut(timeout - this->timeout);
 }
 
 void CTimer::AddTimeOut(long timeout) {
@@ -23,7 +23,7 @@ CTimerState CTimer::GetState()
 
 void CTimer::Start() {
 	this->state = CTimerState::RUNNING;
-	this->startPoint = GetTickCount64();
+	this->startPoint = (long)GetTickCount64();
 }
 
 void CTimer::Stop() {
@@ -42,7 +42,7 @@ void CTimer::Update(unsigned long dt) {
 		this->timeleft -= dt;
 	}
 	else {
-		this->timeleft = timeout - (GetTickCount64() - startPoint);
+		this->timeleft = (long)(timeout - (GetTickCount64() - startPoint));
 	}
 
 	if (timeleft < 0) {

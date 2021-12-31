@@ -26,6 +26,9 @@
 6	0	21	16	16
 7	18	21	16	16
 
+#1_up
+8	134	10	18	10
+
 #id_sprite	time(ms)
 
 #brick_broken
@@ -70,3 +73,9 @@
 7	100
 [ANIMATION]
 6
+
+#1_up
+[FRAME]
+8	100
+[ANIMATION]
+7

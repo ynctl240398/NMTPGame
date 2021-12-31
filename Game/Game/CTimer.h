@@ -15,11 +15,11 @@ private:
 
 	CTimerState state;
 
-	ULONGLONG timeleft;
+	long timeleft;
 
-	ULONGLONG timeout;
+	long timeout;
 
-	ULONGLONG startPoint;
+	long startPoint;
 
 public:
 	CTimer(bool useGameTime, long timeout = 0);
