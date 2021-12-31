@@ -8,7 +8,7 @@ CTimer::CTimer(bool useGameTime, long timeout) {
 }
 
 void CTimer::SetTimeOut(long timeout) {
-	AddTimeOut(timeout - this->timeout);
+	AddTimeOut(timeout - (long)this->timeout);
 }
 
 void CTimer::AddTimeOut(long timeout) {

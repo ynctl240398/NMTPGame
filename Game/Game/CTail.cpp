@@ -28,7 +28,7 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	_liveTimer.Update(dt);
 
 	if (_step == 0) {
-		_velocity.x = min(MARIO_TAIL_RANGE_BACK / dt, 0.467742) * (mario->_direction > 0 ? 1 : -1) * -1;
+		_velocity.x = min(MARIO_TAIL_RANGE_BACK / dt, 0.467742f) * (mario->_direction > 0 ? 1 : -1) * -1;
 		if (_liveTimer.GetState() == CTimerState::TIMEOVER) {
 			_step = 1;
 			_liveTimer.Reset();

@@ -196,16 +196,16 @@ void CVenusFireTrap::CalcFireBallStat(float playerX, float playerY, float& fbVx,
 	float angle = 0;
 
 	if (abs(dxFromPlayer) > 48 * 6 || (0 < abs(dyFromPlayer) && abs(dyFromPlayer) < 96))
-		angle = (dxFromPlayer > 0 ? 25 : 155) * (dyFromPlayer < 0 ? -1 : 1);
+		angle = (float)(dxFromPlayer > 0 ? 25 : 155) * (dyFromPlayer < 0 ? -1 : 1);
 	else
-		angle = (dxFromPlayer > 0 ? 45 : 135) * (dyFromPlayer < 0 ? -1 : 1);
+		angle = (float)(dxFromPlayer > 0 ? 45 : 135) * (dyFromPlayer < 0 ? -1 : 1);
 
 	if (dyFromPlayer < 0) {
 		_shootHeadDown = 0;
 	}
 	else _shootHeadDown = 1;
 
-	angle = angle * 3.14 / 180.0f;
+	angle = angle * 3.14f / 180.0f;
 
 	float magV = sqrt(cos(angle) * cos(angle) + sin(angle) * sin(angle));
 

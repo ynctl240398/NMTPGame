@@ -26,7 +26,7 @@ CHub::CHub()
 
 void CHub::Update(DWORD dt)
 {
-    _pLevel = min(floor(CMario::GetInstance()->powerMeter), 6);
+    _pLevel = (int)min(floor(CMario::GetInstance()->powerMeter), 6);
     _maxP = CMario::GetInstance()->powerMeter >= 7;
 }
 
@@ -36,7 +36,7 @@ void CHub::Render()
     {
         for (int j = -8; j < HUB_HEIGHT; j += 16)
         {
-            CAnimations::GetInstance()->Get(ID_ANI_HUB_BLACK)->Render(HUB_X + i, HUB_Y + j, { 1, 1 }, 255, true);
+            CAnimations::GetInstance()->Get(ID_ANI_HUB_BLACK)->Render((float)HUB_X + i, (float)HUB_Y + j, { 1, 1 }, 255, true);
         }
     }
 

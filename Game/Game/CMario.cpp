@@ -111,7 +111,7 @@ void CMario::SheldUpdate(DWORD dt)
 		hand->SetVelocity({ 0, 0 });
 		hand->SetPosition(pos);
 
-		_velocity.x += 0.1 * _direction;
+		_velocity.x += (FLOAT)(0.1f * _direction);
 		hand = nullptr;
 	}
 }

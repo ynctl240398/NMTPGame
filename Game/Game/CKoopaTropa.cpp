@@ -122,7 +122,7 @@ void CKoopaTropa::SetState(int state) {
 
 void CKoopaTropa::OnNoCollision(DWORD dt)
 {
-	_position -= _velocity * dt;
+	_position -= _velocity * (FLOAT)dt;
 	_position.x += _velocity.x * dt;
 	_position.y += (_velocity.y * dt) / 2.25f;
 }
@@ -217,8 +217,8 @@ int CKoopaTropa::IsBlocking(LPCOLLISIONEVENT e)
 
 void CKoopaTropa::Render() {
 	_aniId = _GetAnimationId();
-	_scale.y = _flip ? -1 : 1;
-	_scale.x = _velocity.x > 0 ? -1 : 1;
+	_scale.y = _flip ? -1.0f : 1.0f;
+	_scale.x = _velocity.x > 0 ? -1.0f : 1.0f;
 	CGameObject::Render();
 }
 

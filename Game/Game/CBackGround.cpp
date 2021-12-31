@@ -34,11 +34,11 @@ void CBackGround::_ParseSectionSprites(string line) {
 	else {
 		int w = atoi(tokens[4].c_str());
 		int h = atoi(tokens[5].c_str());
-		int mi = w / WIDTH_TITLE_SET, mj = h / HEIGHT_TITLE_SET;
+		unsigned int mi = w / WIDTH_TITLE_SET, mj = h / HEIGHT_TITLE_SET;
 		for (size_t i = 0; i <= mi; i++) {
 			for (size_t j = 0; j <= mj; j++)
 			{
-				D3DXVECTOR2 position = D3DXVECTOR2(i * WIDTH_TITLE_SET, j * HEIGHT_TITLE_SET);
+				D3DXVECTOR2 position = D3DXVECTOR2((FLOAT)i * WIDTH_TITLE_SET, (FLOAT)j * HEIGHT_TITLE_SET);
 				this->_sprites.push_back(std::make_pair(spriteBound, position));
 			}
 		}

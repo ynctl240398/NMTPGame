@@ -84,7 +84,7 @@ void CParaGoomba::SetState(int state) {
 
 	_ay = GOOMBA_GRAVITY;
 
-	float sign = _velocity.x >= 0 ? 1 : -1;
+	int sign = _velocity.x >= 0 ? 1 : -1;
 
 	switch (state)
 	{
@@ -109,7 +109,7 @@ void CParaGoomba::SetState(int state) {
 }
 
 void CParaGoomba::OnNoCollision(DWORD dt) {
-	_position -= _velocity * dt;
+	_position -= _velocity * (FLOAT)dt;
 	_position.x += _velocity.x * dt;
 	_position.y += _velocity.y * dt / 2;
 }

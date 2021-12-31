@@ -26,7 +26,9 @@ void CAniObject::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	_velocity.x += _ax * dt;
 	_velocity.y += _ay * dt;
-	_position += _velocity * dt;
+
+	_position.x += _velocity.x * dt;
+	_position.y += _velocity.y * dt;
 
 	timer.Update(dt);
 

@@ -528,7 +528,7 @@ void BaseMario::OnBlockingOn(bool isHorizontal, float z)
 		vx = 0;
 	}
 	else {
-		vy = 0.00000001;
+		vy = 0.00000001f;
 		if (z < 0) {
 			mario->SetOnGround(true);
 			CCam::GetInstance()->LockTop();

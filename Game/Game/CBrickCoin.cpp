@@ -27,10 +27,10 @@ void CBrickCoin::_TranformUpdate(DWORD dt)
 
 void CBrickCoin::_SpawnBreakEffect()
 {
-    CAniObject* piece1 = new CAniObject(_position, -0.05, -0.2, ID_ANI_PARTICLES_BRICK_BROKEN_IDLE);
-    CAniObject* piece3 = new CAniObject(_position, -0.05, -0.1, ID_ANI_PARTICLES_BRICK_BROKEN_IDLE);
-    CAniObject* piece2 = new CAniObject(_position, 0.05, -0.2, ID_ANI_PARTICLES_BRICK_BROKEN_IDLE);
-    CAniObject* piece4 = new CAniObject(_position, 0.05, -0.1, ID_ANI_PARTICLES_BRICK_BROKEN_IDLE);
+    CAniObject* piece1 = new CAniObject(_position, -0.05f, -0.2f, ID_ANI_PARTICLES_BRICK_BROKEN_IDLE);
+    CAniObject* piece3 = new CAniObject(_position, -0.05f, -0.1f, ID_ANI_PARTICLES_BRICK_BROKEN_IDLE);
+    CAniObject* piece2 = new CAniObject(_position, 0.05f, -0.2f, ID_ANI_PARTICLES_BRICK_BROKEN_IDLE);
+    CAniObject* piece4 = new CAniObject(_position, 0.05f, -0.1f, ID_ANI_PARTICLES_BRICK_BROKEN_IDLE);
 
     CGame::GetInstance()->GetCurrentScene()->SpawnAniObject(piece1);
     CGame::GetInstance()->GetCurrentScene()->SpawnAniObject(piece2);

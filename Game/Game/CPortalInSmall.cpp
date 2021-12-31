@@ -33,7 +33,7 @@ void CPortalInSmall::Update(DWORD dt, vector<CGameObject*>* coObjects)
 		mario->_tele = true;
 		D3DXVECTOR2 pos = mario->GetPosition();
 		pos.x = _position.x;
-		pos.y += 0.7 * _direction;
+		pos.y += 0.7f * _direction;
 		mario->SetPosition(pos);
 		mario->SetVelocity({ 0, 0 });
 

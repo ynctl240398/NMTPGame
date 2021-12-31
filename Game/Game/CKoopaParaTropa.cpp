@@ -203,8 +203,8 @@ int CKoopaParaTropa::IsBlocking(LPCOLLISIONEVENT e)
 
 void CKoopaParaTropa::Render() {
 	_aniId = _GetAnimationId();
-	_scale.y = _flip ? -1 : 1;
-	_scale.x = _velocity.x > 0 ? -1 : 1;
+	_scale.y = _flip ? -1.0f : 1.0f;
+	_scale.x = _velocity.x > 0 ? -1.0f : 1.0f;
 	CGameObject::Render();
 	_obj->Render();
 }

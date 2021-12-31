@@ -149,7 +149,7 @@ void CItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	else if (_type == TYPE_ITEM_LEAF) {
 		if (_step == 0) {
 			_velocity.y = -ITEM_LEAF_JUMP;
-			_ay = ITEM_GRAVITY / 1.5;
+			_ay = ITEM_GRAVITY / 1.5f;
 			_step = 1;
 		}
 		else if (_step == 1) {
@@ -223,8 +223,8 @@ void CItem::Render() {
 }
 
 void CItem::GetBoundingBox(float& left, float& top, float& right, float& bottom) {
-	float w = _state == STATE_ITEM_P_PUSHED ? ITEM_WIDTH : ITEM_WIDTH;
-	float h = _state == STATE_ITEM_P_PUSHED ? ITEM_HEIGHT : ITEM_HEIGHT;
+	int w = _state == STATE_ITEM_P_PUSHED ? ITEM_WIDTH : ITEM_WIDTH;
+	int h = _state == STATE_ITEM_P_PUSHED ? ITEM_HEIGHT : ITEM_HEIGHT;
 
 	left = _position.x - w / 2;
 	top = _position.y - h / 2;
